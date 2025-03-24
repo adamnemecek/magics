@@ -2454,15 +2454,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "egui_plot"
-version = "0.26.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "803bfcb1ad294dd7f106e26ac9199730d16051496ddb66b10fdb6529eb43df58"
-dependencies = [
- "egui",
-]
-
-[[package]]
 name = "egui_tiles"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3796,7 +3787,6 @@ dependencies = [
  "derive_more",
  "egui_dock",
  "egui_extras",
- "egui_plot",
  "egui_tiles",
  "embed-resource 2.4.2",
  "env_to_png",

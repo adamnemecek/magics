@@ -8,7 +8,6 @@ use bevy::{
     prelude::*,
 };
 use bevy_egui::egui;
-use egui_plot::{Line, Plot, PlotPoints};
 use gbp_config::Config;
 
 use super::UiState;
@@ -113,25 +112,6 @@ impl MetricsPlugin {
                     }
                 }
 
-                // if let Some(messages_sent) =
-                // diagnostics.get(&RobotDiagnosticsPlugin::MESSAGES_SENT_COUNT) {
-                //     #[allow(clippy::cast_precision_loss)]
-                //     let points: PlotPoints = messages_sent.values()
-                //         // .iter()
-                //         .enumerate()
-                //         .map(|(i, robot)| [i as f64, *robot])
-                //         .collect();
-                //     let line = Line::new(points);
-                //
-                //     let plot = Plot::new("messages sent")
-                //         .view_aspect(2.0)
-                //         .show_grid(true)
-                //         .x_axis_label("samples recorded")
-                //         .y_axis_label("messages sent");
-                //
-                //     plot.show(ui, |plot_ui| plot_ui.line(line));
-                // }
-
                 // ui.label(format!("{}", egui::special_emojis::GITHUB));
 
                 // if ui.color_edit_button_rgb(&mut [0.1, 0.5, 0.6]).clicked() {
@@ -157,36 +137,5 @@ impl MetricsPlugin {
         *current_pos = window
             .map(|ref inner| inner.response.rect.min)
             .unwrap_or_default();
-
-        // let messages_sent_window = egui::Window::new("Metrics")
-        //     .collapsible(true)
-        //     .interactable(true)
-        //     .movable(true)
-        //     // .default_pos(*current_pos)
-        //     .title_bar(true)
-        //     // .vscroll(true)
-        //     .show(egui_ctx.ctx_mut(), |ui| {
-
-        //         if let Some(messages_sent) =
-        //
-        // diagnostics.get(&RobotDiagnosticsPlugin::MESSAGES_SENT_COUNT)
-        //         {
-        //             #[allow(clippy::cast_precision_loss)]
-        //             let points: PlotPoints = messages_sent.values()
-        //                 // .iter()
-        //                 .enumerate()
-        //                 .map(|(i, robot)| [i as f64, *robot])
-        //                 .collect();
-        //             let line = Line::new(points);
-
-        //             let plot = Plot::new("messages sent")
-        //                 .view_aspect(2.0)
-        //                 .show_grid(true)
-        //                 .x_axis_label("samples recorded")
-        //                 .y_axis_label("messages sent");
-
-        //             plot.show(ui, |plot_ui| plot_ui.line(line));
-        //         }
-        //     });
     }
 }
