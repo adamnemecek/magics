@@ -24,7 +24,6 @@ const END: Vec2 = Vec2::new(100.0 - 12.5, -62.5 + 12.5);
 // const END: Vec2 = Vec2::new(0.0, -75.0 + 5.0);
 
 fn main() -> anyhow::Result<()> {
-    better_panic::debug_install();
     let mut app = App::new();
     app.init_resource::<ChangingBinding>()
         .init_resource::<Path>()

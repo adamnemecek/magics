@@ -27,7 +27,6 @@ const CAMERA_INITIAL_TARGET: Vec3 = Vec3::ZERO;
 const CAMERA_INITIAL_POSITION: Vec3 = Vec3::new(0.0, INITIAL_CAMERA_DISTANCE, 0.0);
 
 fn main() -> anyhow::Result<()> {
-    better_panic::debug_install();
 
     let cli = cli::parse_arguments();
 

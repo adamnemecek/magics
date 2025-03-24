@@ -3,7 +3,6 @@
 use bevy::prelude::*;
 
 fn main() {
-    better_panic::debug_install();
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
