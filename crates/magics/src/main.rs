@@ -54,11 +54,9 @@ use bevy_image_export::{
     ImageExportBundle, ImageExportPlugin, ImageExportSettings, ImageExportSource,
 };
 use colored::Colorize;
-// use iyes_perf_ui::prelude::*;
 
 // use rand::{Rng, SeedableRng};
 use environment::MainCamera;
-// use iyes_perf_ui::prelude::*;
 use gbp_config::{read_config, Config, FormationGroup};
 // use config::{environment::EnvironmentType, Environment};
 use gbp_environment::{Environment, EnvironmentType};
