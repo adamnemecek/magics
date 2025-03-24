@@ -1114,20 +1114,14 @@ fn ui_settings_panel(
                         });
                         custom::fill_x(ui, |ui| {
                             if ui.button("Open").clicked() {
-
-                                if cfg!(target_arch = "wasm32") {
-                                    world.send_event::<ToastEvent>(ToastEvent::warning("Not supported on wasm32"));
+                                let image_output_path = Path::new("factorgraphs.png");
+                                if !image_output_path.exists() {
+                                    world.send_event::<ToastEvent>(ToastEvent::warning("No factorgraph has been exported yet"));
                                 } else {
-
-                                    let image_output_path = Path::new("factorgraphs.png");
-                                    if !image_output_path.exists() {
-                                        world.send_event::<ToastEvent>(ToastEvent::warning("No factorgraph has been exported yet"));
-                                    } else {
-                                        if let Err(err) = open::that_detached(image_output_path) {
-                                            let err_msg = format!("Failed to open {}: {}", image_output_path.display(), err);
-                                            error!(err_msg);
-                                            world.send_event::<ToastEvent>(ToastEvent::error(err_msg));
-                                        }
+                                    if let Err(err) = open::that_detached(image_output_path) {
+                                        let err_msg = format!("Failed to open {}: {}", image_output_path.display(), err);
+                                        error!(err_msg);
+                                        world.send_event::<ToastEvent>(ToastEvent::error(err_msg));
                                     }
                                 }
                             }
@@ -1148,12 +1142,8 @@ fn ui_settings_panel(
 
                         custom::fill_x(ui, |ui| {
                             if ui.button("Open").clicked() {
-                                if cfg!(target_arch = "wasm32") {
-                                    world.send_event::<ToastEvent>(ToastEvent::warning("Not supported on wasm32"));
-                                } else {
-                                    use crate::export::events::OpenLatestExport;
-                                    world.send_event::<OpenLatestExport>(OpenLatestExport);
-                                }
+                                use crate::export::events::OpenLatestExport;
+                                world.send_event::<OpenLatestExport>(OpenLatestExport);
                             }
                         });
                     });

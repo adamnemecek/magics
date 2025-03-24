@@ -17,11 +17,6 @@ pub enum DumpDefault {
 // Structure containing all the flags and arguments that can be passed to
 // binary from a shell. use `parse_arguments()`[`crate::cli::parse_arguments`]
 // to parse arguments from `std::env::args` and receive a [`Cli`] instance.
-//
-// # NOTE
-// Do not use `Cli::parse()` to parse arguments, use
-// (`parse_arguments()`)[`crate::cli::parse_arguments`] instead as the default
-// values are different when compiling for `target_arch` = "wasm32".
 
 #[allow(clippy::struct_excessive_bools, missing_docs)]
 #[derive(Debug, Parser)]
@@ -79,7 +74,6 @@ pub struct Cli {
     // #[arg(long, group = "configuration")]
     // pub default: bool,
     /// Specify an initial working directory
-    #[cfg(not(target_arch = "wasm32"))]
     #[arg(short, long)]
     pub working_dir: Option<std::path::PathBuf>,
 
@@ -129,20 +123,11 @@ impl Cli {
 }
 
 /// Parse arguments from `std::env::args`
-#[cfg(not(target_arch = "wasm32"))]
 #[must_use]
 pub fn parse_arguments() -> Cli {
     Cli::parse()
 }
 
-#[must_use]
-#[cfg(target_arch = "wasm32")]
-pub fn parse_arguments() -> Cli {
-    eprintln!("parsing arguments on wasm32");
-    let mut cli = Cli::parse();
-    cli.default = true;
-    cli
-}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, clap::ValueEnum)]
 pub enum BevySchedule {

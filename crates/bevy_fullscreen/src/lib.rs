@@ -46,14 +46,6 @@ impl Default for ToggleFullscreenPlugin {
 
 impl Plugin for ToggleFullscreenPlugin {
     fn build(&self, app: &mut App) {
-        if cfg!(target_arch = "wasm32") {
-            warn!(
-                "ToggleFullscreenPlugin: on target 'wasm32' the window cannot be fullscreened. no \
-                 systems registered."
-            );
-            return;
-        }
-
         app.add_event::<ToggleFullscreen>()
             .add_systems(PostUpdate, toggle_fullscreen);
 

@@ -97,14 +97,10 @@ fn open_latest_export(
             continue;
         };
 
-        if cfg!(target_arch = "wasm32") {
-            evw_toast.send(bevy_notify::ToastEvent::warning("Not supported on wasm32"));
-        } else {
-            if let Err(err) = open::that_detached(path) {
-                let err_msg = format!("Failed to open {}: {}", path.display(), err);
-                error!(err_msg);
-                evw_toast.send(bevy_notify::ToastEvent::error(err_msg));
-            }
+        if let Err(err) = open::that_detached(path) {
+            let err_msg = format!("Failed to open {}: {}", path.display(), err);
+            error!(err_msg);
+            evw_toast.send(bevy_notify::ToastEvent::error(err_msg));
         }
     }
 }
@@ -599,11 +595,8 @@ fn export(
         };
 
         let dirname = match event.save_at_location {
-            ExportSaveLocation::Cwd if cfg!(not(target_arch = "wasm32")) => {
-                std::env::current_dir().expect("current directory exists")
-            }
             ExportSaveLocation::Cwd => {
-                panic!("cannot take screenshots when running in wasm32")
+                std::env::current_dir().expect("current directory exists")
             }
             ExportSaveLocation::At(ref path) => path.clone(),
         };
@@ -627,20 +620,11 @@ fn export(
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, Copy, PartialEq, Eq)]
 pub enum ExportSavePostfix {
+    #[default]
     Number,
     UnixTimestamp,
-}
-
-impl Default for ExportSavePostfix {
-    fn default() -> Self {
-        if cfg!(target_arch = "wasm32") {
-            Self::UnixTimestamp
-        } else {
-            Self::Number
-        }
-    }
 }
 
 fn take_snapshot_of_robot(

@@ -146,16 +146,7 @@ colorgrad  = "0.6.2"
 ordered-float = "4.2.0"
 # dialoguer = { version = "0.11.0", features = ["fuzzy-select"] }
 
-# # TODO: change to not wasm
-# [target.'cfg(linux)'.dependencies]
-# open = "5.1.0"
-
-
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 open = "5.1"
-clap = { version = "4.5", default-features = false, features = [
-  "derive",
-] }
 
 [dev-dependencies]
 pretty_assertions.workspace = true

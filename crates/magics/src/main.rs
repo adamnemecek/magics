@@ -30,7 +30,6 @@ pub(crate) mod macros;
 use std::{path::Path, time::Duration};
 
 use bevy::{
-    asset::AssetMetaCheck,
     input::common_conditions::input_just_pressed,
     prelude::*,
     render::{
@@ -63,16 +62,6 @@ fn main() -> anyhow::Result<()> {
     const NAME: &str = env!("CARGO_PKG_NAME");
     const VERSION: &str = env!("CARGO_PKG_VERSION");
     const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
-
-
-    // if cfg!(all(not(target_arch = "wasm32"), debug_assertions)) {
-    if cfg!(not(target_arch = "wasm32")) {
-        if cfg!(debug_assertions) {
-            better_panic::debug_install();
-        } else {
-            better_panic::install();
-        }
-    }
 
     let cli = cli::parse_arguments();
 
@@ -183,16 +172,9 @@ fn main() -> anyhow::Result<()> {
         return Ok(());
     }
 
-    #[cfg(not(target_arch = "wasm32"))]
-    {
-        if let Some(ref working_dir) = cli.working_dir {
-            std::env::set_current_dir(working_dir).expect("the given --working-dir exists");
-            eprintln!("changed working_dir to: {:?}", working_dir);
-        }
-        eprintln!(
-            "current working dir: {:?}",
-            std::env::current_dir().expect("current working dir exists")
-        );
+    if let Some(ref working_dir) = cli.working_dir {
+        std::env::set_current_dir(working_dir).expect("the given --working-dir exists");
+        eprintln!("changed working_dir to: {:?}", working_dir);
     }
 
     // let (config, formation, environment): (Config, FormationGroup, Environment) =
@@ -235,19 +217,7 @@ fn main() -> anyhow::Result<()> {
 
     eprintln!("initial window mode: {:?}", window_mode);
 
-    let window_plugin = if cfg!(target_arch = "wasm32") {
-        WindowPlugin {
-            primary_window: Some(Window {
-                window_theme: None,
-                visible: true,
-                canvas: Some("#bevy".to_string()),
-                // Tells wasm not to override default event handling, like F5 and Ctrl+R
-                prevent_default_event_handling: false,
-                ..Default::default()
-            }),
-            ..Default::default()
-        }
-    } else {
+    let window_plugin = {
         let default_window_resolution = WindowResolution::default();
         let width = cli
             .width
@@ -283,11 +253,6 @@ fn main() -> anyhow::Result<()> {
 
     // bevy app
     let mut app = App::new();
-
-    if cfg!(target_arch = "wasm32") {
-        app.insert_resource(AssetMetaCheck::Never); // needed for wasm build to
-                                                    // work
-    }
 
     let image_plugin = ImagePlugin::default_nearest();
 

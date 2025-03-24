@@ -399,12 +399,6 @@ fn handle_export_graph(
     mut export_graph_finished_event: EventWriter<ExportFactorGraphAsGraphvizFinished>,
     // mut toast_event: EventWriter<ToastEvent>,
 ) -> std::io::Result<()> {
-    if cfg!(target_arch = "wasm32") {
-        return Err(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "there is not filesystem access on target_arch wasm32",
-        ));
-    }
 
     let Some(output) = export_factorgraphs_as_graphviz(q, config) else {
         warn!("There are no factorgraphs in the world");

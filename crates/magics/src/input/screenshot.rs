@@ -14,8 +14,6 @@ pub struct ScreenshotPluginConfig {
     pub show_notification: bool,
     pub override_if_screenshot_exists: bool,
     pub with_egui_ui: bool,
-    // OPTIONAL in wasm32
-    // pub screenshot_save_location: ScreenShotSaveLocation,
 }
 
 impl Default for ScreenshotPluginConfig {
@@ -72,20 +70,11 @@ pub enum ScreenshotSaveLocation {
     // Clipboard,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, Copy, PartialEq, Eq)]
 pub enum ScreenshotSavePostfix {
+    #[default]
     Number,
     UnixTimestamp,
-}
-
-impl Default for ScreenshotSavePostfix {
-    fn default() -> Self {
-        if cfg!(target_arch = "wasm32") {
-            Self::UnixTimestamp
-        } else {
-            Self::Number
-        }
-    }
 }
 
 #[derive(Debug, Clone, Event)]
@@ -128,8 +117,6 @@ fn handle_screenshot_event(
                     })
                     .max();
 
-                // TODO: handle wasm32 constraints
-
                 let screenshot_id = latest_screenshot_id.map_or(0, |id| id + 1);
                 screenshot_id.to_string()
             }
@@ -143,11 +130,8 @@ fn handle_screenshot_event(
             .expect("every format has at least one extension");
 
         let dirname = match event.save_at_location {
-            ScreenshotSaveLocation::Cwd if cfg!(not(target_arch = "wasm32")) => {
-                std::env::current_dir().expect("current directory exists")
-            }
             ScreenshotSaveLocation::Cwd => {
-                panic!("cannot take screenshots when running in wasm32")
+                std::env::current_dir().expect("current directory exists")
             }
             ScreenshotSaveLocation::At(ref path) => path.clone(),
         };

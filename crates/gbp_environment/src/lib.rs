@@ -653,8 +653,7 @@ impl Tiles {
     }
 }
 
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-#[cfg_attr(not(target_arch = "wasm32"), derive(clap::ValueEnum))]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, clap::ValueEnum)]
 pub enum EnvironmentType {
     #[default]
     Intersection,

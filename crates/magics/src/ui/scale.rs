@@ -22,16 +22,13 @@ impl Plugin for ScaleUiPlugin {
             .add_systems(Startup, scale_ui)
             .add_systems(Update, scale_ui);
 
-        // Browser already use these input actions to scale the webpage
-        if cfg!(not(target_arch = "wasm32")) {
-            app.add_systems(
-                Update,
-                (
-                    Self::scale_ui_when_ctrl_scroll,
-                    Self::scale_ui_on_ctrl_plus_minus_equal,
-                ),
-            );
-        }
+        app.add_systems(
+            Update,
+            (
+                Self::scale_ui_when_ctrl_scroll,
+                Self::scale_ui_on_ctrl_plus_minus_equal,
+            ),
+        );
     }
 }
 

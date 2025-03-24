@@ -29,7 +29,6 @@
         "rust-analyzer"
         "llvm-tools-preview" # used with `cargo-pgo`
       ];
-      rust-additional-targets = ["wasm32-unknown-unknown"];
 
       python-deps = with pkgs.python3Packages; [
         numpy
@@ -100,9 +99,6 @@
           # lldb # debugger
           # rr # time-traveling debugger
           ra-multiplex
-          trunk # rust wasm bundler
-          wasm-bindgen-cli
-          # binaryen # wasm-opt
           sass
           tailwindcss
           graphviz

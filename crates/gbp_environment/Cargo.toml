@@ -25,7 +25,6 @@ angle        = { path = "../angle" }
 gbp_linalg   = { path = "../gbp_linalg" }
 gbp_geometry = { path = "../gbp_geometry" }
 
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 # open = "5.1"
 clap = { version = "4.5", default-features = false, features = [
   "derive",
