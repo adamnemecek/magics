@@ -105,8 +105,7 @@ fn main() -> anyhow::Result<()> {
         let scenario_dir = Path::new("./config/scenarios");
         assert!(scenario_dir.exists());
         let mut directories = Vec::new();
-        let entries = scenario_dir.read_dir()?; // .sort_by(|a, b| a.file_name().cmp(&b.file_name()));
-                                                //
+        let entries = scenario_dir.read_dir()?;
         for entry in entries {
             let entry = entry?.path();
             if entry.is_dir() {
@@ -146,43 +145,11 @@ fn main() -> anyhow::Result<()> {
         eprintln!("changed working_dir to: {:?}", working_dir);
     }
 
-    // let (config, formation, environment): (Config, FormationGroup, Environment) =
-    // if cli.default {     (
-    //         Config::default(),
-    //         FormationGroup::default(),
-    //         Environment::default(),
-    //     )
-    // } else {
-    //     let config = read_config(cli.config.as_ref())?;
-    //     if let Some(ref inner) = cli.config {
-    //         println!(
-    //             "successfully read config from: {}",
-    //             inner.as_os_str().to_string_lossy()
-    //         );
-    //     }
-
-    //     let formation = FormationGroup::from_ron_file(&config.formation_group)?;
-    //     println!(
-    //         "successfully read formation config from: {}",
-    //         config.formation_group
-    //     );
-    //     let environment = Environment::from_file(&config.environment)?;
-    //     println!(
-    //         "successfully read environment config from: {}",
-    //         config.environment
-    //     );
-
-    //     (config, formation, environment)
-    // };
-
     let window_mode = if cli.fullscreen {
         WindowMode::BorderlessFullscreen
     } else {
         WindowMode::Windowed
     };
-
-    // let mut rng =
-    // rand_chacha::ChaCha8Rng::seed_from_u64(config.simulation.random_seed);
 
     eprintln!("initial window mode: {:?}", window_mode);
 
@@ -224,35 +191,6 @@ fn main() -> anyhow::Result<()> {
     let mut app = App::new();
 
     let image_plugin = ImagePlugin::default_nearest();
-
-    // let mut default_plugins = DefaultPlugins;
-
-    // let log_plugin = if cfg!(debug_assertions) {
-    //     // dev build
-    //     LogPlugin {
-    //         level: bevy::log::Level::DEBUG,
-    //         filter: format!("error,wgpu_core=warn,wgpu_hal=warn,{}=debug", NAME),
-    //         ..default()
-    //     }
-    // } else {
-    //     // release build
-    //     LogPlugin {
-    //         level: bevy::log::Level::INFO,
-    //         filter: format!("error,wgpu_core=warn,wgpu_hal=warn,{}=info", NAME),
-    //         ..default()
-    //     }
-    // };
-
-    // TODO: load from sim loader instead
-    // app.insert_resource(Time::<Fixed>::from_hz(config.simulation.hz))
-    // let hz = 60.0;
-    // app.insert_resource(Time::<Fixed>::from_hz(hz))
-
-    // let default_plugins = if cli.headless {
-    //    DefaultPlugins.set(image_plugin)
-    //} else {
-    //    DefaultPlugins.set(window_plugin).set(image_plugin)
-    //};
 
     app
         //.add_plugins(default_plugins)
