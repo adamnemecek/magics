@@ -685,8 +685,6 @@ pub enum ParseError {
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
     #[error("RON error: {0}")]
-    Ron(#[from] ron::Error),
-    #[error("TOML error: {0}")]
     Toml(#[from] toml::de::Error),
     #[error("YAML error: {0}")]
     Yaml(#[from] serde_yaml::Error),
@@ -726,12 +724,6 @@ impl Environment {
     /// 2. The contents of `path` are not valid RON
     /// 3. The parsed data does not represent a valid [`Environment`]
     pub fn parse(contents: &str) -> Result<Self, ParseError> {
-        // ron::from_str::<Environment>(contents)
-        //     .map_err(|span| span.code)?
-        //     .validate()
-        //     .map_err(Into::into)
-        // with yaml
-
         serde_yaml::from_str::<Self>(contents)
             .map_err(Into::into)
             .and_then(|env| env.validate().map_err(Into::into))

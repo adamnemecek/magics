@@ -131,10 +131,7 @@ fn main() -> anyhow::Result<()> {
             }
             DumpDefault::Formation => {
                 let default = gbp_config::FormationGroup::default();
-                let config = ron::ser::PrettyConfig::new().indentor("  ".to_string());
-
                 let yaml = serde_yaml::to_string(&default)?;
-                // println!("{ron}");
                 if stdout_is_a_terminal {
                     bat::PrettyPrinter::new()
                         .input_from_bytes(yaml.as_bytes())
@@ -147,19 +144,6 @@ fn main() -> anyhow::Result<()> {
                     // config)?);
                 }
 
-                // let ron = ron::ser::to_string_pretty(&default, config)?;
-                // // println!("{ron}");
-                // if stdout_is_a_terminal {
-                //     bat::PrettyPrinter::new()
-                //         .input_from_bytes(ron.as_bytes())
-                //         .language("rust")
-                //         .print()
-                //         .unwrap();
-                // } else {
-                //     println!("{ron}");
-                //     // println!("{}", ron::ser::to_string_pretty(&default,
-                //     // config)?);
-                // }
             }
             DumpDefault::Environment => {
                 let yaml = serde_yaml::to_string(&Environment::default())?;

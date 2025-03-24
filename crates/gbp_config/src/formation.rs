@@ -653,8 +653,6 @@ pub enum ParseError {
     // InvalidFormation(#[from] FormationError),
     // #[error("Invalid formation group: {0}")]
     // InvalidFormationGroup(#[from] FormationGroupError),
-    #[error("RON error: {0}")]
-    Ron(#[from] ron::Error),
 
     #[error("YAML error: {0}")]
     Yaml(#[from] serde_yaml::Error),
@@ -668,35 +666,12 @@ pub struct FormationGroup {
 }
 
 impl FormationGroup {
-    /// Attempt to parse a `FormationGroup` from a RON file
-    ///
-    /// # Errors
-    ///
-    /// Will return `Err` if:
-    /// 1. `path` does not exist on the filesystem.
-    /// 2. The contents of `path` is not valid RON.
-    /// 3. The parsed data does not represent a valid `FormationGroup`.
-    pub fn from_ron_file<P: AsRef<Path>>(path: P) -> Result<Self, ParseError> {
-        std::fs::read_to_string(path)
-            .map(|file_contents| Self::parse_from_ron(file_contents.as_str()))?
-    }
-
     #[allow(clippy::missing_errors_doc)]
     pub fn from_yaml_file<P: AsRef<Path>>(path: P) -> Result<Self, ParseError> {
         std::fs::read_to_string(path)
             .map(|file_contents| Self::parse_from_yaml(file_contents.as_str()))?
     }
 
-    /// Attempt to parse a `FormationGroup` from a RON encoded string.
-    ///
-    /// # Errors
-    ///
-    /// Will return `Err`  if:
-    /// 1. `contents` is not valid RON.
-    /// 2. The parsed data does not represent a valid `FormationGroup`.
-    pub fn parse_from_ron(contents: &str) -> Result<Self, ParseError> {
-        Ok(ron::from_str::<Self>(contents).map_err(|span| span.code)?)
-    }
 
     /// Attempt to parse a `FormationGroup` from a YAML encoded string.
     ///

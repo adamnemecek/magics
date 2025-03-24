@@ -66,7 +66,6 @@ typed_floats = { version = "1.0.0", features = [
 clap = { version = "4.5", default-features = false, features = [
   "derive",
 ] }
-ron = "0.8.1"
 toml = "0.8.8"
 serde_yaml = "0.9.34"
 rrt = { git = "https://github.com/AU-Master-Thesis/rrt", branch = "main" }

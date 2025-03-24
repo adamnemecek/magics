@@ -18,7 +18,6 @@ strum.workspace        = true
 strum_macros.workspace = true
 itertools.workspace    = true
 
-ron.workspace        = true
 toml.workspace       = true
 serde_yaml.workspace = true
 
