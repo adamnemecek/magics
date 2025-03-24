@@ -114,7 +114,6 @@ bevy_dev_console = { git = "https://github.com/doonv/bevy_dev_console.git", vers
 termsize         = "0.1.6"
 paste            = "1.0.14"
 egui_plot        = "0.26"
-egui_graphs      = "0.19.0"
 colored          = "2.1.0"
 chrono           = "0.4.37"
 # parry3d = "0.13.7"

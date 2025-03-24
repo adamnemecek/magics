@@ -1,6 +1,5 @@
 pub mod controls;
 mod custom;
-mod data;
 mod decoration;
 mod metrics;
 mod scale;
@@ -19,7 +18,7 @@ pub use decoration::ToUiString;
 use strum_macros::EnumIter;
 
 use self::{
-    controls::ControlsPanelPlugin, data::DataPanelPlugin, metrics::MetricsPlugin,
+    controls::ControlsPanelPlugin, metrics::MetricsPlugin,
     scale::ScaleUiPlugin, settings::SettingsPanelPlugin,
 };
 use crate::{theme::CatppuccinThemeVisualsExt, AppState};
@@ -42,7 +41,6 @@ impl PluginGroup for UiPlugins {
         bevy::app::PluginGroupBuilder::start::<Self>()
             .add(ControlsPanelPlugin)
             .add(SettingsPanelPlugin)
-            //.add(DataPanelPlugin)
             .add(MetricsPlugin::default())
             .add(ScaleUiPlugin::default())
     }
@@ -57,7 +55,7 @@ impl Plugin for EguiInterfacePlugin {
             .init_resource::<OccupiedScreenSpace>()
             .init_resource::<UiState>()
             // .init_resource::<PreviousUiState>()
-            .add_plugins(( ControlsPanelPlugin, SettingsPanelPlugin, DataPanelPlugin,
+            .add_plugins(( ControlsPanelPlugin, SettingsPanelPlugin,
                 ScaleUiPlugin::default(),
 
 
