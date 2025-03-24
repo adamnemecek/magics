@@ -2454,19 +2454,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "egui_tiles"
-version = "0.7.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1bb10cef7bdbd1adb158aec9cca20f34779fd40ea126e02662ab558189f1c435"
-dependencies = [
- "ahash",
- "egui",
- "itertools 0.12.1",
- "log",
- "serde",
-]
-
-[[package]]
 name = "ehttp"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3787,7 +3774,6 @@ dependencies = [
  "derive_more",
  "egui_dock",
  "egui_extras",
- "egui_tiles",
  "embed-resource 2.4.2",
  "env_to_png",
  "fastrand",
