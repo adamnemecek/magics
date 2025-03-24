@@ -27,9 +27,6 @@ pub(crate) mod escape_codes;
 pub(crate) mod macros;
 
 
-#[global_allocator]
-static ALLOC: mimalloc::MiMalloc = mimalloc::MiMalloc;
-
 use std::{path::Path, time::Duration};
 
 use bevy::{
