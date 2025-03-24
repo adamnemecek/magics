@@ -446,12 +446,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
-name = "beef"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a8241f3ebb85c056b509d4327ad0358fbbba6ffb340bf388f26350aeda225b1"
-
-[[package]]
 name = "bevy"
 version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -483,7 +477,7 @@ dependencies = [
  "bevy_time",
  "bevy_utils",
  "bevy_window",
- "egui 0.26.2",
+ "egui",
  "image 0.24.9",
  "once_cell",
  "pretty-type-name",
@@ -683,23 +677,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy_dev_console"
-version = "0.1.0"
-source = "git+https://github.com/doonv/bevy_dev_console.git#f645e20ac29ff69f735738826eef1e5032172797"
-dependencies = [
- "android_log-sys",
- "bevy",
- "bevy_egui 0.27.0",
- "chrono",
- "console_error_panic_hook",
- "logos",
- "tracing-log 0.2.0",
- "tracing-subscriber",
- "tracing-wasm",
- "web-time 1.1.0",
-]
-
-[[package]]
 name = "bevy_diagnostic"
 version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -764,7 +741,7 @@ checksum = "b84bfb8d4104a1467910cf2090bc6a6d394ebde39c0dbc02397b45aa9ef88e80"
 dependencies = [
  "arboard",
  "bevy",
- "egui 0.26.2",
+ "egui",
  "thread_local",
  "web-sys",
  "webbrowser",
@@ -780,28 +757,7 @@ dependencies = [
  "bevy",
  "console_log",
  "crossbeam-channel",
- "egui 0.26.2",
- "js-sys",
- "log",
- "thread_local",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
- "webbrowser",
- "winit",
-]
-
-[[package]]
-name = "bevy_egui"
-version = "0.27.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eac153cb176b04eb0734c60fbc2912aa6fb2539f5b64ba832661c1c4cf9e298a"
-dependencies = [
- "arboard",
- "bevy",
- "console_log",
- "crossbeam-channel",
- "egui 0.27.2",
+ "egui",
  "js-sys",
  "log",
  "thread_local",
@@ -1567,7 +1523,7 @@ dependencies = [
  "thiserror",
  "tracing",
  "uuid",
- "web-time 0.2.4",
+ "web-time",
 ]
 
 [[package]]
@@ -2408,15 +2364,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ecolor"
-version = "0.27.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "20930a432bbd57a6d55e07976089708d4893f3d556cf42a0d79e9e321fa73b10"
-dependencies = [
- "bytemuck",
-]
-
-[[package]]
 name = "egui"
 version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2424,20 +2371,9 @@ checksum = "180f595432a5b615fc6b74afef3955249b86cfea72607b40740a4cd60d5297d0"
 dependencies = [
  "accesskit",
  "ahash",
- "epaint 0.26.2",
+ "epaint",
  "nohash-hasher",
  "serde",
-]
-
-[[package]]
-name = "egui"
-version = "0.27.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "584c5d1bf9a67b25778a3323af222dbe1a1feb532190e103901187f92c7fe29a"
-dependencies = [
- "ahash",
- "epaint 0.27.2",
- "nohash-hasher",
 ]
 
 [[package]]
@@ -2445,7 +2381,7 @@ name = "egui-notify"
 version = "0.14.0"
 source = "git+https://github.com/AU-Master-Thesis/egui-notify?branch=master#7b153e515246e01b7c605676411fa256f059672b"
 dependencies = [
- "egui 0.26.2",
+ "egui",
 ]
 
 [[package]]
@@ -2455,7 +2391,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9a062ac200c9f3ddf120ffcc5582f9fbd5d8fbd046d2eed215ed5426f56513d0"
 dependencies = [
  "duplicate",
- "egui 0.26.2",
+ "egui",
  "paste",
 ]
 
@@ -2465,7 +2401,7 @@ version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f4a6962241a76da5be5e64e41b851ee1c95fda11f76635522a3c82b119b5475"
 dependencies = [
- "egui 0.26.2",
+ "egui",
  "ehttp",
  "enum-map",
  "image 0.24.9",
@@ -2481,7 +2417,7 @@ version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "803bfcb1ad294dd7f106e26ac9199730d16051496ddb66b10fdb6529eb43df58"
 dependencies = [
- "egui 0.26.2",
+ "egui",
 ]
 
 [[package]]
@@ -2491,7 +2427,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1bb10cef7bdbd1adb158aec9cca20f34779fd40ea126e02662ab558189f1c435"
 dependencies = [
  "ahash",
- "egui 0.26.2",
+ "egui",
  "itertools 0.12.1",
  "log",
  "serde",
@@ -2525,15 +2461,6 @@ checksum = "6916301ecf80448f786cdf3eb51d9dbdd831538732229d49119e2d4312eaaf09"
 dependencies = [
  "bytemuck",
  "serde",
-]
-
-[[package]]
-name = "emath"
-version = "0.27.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4c3a552cfca14630702449d35f41c84a0d15963273771c6059175a803620f3f"
-dependencies = [
- "bytemuck",
 ]
 
 [[package]]
@@ -2648,26 +2575,11 @@ dependencies = [
  "ab_glyph",
  "ahash",
  "bytemuck",
- "ecolor 0.26.2",
- "emath 0.26.2",
+ "ecolor",
+ "emath",
  "nohash-hasher",
  "parking_lot",
  "serde",
-]
-
-[[package]]
-name = "epaint"
-version = "0.27.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b381f8b149657a4acf837095351839f32cd5c4aec1817fc4df84e18d76334176"
-dependencies = [
- "ab_glyph",
- "ahash",
- "bytemuck",
- "ecolor 0.27.2",
- "emath 0.27.2",
- "nohash-hasher",
- "parking_lot",
 ]
 
 [[package]]
@@ -3790,39 +3702,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90ed8c1e510134f979dbc4f070f87d4313098b704861a105fe34231c70a3901c"
 
 [[package]]
-name = "logos"
-version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "161971eb88a0da7ae0c333e1063467c5b5727e7fb6b710b8db4814eade3a42e8"
-dependencies = [
- "logos-derive",
-]
-
-[[package]]
-name = "logos-codegen"
-version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e31badd9de5131fdf4921f6473d457e3dd85b11b7f091ceb50e4df7c3eeb12a"
-dependencies = [
- "beef",
- "fnv",
- "lazy_static",
- "proc-macro2",
- "quote",
- "regex-syntax 0.8.3",
- "syn 2.0.64",
-]
-
-[[package]]
-name = "logos-derive"
-version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c2a69b3eb68d5bd595107c9ee58d7e07fe2bb5e360cc85b0f084dedac80de0a"
-dependencies = [
- "logos-codegen",
-]
-
-[[package]]
 name = "loop9"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3851,7 +3730,6 @@ dependencies = [
  "bevy",
  "bevy-inspector-egui",
  "bevy_asset_loader",
- "bevy_dev_console",
  "bevy_egui 0.26.0",
  "bevy_fullscreen",
  "bevy_infinite_grid",
@@ -6482,16 +6360,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "web-time"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5a6580f308b1fad9207618087a65c04e7a10bc77e02c8e84e9b00dd4b12fa0bb"
-dependencies = [
- "js-sys",
- "wasm-bindgen",
-]
-
-[[package]]
 name = "webbrowser"
 version = "0.8.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7016,7 +6884,7 @@ dependencies = [
  "wayland-protocols",
  "wayland-protocols-plasma",
  "web-sys",
- "web-time 0.2.4",
+ "web-time",
  "windows-sys 0.48.0",
  "x11-dl",
  "x11rb",
