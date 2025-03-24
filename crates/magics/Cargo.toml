@@ -47,7 +47,6 @@ bevy.workspace = true
 
 bevy-inspector-egui = "0.23.2"
 bevy_egui           = "0.26.0"
-egui_dock           = "0.11.4"
 
 # bevy_egui = { git = "https://github.com/mvlabat/bevy_egui", branch = "main" } # 0.26 does not support egui 0.27, which egui-notify needs
 
