@@ -61,9 +61,8 @@ derive_more = "0.99.17"
 typed_floats = { version = "1.0.0", features = [
   "serde",
 ] }
-# clap = { version = "4.4.18", no-default-features = true, features = [
 
-clap = { version = "4.5", default-features = false, features = [
+clap = { version = "4.5", features = [
   "derive",
 ] }
 toml = "0.8.8"

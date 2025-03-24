@@ -98,7 +98,6 @@ catppuccin = "1.4.0"
 serde = { version = "1.0.196", features = [
   "derive",
 ] }
-clap_complete = "4.5.2"
 
 # color-eyre = "0.6.2"
 rand     = "0.8.5"
