@@ -65,34 +65,6 @@ fn main() -> anyhow::Result<()> {
 
     let cli = cli::parse_arguments();
 
-    if cli.metadata {
-        let authors = env!("CARGO_PKG_AUTHORS").split(':').collect::<Vec<_>>();
-
-        eprintln!(
-            "{}:   {}",
-            "target arch".green().bold(),
-            std::env::consts::ARCH
-        );
-        eprintln!(
-            "{}:     {}",
-            "target os".green().bold(),
-            std::env::consts::OS
-        );
-        eprintln!(
-            "{}: {}",
-            "target family".green().bold(),
-            std::env::consts::FAMILY
-        );
-
-        eprintln!("{}:          {}", "name".green().bold(), NAME);
-        eprintln!("{}:", "authors".green().bold());
-        for &author in &authors {
-            eprintln!(" - {}", author);
-        }
-        eprintln!("{}:       {}", "version".green().bold(), VERSION);
-        eprintln!("{}:  {}", "manifest_dir".green().bold(), MANIFEST_DIR);
-    }
-
     if let Some(dump) = cli.dump_default {
         let stdout_is_a_terminal = atty::is(atty::Stream::Stdout);
         match dump {

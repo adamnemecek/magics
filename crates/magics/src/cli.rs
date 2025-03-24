@@ -65,9 +65,6 @@ pub struct Cli {
     // /// Enable debug plugins
     // #[arg(short, long)]
     // pub debug: bool,
-    /// print metadata about the project to the stderr
-    #[arg(short, long)]
-    pub metadata: bool,
 
     // /// use default values for all configuration, simulation and environment
     // /// settings
