@@ -46,9 +46,6 @@ pub struct Cli {
     #[arg(short, long, group = "dump")]
     pub list_scenarios: bool,
 
-    #[arg(long, value_name = "SCHEDULE_GRAPH", group = "dump")]
-    pub schedule_graph: Option<BevySchedule>,
-
     /// Initial scenario to load
     /// If not specified, the first scenario in lexiographical order is loaded
     /// from the simulations directory

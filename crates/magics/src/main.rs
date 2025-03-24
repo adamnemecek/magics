@@ -298,37 +298,6 @@ fn main() -> anyhow::Result<()> {
         .add_systems(Update, draw_coordinate_system.run_if(input_just_pressed(KeyCode::F1)))
         .add_systems(PostUpdate, end_simulation.run_if(virtual_time_exceeds_max_time));
 
-    if let Some(schedule) = cli.schedule_graph {
-        match schedule {
-            cli::BevySchedule::PreStartup => {
-                bevy_mod_debugdump::print_schedule_graph(&mut app, PreStartup);
-            }
-            cli::BevySchedule::Startup => {
-                bevy_mod_debugdump::print_schedule_graph(&mut app, Startup);
-            }
-            cli::BevySchedule::PostStartup => {
-                bevy_mod_debugdump::print_schedule_graph(&mut app, PostStartup);
-            }
-            cli::BevySchedule::PreUpdate => {
-                bevy_mod_debugdump::print_schedule_graph(&mut app, PreUpdate);
-            }
-            cli::BevySchedule::Update => {
-                bevy_mod_debugdump::print_schedule_graph(&mut app, Update);
-            }
-            cli::BevySchedule::PostUpdate => {
-                bevy_mod_debugdump::print_schedule_graph(&mut app, PostUpdate);
-            }
-            cli::BevySchedule::FixedUpdate => {
-                bevy_mod_debugdump::print_schedule_graph(&mut app, FixedUpdate);
-            }
-            cli::BevySchedule::Last => {
-                bevy_mod_debugdump::print_schedule_graph(&mut app, Last);
-            }
-        }
-
-        return Ok(());
-    }
-
     if cli.record {
         app.add_plugins(export_plugin);
         app.add_systems(
