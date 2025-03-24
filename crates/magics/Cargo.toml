@@ -121,7 +121,6 @@ chrono           = "0.4.37"
 
 # font-kit = { version = "0.13.0", features = ["freetype"] }
 
-dark-light = "1.1.1"
 bevy_dev   = "0.3.0"
 once_cell  = "1.19.0"
 

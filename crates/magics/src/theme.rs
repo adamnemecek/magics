@@ -40,16 +40,6 @@ impl CatppuccinTheme {
     }
 }
 
-// impl Default for CatppuccinTheme {
-//     fn default() -> Self {
-//         let flavour = match dark_light::detect() {
-//             dark_light::Mode::Dark | dark_light::Mode::Default =>
-// Flavour::Macchiato,             dark_light::Mode::Light => Flavour::Latte,
-//         };
-//         Self { flavour }
-//     }
-// }
-
 impl FromWorld for CatppuccinTheme {
     fn from_world(world: &mut World) -> Self {
         let mut q = world.query::<(&Window, &PrimaryWindow)>();
