@@ -26,11 +26,7 @@ pub mod export;
 pub(crate) mod escape_codes;
 pub(crate) mod macros;
 
-// #[cfg(feature = "dhat-heap")]
-// #[global_allocator]
-// static ALLOC: dhat::Alloc = dhat::Alloc;
 
-// #[cfg(not(feature = "dhat-heap"))]
 #[global_allocator]
 static ALLOC: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
@@ -64,14 +60,13 @@ use magics::AppState;
 
 use crate::cli::DumpDefault;
 
-const NAME: &str = env!("CARGO_PKG_NAME");
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
 
 #[allow(clippy::too_many_lines)]
 fn main() -> anyhow::Result<()> {
-    #[cfg(feature = "dhat-heap")]
-    let _profiler = dhat::Profiler::new_heap();
+    const NAME: &str = env!("CARGO_PKG_NAME");
+    const VERSION: &str = env!("CARGO_PKG_VERSION");
+    const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
+
 
     // if cfg!(all(not(target_arch = "wasm32"), debug_assertions)) {
     if cfg!(not(target_arch = "wasm32")) {

@@ -13,12 +13,6 @@ license.workspace      = true
 dev = [
   "bevy/dynamic_linking",
 ]
-dhat-heap = [
-  "dep:dhat",
-] # if you are doing heap profiling
-dhat-ad-hoc = [
-  "dep:dhat",
-] # if you are doing ad hoc profiling
 
 # TODO: use this feature, to only sample last measurement when enabled
 visualization-obstacle-factors = [
@@ -144,7 +138,6 @@ rand_chacha = { version = "0.3.1", features = [
 
 typed-builder = "0.18.2"
 atty          = "0.2.14"
-dhat          = { version = "0.3.3", optional = true }
 indexmap      = "2.2.6"
 # colored-diff  = "0.2.3"
 serde_json = "1.0.116"
