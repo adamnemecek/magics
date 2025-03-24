@@ -156,7 +156,6 @@ open = "5.1"
 clap = { version = "4.5", default-features = false, features = [
   "derive",
 ] }
-bat = "0.24"
 
 [dev-dependencies]
 pretty_assertions.workspace = true

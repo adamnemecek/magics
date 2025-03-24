@@ -109,52 +109,22 @@ fn main() -> anyhow::Result<()> {
         match dump {
             DumpDefault::Config => {
                 let default = gbp_config::Config::default();
-                if stdout_is_a_terminal {
-                    let toml = toml::to_string_pretty(&default)?;
-                    bat::PrettyPrinter::new()
-                        .input_from_bytes(toml.as_bytes())
-                        .language("toml")
-                        .print()
-                        .unwrap();
-                } else {
-                    // let stdout = std::io::stdout::lock();
-                    println!("{}", toml::to_string_pretty(&default)?);
-                }
+                println!("{}", toml::to_string_pretty(&default)?);
             }
             DumpDefault::Formation => {
                 let default = gbp_config::FormationGroup::default();
                 let yaml = serde_yaml::to_string(&default)?;
-                if stdout_is_a_terminal {
-                    bat::PrettyPrinter::new()
-                        .input_from_bytes(yaml.as_bytes())
-                        .language("rust")
-                        .print()
-                        .unwrap();
-                } else {
-                    println!("{yaml}");
-                    // println!("{}", ron::ser::to_string_pretty(&default,
-                    // config)?);
-                }
-
+                println!("{yaml}");
             }
             DumpDefault::Environment => {
                 let yaml = serde_yaml::to_string(&Environment::default())?;
-                if stdout_is_a_terminal {
-                    bat::PrettyPrinter::new()
-                        .input_from_bytes(yaml.as_bytes())
-                        .language("yaml")
-                        .print()
-                        .unwrap();
-                } else {
-                    println!("{yaml}");
-                    // println!("{}",
-                    // serde_yaml::to_string(&Environment::default())?);
-                }
+                println!("{yaml}");
             }
         };
 
         return Ok(());
     }
+
     // dump_environment
     if let Some(dump_environment) = cli.dump_environment {
         let env = match dump_environment {
@@ -168,16 +138,7 @@ fn main() -> anyhow::Result<()> {
 
         let yaml = serde_yaml::to_string(&env)?;
         let stdout_is_a_terminal = atty::is(atty::Stream::Stdout);
-        if stdout_is_a_terminal {
-            bat::PrettyPrinter::new()
-                .input_from_bytes(yaml.as_bytes())
-                .language("yaml")
-                .print()
-                .unwrap();
-        } else {
-            println!("{yaml}");
-            // println!("{}", serde_yaml::to_string(&env)?);
-        }
+        println!("{yaml}");
 
         return Ok(());
     }
