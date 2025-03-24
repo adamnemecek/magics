@@ -3988,7 +3988,6 @@ dependencies = [
  "glob",
  "heck 0.5.0",
  "image 0.25.1",
- "indexmap",
  "interleave_evenly",
  "itertools 0.13.0",
  "leafwing-input-manager",
