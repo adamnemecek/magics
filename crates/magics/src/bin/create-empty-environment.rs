@@ -1,19 +1,17 @@
 use std::path::PathBuf;
 
-use clap::{arg, value_parser};
+use clap::Parser;
 use image::{ImageBuffer, Rgb};
 
+#[derive(Parser)]
+struct Args {
+    /// output image
+    #[arg(short, long)]
+    output: PathBuf,
+}
+
 fn main() -> anyhow::Result<()> {
-    let matches = clap::command!()
-        .arg(
-            arg!(-o --output <FILE> "output image")
-                .required(true)
-                .value_parser(value_parser!(PathBuf)),
-        )
-        .get_matches();
-
-    let output = matches.get_one::<PathBuf>("output").unwrap();
-
+    let args = Args::parse();
     let size = 1000;
 
     let mut image = ImageBuffer::<Rgb<u8>, Vec<u8>>::new(size, size);
@@ -22,7 +20,7 @@ fn main() -> anyhow::Result<()> {
         *pixel = Rgb([255, 255, 255]);
     }
 
-    image.save(output)?;
+    image.save(args.output)?;
 
     Ok(())
 }

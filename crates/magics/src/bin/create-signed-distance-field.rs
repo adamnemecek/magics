@@ -1,31 +1,25 @@
 use std::path::PathBuf;
 
-use clap::{arg, value_parser};
+use clap::Parser;
 use image::{ImageBuffer, Rgb};
 
+#[derive(Parser)]
+struct Args {
+    /// input grayscale image
+    #[arg(short, long)]
+    input: PathBuf,
+    /// output distance field image
+    #[arg(short, long)]
+    output: PathBuf,
+}
+
 fn main() -> anyhow::Result<()> {
-    let matches = clap::command!()
-        .arg(
-            arg!(-i --input <FILE> "input grayscale image")
-                .required(true)
-                .value_parser(value_parser!(PathBuf)),
-        )
-        .arg(
-            arg!(-o --output <FILE> "output distance field image")
-                .required(true)
-                .value_parser(value_parser!(PathBuf)),
-        )
-        .get_matches();
-
-    // println!("{:#?}", matches);
-
-    let input = matches.get_one::<PathBuf>("input").unwrap();
-    let output = matches.get_one::<PathBuf>("output").unwrap();
-    let input = image::io::Reader::open(input)?.decode()?;
+    let args = Args::parse();
+    let input = image::io::Reader::open(args.input)?.decode()?;
 
     let sdf = signed_distance_field(input.into());
 
-    sdf.save(output)?;
+    sdf.save(args.output)?;
 
     Ok(())
 }
