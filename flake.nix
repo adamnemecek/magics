@@ -1,8 +1,7 @@
 {
-  description = "gbp-rs";
+  description = "Simulating Multi-agent Path Planning in Complex environments using Gaussian Belief Propagation and Global Path Finding";
 
   inputs = {
-    # wgsl_analyzer.url = "github:wgsl-analyzer/wgsl-analyzer";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     rust-overlay = {
@@ -26,26 +25,6 @@
         pkgs = import inputs.nixpkgs { inherit system overlays; };
         rustToolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
 
-        python-deps = with pkgs.python3Packages; [
-          numpy
-          scipy
-          rich
-          tabulate
-          matplotlib
-          toolz
-          seaborn
-          result
-          pretty-errors
-          seaborn
-          catppuccin
-          jupyter
-          notebook
-          pip
-          numpy
-          polars
-          pandas
-        ];
-        # wgsl-analyzer-pkgs = import inputs.wgsl_analyzer {inherit system;};
         bevy-deps = with pkgs; [
           udev
           alsa-lib
@@ -59,9 +38,6 @@
           egl-wayland
           freetype
           fontconfig
-          # wgsl-analyzer-pkgs.wgsl_analyzer
-          # wgsl_analyzer.packages.${system}
-          # wgsl_analyzer.outputs.packages.${system}.default
         ];
         cargo-subcommands = with pkgs; [
           cargo-bloat
@@ -96,10 +72,7 @@
             # lldb # debugger
             # rr # time-traveling debugger
             ra-multiplex
-            sass
-            tailwindcss
             graphviz
-            dot2tex
             blas
             # openblas
             openssl
@@ -110,13 +83,8 @@
           ]
           ++ cargo-subcommands;
         dev-deps = with pkgs; [
-          nodejs
           just
           typos # spell checker
-          act # run github actions local in a docker container
-          dot-language-server
-          gh
-          texliveFull
         ];
       in
       with pkgs;
@@ -130,8 +98,7 @@
             ]
             ++ bevy-deps
             ++ rust-deps
-            ++ dev-deps
-            ++ python-deps;
+            ++ dev-deps;
 
           LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
         };
