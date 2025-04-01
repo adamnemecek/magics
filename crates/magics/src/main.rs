@@ -1,4 +1,3 @@
-#![feature(iter_repeat_n)]
 //! The main entry point of the simulation.
 pub(crate) mod asset_loader;
 mod bevy_utils;
@@ -26,7 +25,6 @@ pub mod export;
 pub(crate) mod escape_codes;
 pub(crate) mod macros;
 
-
 use std::{path::Path, time::Duration};
 
 use bevy::{
@@ -52,7 +50,6 @@ use gbp_environment::{Environment, EnvironmentType};
 use magics::AppState;
 
 use crate::cli::DumpDefault;
-
 
 #[allow(clippy::too_many_lines)]
 fn main() -> anyhow::Result<()> {
