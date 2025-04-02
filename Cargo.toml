@@ -23,13 +23,12 @@ members = [
   "crates/gbp_geometry",
   "crates/gbp_global_planner",
   "crates/gbp_config",
-  "crates/bevy_tracking",
 ]
 
 [workspace.package]
 version = "2.0.0"
 edition = "2024"
-repository = "https://github.com/AU-Master-Thesis/gbp-rs"
+repository = "https://github.com/AU-Master-Thesis/magics"
 authors = [
   "Jens Høigaard Jensen <jens.jens@live.dk>",
   "Kristoffer Plagborg Bak Sørensen <kristoffer.pbs@tuta.io>",
