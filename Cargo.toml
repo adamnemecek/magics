@@ -15,7 +15,6 @@ members = [
   "crates/bevy_fullscreen",
   "crates/bevy_touchpad",
   "crates/seq",
-  "crates/as_variant",
   "crates/interleave_evenly",
   "crates/gbp_schedule",
   "crates/env_to_png",
