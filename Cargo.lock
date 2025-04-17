@@ -256,9 +256,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.97"
+version = "1.0.98"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dcfed56ad506cb2c684a14971b8861fdc3baaaae314b9e5f9bb532cbe3ba7a4f"
+checksum = "e16d2d3311acee920a9eb8d33b8cbc1787ce4a264e85f964c2404b969bdcd487"
 
 [[package]]
 name = "approx"
@@ -513,7 +513,7 @@ dependencies = [
  "bevy_time",
  "bevy_utils",
  "bevy_window",
- "egui 0.26.2",
+ "egui",
  "image 0.24.9",
  "once_cell",
  "pretty-type-name",
@@ -777,7 +777,7 @@ checksum = "b84bfb8d4104a1467910cf2090bc6a6d394ebde39c0dbc02397b45aa9ef88e80"
 dependencies = [
  "arboard",
  "bevy",
- "egui 0.26.2",
+ "egui",
  "thread_local",
  "web-sys",
  "webbrowser",
@@ -793,7 +793,7 @@ dependencies = [
  "bevy",
  "console_log",
  "crossbeam-channel",
- "egui 0.26.2",
+ "egui",
  "js-sys",
  "log",
  "thread_local",
@@ -2382,15 +2382,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ecolor"
-version = "0.31.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc4feb366740ded31a004a0e4452fbf84e80ef432ecf8314c485210229672fd1"
-dependencies = [
- "emath 0.31.1",
-]
-
-[[package]]
 name = "egui"
 version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2398,31 +2389,17 @@ checksum = "180f595432a5b615fc6b74afef3955249b86cfea72607b40740a4cd60d5297d0"
 dependencies = [
  "accesskit",
  "ahash",
- "epaint 0.26.2",
+ "epaint",
  "nohash-hasher",
  "serde",
 ]
 
 [[package]]
-name = "egui"
-version = "0.31.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "25dd34cec49ab55d85ebf70139cb1ccd29c977ef6b6ba4fe85489d6877ee9ef3"
-dependencies = [
- "ahash",
- "bitflags 2.9.0",
- "emath 0.31.1",
- "epaint 0.31.1",
- "nohash-hasher",
- "profiling",
-]
-
-[[package]]
 name = "egui-notify"
 version = "0.14.0"
-source = "git+https://github.com/AU-Master-Thesis/egui-notify?branch=master#43fbed778c627b659d8bc69c34707687d75569e9"
+source = "git+https://github.com/AU-Master-Thesis/egui-notify?branch=master#7b153e515246e01b7c605676411fa256f059672b"
 dependencies = [
- "egui 0.31.1",
+ "egui",
 ]
 
 [[package]]
@@ -2431,7 +2408,7 @@ version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f4a6962241a76da5be5e64e41b851ee1c95fda11f76635522a3c82b119b5475"
 dependencies = [
- "egui 0.26.2",
+ "egui",
  "ehttp",
  "enum-map",
  "image 0.24.9",
@@ -2470,12 +2447,6 @@ dependencies = [
  "bytemuck",
  "serde",
 ]
-
-[[package]]
-name = "emath"
-version = "0.31.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e4cadcff7a5353ba72b7fea76bf2122b5ebdbc68e8155aa56dfdea90083fe1b"
 
 [[package]]
 name = "embed-resource"
@@ -2589,26 +2560,11 @@ dependencies = [
  "ab_glyph",
  "ahash",
  "bytemuck",
- "ecolor 0.26.2",
- "emath 0.26.2",
+ "ecolor",
+ "emath",
  "nohash-hasher",
  "parking_lot",
  "serde",
-]
-
-[[package]]
-name = "epaint"
-version = "0.31.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41fcc0f5a7c613afd2dee5e4b30c3e6acafb8ad6f0edb06068811f708a67c562"
-dependencies = [
- "ab_glyph",
- "ahash",
- "ecolor 0.31.1",
- "emath 0.31.1",
- "nohash-hasher",
- "parking_lot",
- "profiling",
 ]
 
 [[package]]
@@ -3744,9 +3700,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.171"
+version = "0.2.172"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c19937216e9d3aa9956d9bb8dfc0b0c8beb6058fc4f7a4dc4d850edf86a237d6"
+checksum = "d750af042f7ef4f724306de029d18836c26c1765a54a6a3f094cbd23a7267ffa"
 
 [[package]]
 name = "libfuzzer-sys"
@@ -4815,9 +4771,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.94"
+version = "1.0.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a31971752e70b8b2686d7e46ec17fb38dad4051d94024c88df49b667caea9c84"
+checksum = "02b3e5e68a3a1a02aad3ec490a98007cbc13c37cbe84a3cd7b8e406d76e7f778"
 dependencies = [
  "unicode-ident",
 ]
@@ -4981,9 +4937,9 @@ dependencies = [
 
 [[package]]
 name = "ravif"
-version = "0.11.11"
+version = "0.11.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2413fd96bd0ea5cdeeb37eaf446a22e6ed7b981d792828721e74ded1980a45c6"
+checksum = "d6a5f31fcf7500f9401fea858ea4ab5525c99f2322cfcee732c0e6c74208c0c6"
 dependencies = [
  "avif-serialize",
  "imgref",
