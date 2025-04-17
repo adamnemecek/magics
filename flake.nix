@@ -32,25 +32,9 @@ rec {
         inherit (pkgs) lib;
 
         cargo-subcommands = with pkgs; [
-          cargo-bloat
-          cargo-expand
-          cargo-outdated
-          cargo-show-asm
-          cargo-make
-          cargo-modules
-          cargo-nextest
-          cargo-rr
-          cargo-udeps
           cargo-watch
-          cargo-wizard
-          cargo-pgo
           cargo-flamegraph
-          cargo-license
           cargo-release
-          # cargo-tree
-
-          #   # cargo-profiler
-          #   # cargo-feature
         ];
         dev-deps = with pkgs; [
           taplo # TOML formatter and LSP
