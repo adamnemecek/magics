@@ -12,20 +12,21 @@ impl Plugin for FollowCamerasPlugin {
     }
 }
 
+/// TODO: should be named to something else as only the proportional part `p` is used
 #[allow(clippy::upper_case_acronyms)]
 #[derive(Component)]
 pub struct PID {
     pub p: f32,
-    pub i: f32,
-    pub d: f32,
+    // pub i: f32,
+    // pub d: f32,
 }
 
 impl Default for PID {
     fn default() -> Self {
         Self {
             p: 1.0,
-            i: 0.0,
-            d: 0.0,
+            // i: 0.0,
+            // d: 0.0,
         }
     }
 }
@@ -33,17 +34,17 @@ impl Default for PID {
 /// `Component` to tag an entity to be followed by a `FollowCamera`
 #[derive(Component, Debug, Default, Clone, Copy)]
 pub struct FollowCameraMe {
-    pub offset:       Option<Vec3>,
+    pub offset: Option<Vec3>,
     pub up_direction: Option<Direction3d>,
-    pub attached:     bool,
+    pub attached: bool,
 }
 
 impl From<Vec3> for FollowCameraMe {
     fn from(v: Vec3) -> Self {
         Self {
-            offset:       Some(v),
+            offset: Some(v),
             up_direction: None,
-            attached:     false,
+            attached: false,
         }
     }
 }
@@ -52,9 +53,9 @@ impl FollowCameraMe {
     #[must_use]
     pub const fn new(x: f32, y: f32, z: f32) -> Self {
         Self {
-            offset:       Some(Vec3::new(x, y, z)),
+            offset: Some(Vec3::new(x, y, z)),
             up_direction: None,
-            attached:     false,
+            attached: false,
         }
     }
 
@@ -84,7 +85,7 @@ impl FollowCameraMe {
 pub struct FollowCameraSettings {
     pub target: Entity,
     pub offset: Vec3,
-    pub pid:    PID,
+    pub pid: PID,
 }
 
 impl FollowCameraSettings {
@@ -94,7 +95,7 @@ impl FollowCameraSettings {
             offset: Vec3::new(0.0, 5.0, -10.0).normalize() * 10.0,
             pid: PID {
                 p: 1.0,
-                ..Default::default()
+                // ..Default::default()
             },
         }
     }
@@ -117,10 +118,10 @@ pub enum CameraType {
 /// Bundle for a [`FollowCamera`] entity
 #[derive(Bundle)]
 pub struct FollowCameraBundle {
-    pub settings:    FollowCameraSettings,
-    pub movement:    OrbitMovementBundle,
-    pub velocity:    Velocity,
-    pub camera:      Camera3dBundle,
+    pub settings: FollowCameraSettings,
+    pub movement: OrbitMovementBundle,
+    pub velocity: Velocity,
+    pub camera: Camera3dBundle,
     pub camera_type: CameraType,
 }
 

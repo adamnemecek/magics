@@ -13,9 +13,9 @@ struct Args {
     output: PathBuf,
 }
 
-fn main() -> anyhow::Result<()> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
-    let input = image::io::Reader::open(args.input)?.decode()?;
+    let input = image::ImageReader::open(args.input)?.decode()?;
 
     let sdf = signed_distance_field(input.into());
 

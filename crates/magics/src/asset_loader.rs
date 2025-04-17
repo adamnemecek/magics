@@ -7,10 +7,10 @@ use crate::theme::{CatppuccinTheme, ColorFromCatppuccinColourExt};
 /// A sub-category of the [`SceneAssets`] [`Resource`] to hold all meshes
 #[derive(Debug, Resource)]
 pub struct Meshes {
-    pub robot:    Handle<Mesh>,
+    // pub robot: Handle<Mesh>,
     pub variable: Handle<Mesh>,
     pub waypoint: Handle<Mesh>,
-    pub plane:    Handle<Mesh>,
+    pub plane: Handle<Mesh>,
 }
 
 impl FromWorld for Meshes {
@@ -19,12 +19,12 @@ impl FromWorld for Meshes {
             .get_resource_mut::<Assets<Mesh>>()
             .expect("Meshes resource exists in the world");
         Self {
-            robot:    meshes.add(
-                Sphere::new(1.0)
-                    .mesh()
-                    .ico(4)
-                    .expect("4 subdivisions is less than the maximum allowed of 80"),
-            ),
+            // robot: meshes.add(
+            //     Sphere::new(1.0)
+            //         .mesh()
+            //         .ico(4)
+            //         .expect("4 subdivisions is less than the maximum allowed of 80"),
+            // ),
             variable: meshes.add(
                 Sphere::new(0.3)
                     .mesh()
@@ -37,7 +37,7 @@ impl FromWorld for Meshes {
                     .ico(4)
                     .expect("4 subdivisions is less than the maximum allowed of 80"),
             ),
-            plane:    meshes.add(Mesh::from(Rectangle::new(100.0f32, 100.0f32))),
+            plane: meshes.add(Mesh::from(Rectangle::new(100.0f32, 100.0f32))),
         }
     }
 }
@@ -133,16 +133,18 @@ impl FromWorld for Materials {
 // #[derive(Resource, Default)]
 // pub struct ObstacleRaw(Handle<Image>);
 
-#[derive(Resource, Default)]
-pub struct Obstacles {
-    pub raw: Handle<Image>,
-    pub sdf: Handle<Image>,
-    // pub sdf: Image,
-}
+// #[derive(Resource, Default)]
+// pub struct Obstacles {
+//     pub raw: Handle<Image>,
+//     pub sdf: Handle<Image>,
+//     // pub sdf: Image,
+// }
 
 #[derive(AssetCollection, Resource, Debug)]
 pub struct Fonts {
     #[asset(path = "fonts/JetBrainsMonoNerdFont-Regular.ttf")]
+    // It is not dead `rustc` ...
+    #[allow(dead_code)]
     pub main: Handle<Font>,
 }
 
@@ -180,7 +182,7 @@ impl Plugin for AssetLoaderPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<Meshes>()
             .init_resource::<Materials>()
-            .init_resource::<Obstacles>()
+            // .init_resource::<Obstacles>()
             .init_collection::<Fonts>();
         // app.init_resource::<ImageAssets>();
         // app.init_resource::<ObstacleSdf>();

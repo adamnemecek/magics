@@ -33,14 +33,14 @@ pub struct Meter(f64);
 pub struct GraphvizEdgeAttributes {
     // TODO: implement a way to validate this field to only match the valid edge styles: https://graphviz.org/docs/attr-types/style/
     pub style: String,
-    pub len:   f32,
+    pub len: f32,
     pub color: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct GraphvizInterrobotSection {
-    pub active:   GraphvizEdgeAttributes,
+    pub active: GraphvizEdgeAttributes,
     pub inactive: GraphvizEdgeAttributes,
     // pub edge: GraphvizEdgeAttributes,
 }
@@ -48,7 +48,7 @@ pub struct GraphvizInterrobotSection {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct GraphvizSection {
-    pub interrobot:      GraphvizInterrobotSection,
+    pub interrobot: GraphvizInterrobotSection,
     #[serde(default = "GraphvizSection::default_export_location")]
     pub export_location: String,
 }
@@ -62,15 +62,15 @@ impl GraphvizSection {
 impl Default for GraphvizSection {
     fn default() -> Self {
         Self {
-            interrobot:      GraphvizInterrobotSection {
-                active:   GraphvizEdgeAttributes {
+            interrobot: GraphvizInterrobotSection {
+                active: GraphvizEdgeAttributes {
                     style: "solid".to_string(),
-                    len:   8.0,
+                    len: 8.0,
                     color: "green".to_string(),
                 },
                 inactive: GraphvizEdgeAttributes {
                     style: "dashed".to_string(),
-                    len:   4.0,
+                    len: 4.0,
                     color: "green".to_string(),
                 },
             },
@@ -82,14 +82,14 @@ impl Default for GraphvizSection {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct HeightSection {
-    pub objects:    f32,
+    pub objects: f32,
     pub height_map: f32,
 }
 
 impl Default for HeightSection {
     fn default() -> Self {
         Self {
-            objects:    0.5,
+            objects: 0.5,
             height_map: 1.0,
         }
     }
@@ -99,14 +99,14 @@ impl Default for HeightSection {
 #[serde(rename_all = "kebab-case")]
 pub struct UncertaintySection {
     pub max_radius: f32,
-    pub scale:      f32,
+    pub scale: f32,
 }
 
 impl Default for UncertaintySection {
     fn default() -> Self {
         Self {
             max_radius: 5.0,
-            scale:      100.0,
+            scale: 100.0,
         }
     }
 }
@@ -454,13 +454,13 @@ impl Default for GbpIterationSchedule {
 pub struct FactorsEnabledSection {
     // pub pose:       bool,
     #[serde(default = "FactorsEnabledSection::default_dynamic")]
-    pub dynamic:    bool,
+    pub dynamic: bool,
     #[serde(default = "FactorsEnabledSection::default_interrobot")]
     pub interrobot: bool,
     #[serde(default = "FactorsEnabledSection::default_obstacle")]
-    pub obstacle:   bool,
+    pub obstacle: bool,
     #[serde(default = "FactorsEnabledSection::default_tracking")]
-    pub tracking:   bool,
+    pub tracking: bool,
 }
 
 impl FactorsEnabledSection {
@@ -485,10 +485,10 @@ impl Default for FactorsEnabledSection {
     fn default() -> Self {
         Self {
             // pose:       true,
-            dynamic:    Self::default_dynamic(),
+            dynamic: Self::default_dynamic(),
             interrobot: Self::default_interrobot(),
-            obstacle:   Self::default_obstacle(),
-            tracking:   Self::default_tracking(),
+            obstacle: Self::default_obstacle(),
+            tracking: Self::default_tracking(),
         }
     }
 }
@@ -500,37 +500,17 @@ impl Default for FactorsEnabledSection {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct TrackingSection {
-    #[serde(default = "TrackingSection::default_switch_padding")]
-    pub switch_padding:      f32,
-    #[serde(default = "TrackingSection::default_attraction_distance")]
+    pub switch_padding: f32,
     pub attraction_distance: f32,
     //#[serde(default = "TrackingSection::default_enabled")]
     // pub enabled: bool,
 }
 
-impl TrackingSection {
-    fn default_enabled() -> bool {
-        true
-    }
-
-    fn default_attraction_distance() -> f32 {
-        2.0
-    }
-
-    fn default_switch_padding() -> f32 {
-        1.0
-    }
-}
-
-/// Default value for the attraction distance
-
-/// Default value for the switch padding
-
 impl Default for TrackingSection {
     fn default() -> Self {
         Self {
-            switch_padding:      Self::default_switch_padding(),
-            attraction_distance: Self::default_attraction_distance(),
+            switch_padding: 1.0,
+            attraction_distance: 2.0,
             // enabled: Self::default_enabled(),
         }
     }
@@ -613,13 +593,11 @@ pub struct CommunicationSection {
 impl Default for CommunicationSection {
     fn default() -> Self {
         Self {
-            radius:       20.0.try_into().expect("20.0 > 0.0"),
+            radius: 20.0.try_into().expect("20.0 > 0.0"),
             failure_rate: 0.2,
         }
     }
 }
-
-type NaturalQuantity = StrictlyPositiveFinite<f32>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -689,14 +667,14 @@ pub struct InteractionSection {
     pub ui_focus_cancels_inputs: bool,
     /// Default camera distance from the origin.
     /// Can also be interpreted as default zoom level
-    pub default_cam_distance:    f32,
+    pub default_cam_distance: f32,
 }
 
 impl Default for InteractionSection {
     fn default() -> Self {
         Self {
             ui_focus_cancels_inputs: true,
-            default_cam_distance:    125.0,
+            default_cam_distance: 125.0,
         }
     }
 }
@@ -772,23 +750,23 @@ pub struct DebugSection {
 )]
 #[serde(rename_all = "kebab-case")]
 pub struct OnVariableClickedSection {
-    pub obstacle:   bool,
-    pub dynamic:    bool,
+    pub obstacle: bool,
+    pub dynamic: bool,
     pub interrobot: bool,
-    pub tracking:   bool,
-    pub variable:   bool,
-    pub inbox:      bool,
+    pub tracking: bool,
+    pub variable: bool,
+    pub inbox: bool,
 }
 
 impl Default for OnVariableClickedSection {
     fn default() -> Self {
         Self {
-            obstacle:   false,
-            dynamic:    false,
+            obstacle: false,
+            dynamic: false,
             interrobot: false,
-            tracking:   false,
-            variable:   false,
-            inbox:      false,
+            tracking: false,
+            variable: false,
+            inbox: false,
         }
     }
 }

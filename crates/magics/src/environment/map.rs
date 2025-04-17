@@ -1,22 +1,15 @@
 use bevy::{
     prelude::*,
     render::{
-        mesh::Indices,
         render_asset::RenderAssetUsages,
-        render_resource::{Extent3d, PrimitiveTopology, TextureDimension, TextureFormat},
+        render_resource::{Extent3d, TextureDimension, TextureFormat},
     },
 };
 use bevy_infinite_grid::{InfiniteGridBundle, InfiniteGridPlugin, InfiniteGridSettings};
 use catppuccin::Flavour;
 use gbp_config::{self, Config};
-use gbp_environment::Environment;
 
-use crate::{
-    asset_loader::{Meshes, Obstacles},
-    input::DrawSettingsEvent,
-    simulation_loader::{self, Sdf},
-    theme::CatppuccinTheme,
-};
+use crate::{input::DrawSettingsEvent, simulation_loader::Sdf, theme::CatppuccinTheme};
 
 pub struct MapPlugin;
 
@@ -88,6 +81,7 @@ fn spawn_directional_light(mut commands: Commands) {
 /// 1. is `Waiting` for the image asset to be loaded.
 /// 2. has been `Generated` from the image asset.
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+#[allow(dead_code)]
 pub enum HeightMapState {
     #[default]
     Waiting,
@@ -105,7 +99,7 @@ fn spawn_sdf_map_representation(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut image_assets: ResMut<Assets<Image>>,
     sdf: Res<Sdf>,
-    meshes: Res<Meshes>,
+    // meshes: Res<Meshes>,
     mut mesh_assets: ResMut<Assets<Mesh>>,
     config: Res<Config>,
     environment: Res<gbp_environment::Environment>,
@@ -156,14 +150,17 @@ fn spawn_sdf_map_representation(
     let rectangle = bevy::math::primitives::Rectangle::new(height, width);
     let mesh = mesh_assets.add(Mesh::from(rectangle));
 
-    commands.spawn((SdfMapRepresentation, PbrBundle {
-        mesh,
-        material,
-        visibility,
-        transform: Transform::from_xyz(0.0, 0.1, 0.0)
-            .with_rotation(Quat::from_rotation_x(std::f32::consts::FRAC_PI_2)),
-        ..default()
-    }));
+    commands.spawn((
+        SdfMapRepresentation,
+        PbrBundle {
+            mesh,
+            material,
+            visibility,
+            transform: Transform::from_xyz(0.0, 0.1, 0.0)
+                .with_rotation(Quat::from_rotation_x(std::f32::consts::FRAC_PI_2)),
+            ..default()
+        },
+    ));
     info!("spawned sdf map representation");
 }
 
@@ -188,29 +185,29 @@ fn show_or_hide_flat_map(
     }
 }
 
-/// **Bevy** run criteria
-/// Checks whether the environment image asset has been loaded.
-/// used as a run criteria for the [`obstacles`] system.
-fn environment_png_is_loaded(
-    state: Res<State<HeightMapState>>,
-    // scene_assets: Res<SceneAssets>,
-    obstacles: Res<Obstacles>,
-    image_assets: Res<Assets<Image>>,
-) -> bool {
-    image_assets
-        .get(obstacles.raw.id())
-        .is_some()
-        // && matches!(state.get(), HeightMapState::Generated)
-        && matches!(state.get(), HeightMapState::Waiting)
+// /// **Bevy** run criteria
+// /// Checks whether the environment image asset has been loaded.
+// /// used as a run criteria for the [`obstacles`] system.
+// fn environment_png_is_loaded(
+//     state: Res<State<HeightMapState>>,
+//     // scene_assets: Res<SceneAssets>,
+//     obstacles: Res<Obstacles>,
+//     image_assets: Res<Assets<Image>>,
+// ) -> bool {
+//     image_assets
+//         .get(obstacles.raw.id())
+//         .is_some()
+//         // && matches!(state.get(), HeightMapState::Generated)
+//         && matches!(state.get(), HeightMapState::Waiting)
 
-    // if image_assets
-    //     .get(scene_assets.obstacle_image_raw.clone())
-    //     .is_some()
-    // {
-    //     return matches!(state.get(), HeightMapState::Waiting);
-    // }
-    // false
-}
+//     // if image_assets
+//     //     .get(scene_assets.obstacle_image_raw.clone())
+//     //     .is_some()
+//     // {
+//     //     return matches!(state.get(), HeightMapState::Waiting);
+//     // }
+//     // false
+// }
 
 // /// **Bevy** [`Update`] system
 // /// Spawn the heightmap obstacles as soon as the obstacle image is loaded by
@@ -334,10 +331,10 @@ fn environment_png_is_loaded(
 //     error!("spawned heightmap");
 // }
 
-/// **Bevy** marker [`Component`] to represent the heightmap.
-/// Serves as a marker to identify the heightmap entity.
-#[derive(Component)]
-pub struct HeightMap;
+// /// **Bevy** marker [`Component`] to represent the heightmap.
+// /// Serves as a marker to identify the heightmap entity.
+// #[derive(Component)]
+// pub struct HeightMap;
 
 // /// **Bevy** [`Update`] system
 // /// Reads [`DrawSettingEvent`], where if `DrawSettingEvent.setting ==

@@ -25,29 +25,20 @@ pub mod export;
 pub(crate) mod escape_codes;
 pub(crate) mod macros;
 
-use std::{path::Path, time::Duration};
+use std::{io::IsTerminal, path::Path};
 
 use bevy::{
     input::common_conditions::input_just_pressed,
     prelude::*,
-    render::{
-        camera::RenderTarget,
-        render_resource::{
-            Extent3d, TextureDescriptor, TextureDimension, TextureFormat, TextureUsages,
-        },
-        RenderPlugin,
-    },
-    time::common_conditions::once_after_real_delay,
-    window::{PrimaryWindow, WindowMode, WindowResolution},
+    render::RenderPlugin,
+    window::{WindowMode, WindowResolution},
 };
 use colored::Colorize;
 
 // use rand::{Rng, SeedableRng};
-use environment::MainCamera;
-use gbp_config::{read_config, Config, FormationGroup};
+use gbp_config::{Config, FormationGroup};
 // use config::{environment::EnvironmentType, Environment};
 use gbp_environment::{Environment, EnvironmentType};
-use magics::AppState;
 
 use crate::cli::DumpDefault;
 
@@ -55,19 +46,18 @@ use crate::cli::DumpDefault;
 fn main() -> anyhow::Result<()> {
     const NAME: &str = env!("CARGO_PKG_NAME");
     const VERSION: &str = env!("CARGO_PKG_VERSION");
-    const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
+    // const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
 
     let cli = cli::parse_arguments();
 
     if let Some(dump) = cli.dump_default {
-        let stdout_is_a_terminal = atty::is(atty::Stream::Stdout);
         match dump {
             DumpDefault::Config => {
-                let default = gbp_config::Config::default();
+                let default = Config::default();
                 println!("{}", toml::to_string_pretty(&default)?);
             }
             DumpDefault::Formation => {
-                let default = gbp_config::FormationGroup::default();
+                let default = FormationGroup::default();
                 let yaml = serde_yaml::to_string(&default)?;
                 println!("{yaml}");
             }
@@ -92,7 +82,6 @@ fn main() -> anyhow::Result<()> {
         };
 
         let yaml = serde_yaml::to_string(&env)?;
-        let stdout_is_a_terminal = atty::is(atty::Stream::Stdout);
         println!("{yaml}");
 
         return Ok(());
@@ -122,7 +111,8 @@ fn main() -> anyhow::Result<()> {
 
         for name in directories {
             let basename = Path::new(&name).file_name().unwrap().to_string_lossy();
-            if atty::is(atty::Stream::Stdout) {
+            let stdout = std::io::stdout().lock();
+            if stdout.is_terminal() {
                 println!(
                     "{:width$} {}",
                     basename.green().bold(),
@@ -161,7 +151,7 @@ fn main() -> anyhow::Result<()> {
 
         WindowPlugin {
             primary_window: Some(Window {
-                name: Some(NAME.to_string()),
+                name: Some(format!("{NAME} v{VERSION}")),
                 focused: true,
                 mode: window_mode,
                 window_theme: None,
@@ -210,7 +200,7 @@ fn main() -> anyhow::Result<()> {
         .add_plugins((
             // simulation_loader::SimulationLoaderPlugin::default(),
             despawn_entity_after::DespawnEntityAfterPlugin,
-            simulation_loader::SimulationLoaderPlugin::new(true, cli.initial_scenario.clone()),
+            simulation_loader::SimulationLoaderPlugin::new( cli.initial_scenario.clone()),
             pause_play::PausePlayPlugin::default(),
             theme::ThemePlugin,
             asset_loader::AssetLoaderPlugin,

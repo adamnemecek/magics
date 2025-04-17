@@ -65,8 +65,8 @@ obstacles:
     col: 0
 - shape: !triangle
     angles:
-      A: 1.22
-      B: 1.22
+      a: 1.22
+      b: 1.22
     radius: 0.025
   rotation: 0.0
   translation:
@@ -77,8 +77,8 @@ obstacles:
     col: 0
 - shape: !triangle
     angles:
-      A: 0.6981317007977318
-      B: 1.9198621771937625
+      a: 0.6981317007977318
+      b: 1.9198621771937625
     radius: 0.01
   rotation: 5.2
   translation:
@@ -131,8 +131,8 @@ obstacles:
 #     col: 0
 # - shape: !triangle
 #     angles:
-#       A: 0.5235987755982988
-#       B: 0.5235987755982988
+#       a: 0.5235987755982988
+#       b: 0.5235987755982988
 #     radius: 0.05
 #   rotation: 0.0
 #   translation:
@@ -143,8 +143,8 @@ obstacles:
 #     col: 0
 # - shape: !triangle
 #     angles:
-#       A: 1.9198621771937625
-#       B: 0.6981317007977318
+#       a: 1.9198621771937625
+#       b: 0.6981317007977318
 #     radius: 0.03
 #   rotation: 5.225
 #   translation:

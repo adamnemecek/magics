@@ -6,10 +6,10 @@
 use std::num::NonZeroU32;
 
 // use magics::config::Environment;
-use gbp_environment::{Environment, PlaceableShape, Polygon, RegularPolygon};
+use gbp_environment::{Environment, PlaceableShape, RegularPolygon};
 use gbp_geometry::RelativePoint;
 use glam::{Vec2, Vec3Swizzles};
-use image::{imageops::FilterType::Triangle, RgbImage};
+use image::RgbImage;
 
 /// Custom resolution type, as pixels per tile.
 #[derive(Clone, Copy, Debug)]
@@ -348,7 +348,7 @@ fn is_tile_obstacle(
     let almost_full = Percentage::new(1.0 - path_width.clone().0);
     let obstacle_width = Percentage::new(almost_full.0 / 2.0);
     let obstacle_and_path_width = obstacle_width + path_width.clone();
-    let half = Percentage::new(0.5 - expansion.get() / 2.0);
+    // let half = Percentage::new(0.5 - expansion.get() / 2.0);
 
     match tile {
         '─' => {

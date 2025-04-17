@@ -13,19 +13,14 @@ use gbp_config::Config;
 use super::UiState;
 use crate::diagnostic::prelude::RobotDiagnosticsPlugin;
 
-pub struct MetricsPlugin {
-    wait_duration: Duration,
-}
+pub struct MetricsPlugin;
 
 impl Default for MetricsPlugin {
     fn default() -> Self {
         Self {
-            wait_duration: Duration::from_millis(500),
         }
     }
 }
-
-struct MetricWidget {}
 
 // #[derive(Resource)]
 // struct MetricsState {

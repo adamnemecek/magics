@@ -32,7 +32,7 @@ authors = [
   "Jens Høigaard Jensen <jens.jens@live.dk>",
   "Kristoffer Plagborg Bak Sørensen <kristoffer.pbs@tuta.io>",
 ]
-rust-version = "1.85"
+rust-version = "1.86"
 license = "MIT"
 
 [workspace.dependencies]

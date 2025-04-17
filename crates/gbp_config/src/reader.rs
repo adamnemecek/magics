@@ -1,5 +1,3 @@
-#![warn(missing_docs)]
-
 use std::path::Path;
 
 use directories::BaseDirs;

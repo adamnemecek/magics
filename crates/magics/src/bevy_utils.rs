@@ -32,6 +32,7 @@ pub mod prelude {
 ///     )
 ///     .run();
 /// ```
+#[allow(dead_code)]
 pub fn despawn_entities_with_component<T: Component>(
     to_despawn: Query<Entity, With<T>>,
     mut commands: Commands,
@@ -47,13 +48,16 @@ pub trait BevyAppExt {
     /// If the plugin is already added, then do nothing.
     /// This is an alternative to [`.add_plugins()`] which will panic if a
     /// plugin has already been added.
+    #[allow(dead_code)]
     fn try_add_plugin<P: Plugin>(&mut self, plugin: P) -> &mut Self;
 
     /// Check if an `Event` has been added to the world.
+    #[allow(dead_code)]
     fn event_exists<E: Event>(&self) -> bool;
 }
 
 impl BevyAppExt for bevy::app::App {
+    #[allow(dead_code)]
     fn try_add_plugin<P: Plugin>(&mut self, plugin: P) -> &mut Self {
         if !self.is_plugin_added::<P>() {
             self.add_plugins(plugin);
@@ -61,6 +65,7 @@ impl BevyAppExt for bevy::app::App {
         self
     }
 
+    #[allow(dead_code)]
     fn event_exists<E: Event>(&self) -> bool {
         self.world.contains_resource::<Events<E>>()
     }
@@ -110,18 +115,18 @@ pub mod run_conditions {
     //     }
 }
 
-pub mod state {
-    use bevy::prelude::*;
+// pub mod state {
+//     use bevy::prelude::*;
 
-    pub fn echo_state<S: States>() -> impl Fn(Res<State<S>>) {
-        move |state: Res<State<S>>| {
-            info!("{} state is: {:?}", std::any::type_name::<S>(), state.get());
-        }
-    }
+//     pub fn echo_state<S: States>() -> impl Fn(Res<State<S>>) {
+//         move |state: Res<State<S>>| {
+//             info!("{} state is: {:?}", std::any::type_name::<S>(), state.get());
+//         }
+//     }
 
-    pub fn enter_state<S: States + Copy>(state: S) -> impl FnMut(ResMut<NextState<S>>) {
-        move |mut next_state: ResMut<NextState<S>>| {
-            next_state.set(state);
-        }
-    }
-}
+//     pub fn enter_state<S: States + Copy>(state: S) -> impl FnMut(ResMut<NextState<S>>) {
+//         move |mut next_state: ResMut<NextState<S>>| {
+//             next_state.set(state);
+//         }
+//     }
+// }

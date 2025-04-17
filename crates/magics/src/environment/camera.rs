@@ -8,8 +8,8 @@ use crate::{
 };
 
 // const CAMERA_UP: Vec3 = Vec3::NEG_Y;
-const CAMERA_UP: Vec3 = Vec3::Z;
-const CAMERA_INITIAL_TARGET: Vec3 = Vec3::ZERO;
+// const CAMERA_UP: Vec3 = Vec3::Z;
+// const CAMERA_INITIAL_TARGET: Vec3 = Vec3::ZERO;
 
 pub struct CameraPlugin;
 
@@ -108,12 +108,12 @@ pub enum CameraMovement {
 }
 
 impl CameraMovement {
-    pub fn cycle(&mut self) {
-        *self = match self {
-            CameraMovement::Pan => CameraMovement::Orbit,
-            CameraMovement::Orbit => CameraMovement::Pan,
-        }
-    }
+    // pub fn cycle(&mut self) {
+    //     *self = match self {
+    //         CameraMovement::Pan => CameraMovement::Orbit,
+    //         CameraMovement::Orbit => CameraMovement::Pan,
+    //     }
+    // }
 
     pub fn next(&self) -> Self {
         match self {

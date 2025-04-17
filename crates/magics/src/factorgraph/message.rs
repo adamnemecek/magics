@@ -38,11 +38,15 @@ pub struct PrecisionMatrix(pub Matrix<Float>);
 /// the information vector and mean vector argument.
 pub struct Mean(pub Vector<Float>);
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum MessageOrigin {
-    Internal,
-    External,
-}
+// /// Classify whether the sender/receiver node is from the same [`FactorGraph`] or
+// /// from two different ones.
+// #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+// pub enum MessageOrigin {
+//     /// Within the same [`FactorGraph`] as the receiver -> sender
+//     Internal,
+//     /// The sender or receiver is from another [`FactorGraph`]
+//     External,
+// }
 
 /// Container for the message exchanged between nodes in the factorgraph
 #[derive(Debug, Clone)]
@@ -91,6 +95,7 @@ impl Message {
         self.payload.take()
     }
 
+    #[allow(missing_docs)]
     #[must_use]
     pub fn acquire(&mut self) -> Self {
         Self {
@@ -118,6 +123,7 @@ impl Message {
         })
     }
 
+    #[allow(missing_docs)]
     pub fn zero() -> Self {
         Self {
             payload: Some(Box::new(Payload {
@@ -179,9 +185,9 @@ impl Message {
 #[derive(Debug)]
 pub struct VariableToFactorMessage {
     /// The factor that sends the message
-    pub from:    VariableId,
+    pub from: VariableId,
     /// The variable that receives the message
-    pub to:      FactorId,
+    pub to: FactorId,
     /// The message
     pub message: Message,
 }
@@ -190,9 +196,9 @@ pub struct VariableToFactorMessage {
 #[derive(Debug)]
 pub struct FactorToVariableMessage {
     /// The variable that sends the message
-    pub from:    FactorId,
+    pub from: FactorId,
     /// The factor that receives the message
-    pub to:      VariableId,
+    pub to: VariableId,
     /// The message
     pub message: Message,
 }

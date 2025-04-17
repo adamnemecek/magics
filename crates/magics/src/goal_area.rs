@@ -59,7 +59,7 @@ pub mod events {
 
     #[derive(Event)]
     pub struct GoalAreaReached {
-        pub area:       Entity,
+        pub area: Entity,
         pub reached_by: Entity,
     }
 }
@@ -92,7 +92,7 @@ fn detect_collisions(
                         .insert(collider_entity, time_fixed.elapsed_seconds());
 
                     evw_goal_area_reached.send(events::GoalAreaReached {
-                        area:       goal_area_entity,
+                        area: goal_area_entity,
                         reached_by: collider_entity,
                     });
                 }
@@ -102,38 +102,38 @@ fn detect_collisions(
     }
 }
 
-fn setup_goal_areas_for_junction_scenario(mut commands: Commands) {
-    commands.spawn(components::GoalArea::new(
-        parry2d::bounding_volume::Aabb::new(
-            parry2d::na::Point2::new(-8.0, -48.),
-            parry2d::na::Point2::new(8.0, -52.),
-        ),
-    ));
+// fn setup_goal_areas_for_junction_scenario(mut commands: Commands) {
+//     commands.spawn(components::GoalArea::new(
+//         parry2d::bounding_volume::Aabb::new(
+//             parry2d::na::Point2::new(-8.0, -48.),
+//             parry2d::na::Point2::new(8.0, -52.),
+//         ),
+//     ));
 
-    commands.spawn(components::GoalArea::new(
-        parry2d::bounding_volume::Aabb::new(
-            parry2d::na::Point2::new(48., -8.0),
-            parry2d::na::Point2::new(52., 8.0),
-        ),
-    ));
-}
+//     commands.spawn(components::GoalArea::new(
+//         parry2d::bounding_volume::Aabb::new(
+//             parry2d::na::Point2::new(48., -8.0),
+//             parry2d::na::Point2::new(52., 8.0),
+//         ),
+//     ));
+// }
 
-fn render_goal_areas(mut gizmos: Gizmos, goal_areas: Query<&components::GoalArea>) {
-    for goal_area in &goal_areas {
-        let center = goal_area.aabb.center();
-        let position: Vec3 = Vec3::new(center.x, -1.0, center.y);
-        let half_extents = goal_area.aabb.half_extents();
-        let size = Vec2::new(half_extents.x * 2.0, half_extents.y * 2.0);
+// fn render_goal_areas(mut gizmos: Gizmos, goal_areas: Query<&components::GoalArea>) {
+//     for goal_area in &goal_areas {
+//         let center = goal_area.aabb.center();
+//         let position: Vec3 = Vec3::new(center.x, -1.0, center.y);
+//         let half_extents = goal_area.aabb.half_extents();
+//         let size = Vec2::new(half_extents.x * 2.0, half_extents.y * 2.0);
 
-        gizmos.rect(position, Quat::IDENTITY, size, Color::SEA_GREEN);
-    }
-}
+//         gizmos.rect(position, Quat::IDENTITY, size, Color::SEA_GREEN);
+//     }
+// }
 
-fn log_collisions(mut evr_goal_area_reached: EventReader<events::GoalAreaReached>) {
-    for event in evr_goal_area_reached.read() {
-        info!(
-            "goal area {:?} reached by {:?}",
-            event.area, event.reached_by
-        );
-    }
-}
+// fn log_collisions(mut evr_goal_area_reached: EventReader<events::GoalAreaReached>) {
+//     for event in evr_goal_area_reached.read() {
+//         info!(
+//             "goal area {:?} reached by {:?}",
+//             event.area, event.reached_by
+//         );
+//     }
+// }

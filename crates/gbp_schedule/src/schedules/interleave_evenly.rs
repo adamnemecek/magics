@@ -32,9 +32,11 @@ mod private {
     // }
 
     pub(super) struct InterleaveEvenlyIter {
-        seq:   Vec<bool>,
+        seq: Vec<bool>,
         index: usize,
-        max:   u8,
+
+        #[allow(dead_code)]
+        max: u8,
     }
 
     impl InterleaveEvenlyIter {

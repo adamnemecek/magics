@@ -137,9 +137,9 @@ impl Plugin for InputPlugin {
 /// binding
 #[derive(Debug, Default, Resource)]
 pub struct ChangingBinding {
-    pub action:  InputAction,
+    pub action: InputAction,
     pub binding: usize,
-    cooldown:    f32,
+    cooldown: f32,
 }
 
 impl ChangingBinding {
@@ -174,12 +174,6 @@ impl ChangingBinding {
         if self.cooldown < 0.0 {
             self.cooldown = 0.0;
         }
-    }
-
-    /// Refresh the cooldown
-    #[inline]
-    pub fn refresh_cooldown(&mut self) {
-        self.cooldown = 0.1;
     }
 }
 

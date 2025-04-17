@@ -15,41 +15,41 @@ const fn seq_n(start: usize, n: usize) -> std::ops::Range<usize> {
     start..start + n
 }
 
-type Aa<'a, T> = MatrixView<'a, T>;
-type Ab<'a, T> = MatrixView<'a, T>;
-type Ba<'a, T> = MatrixView<'a, T>;
-type Bb<'a, T> = MatrixView<'a, T>;
+// type Aa<'a, T> = MatrixView<'a, T>;
+// type Ab<'a, T> = MatrixView<'a, T>;
+// type Ba<'a, T> = MatrixView<'a, T>;
+// type Bb<'a, T> = MatrixView<'a, T>;
 
-fn extract_submatrices_from_precision_matrix<T: GbpFloat>(
-    precision_matrix: &Matrix<T>,
-    marg_idx: usize,
-) -> (Aa<T>, Ab<T>, Ba<T>, Bb<T>) {
-    debug_assert!(precision_matrix.is_square());
-    debug_assert_eq!(precision_matrix.nrows() % DOFS, 0);
-    debug_assert_eq!(precision_matrix.ncols() % DOFS, 0);
+// fn extract_submatrices_from_precision_matrix<T: GbpFloat>(
+//     precision_matrix: &Matrix<T>,
+//     marg_idx: usize,
+// ) -> (Aa<T>, Ab<T>, Ba<T>, Bb<T>) {
+//     debug_assert!(precision_matrix.is_square());
+//     debug_assert_eq!(precision_matrix.nrows() % DOFS, 0);
+//     debug_assert_eq!(precision_matrix.ncols() % DOFS, 0);
 
-    let aa = precision_matrix.slice(s![seq_n(marg_idx, DOFS), seq_n(marg_idx, DOFS)]);
+//     let aa = precision_matrix.slice(s![seq_n(marg_idx, DOFS), seq_n(marg_idx, DOFS)]);
 
-    let ab = if marg_idx == 0 {
-        precision_matrix.slice(s![seq_n(marg_idx, DOFS), marg_idx + DOFS..])
-    } else {
-        precision_matrix.slice(s![seq_n(marg_idx, DOFS), ..marg_idx])
-    };
+//     let ab = if marg_idx == 0 {
+//         precision_matrix.slice(s![seq_n(marg_idx, DOFS), marg_idx + DOFS..])
+//     } else {
+//         precision_matrix.slice(s![seq_n(marg_idx, DOFS), ..marg_idx])
+//     };
 
-    let ba = if marg_idx == 0 {
-        precision_matrix.slice(s![marg_idx + DOFS.., seq_n(marg_idx, DOFS)])
-    } else {
-        precision_matrix.slice(s![..marg_idx, seq_n(marg_idx, DOFS)])
-    };
+//     let ba = if marg_idx == 0 {
+//         precision_matrix.slice(s![marg_idx + DOFS.., seq_n(marg_idx, DOFS)])
+//     } else {
+//         precision_matrix.slice(s![..marg_idx, seq_n(marg_idx, DOFS)])
+//     };
 
-    let bb = if marg_idx == 0 {
-        precision_matrix.slice(s![marg_idx + DOFS.., marg_idx + DOFS..])
-    } else {
-        precision_matrix.slice(s![..marg_idx, ..marg_idx])
-    };
+//     let bb = if marg_idx == 0 {
+//         precision_matrix.slice(s![marg_idx + DOFS.., marg_idx + DOFS..])
+//     } else {
+//         precision_matrix.slice(s![..marg_idx, ..marg_idx])
+//     };
 
-    (aa, ab, ba, bb)
-}
+//     (aa, ab, ba, bb)
+// }
 
 #[allow(clippy::similar_names)]
 pub fn marginalise_factor_distance(
@@ -139,9 +139,12 @@ mod tests {
 
     macro_rules! generate_8x8_precision_matrix {
         () => {{
-            let upper_left = array![[1., 2., 3., 4.], [5., 6., 7., 8.], [9., 10., 11., 12.], [
-                13., 14., 15., 16.
-            ]];
+            let upper_left = array![
+                [1., 2., 3., 4.],
+                [5., 6., 7., 8.],
+                [9., 10., 11., 12.],
+                [13., 14., 15., 16.]
+            ];
 
             let upper_right = array![
                 [17., 18., 19., 20.],
@@ -179,44 +182,46 @@ mod tests {
         }};
     }
 
-    #[test]
-    fn extract_submatrices_from_precision_matrix_with_marg_idx0_dofs4() {
-        let (precision_matrix, upper_left, upper_right, lower_left, lower_right) =
-            generate_8x8_precision_matrix!();
+    // #[test]
+    // fn extract_submatrices_from_precision_matrix_with_marg_idx0_dofs4() {
+    //     let (precision_matrix, upper_left, upper_right, lower_left, lower_right) =
+    //         generate_8x8_precision_matrix!();
 
-        assert!(precision_matrix.is_square());
+    //     assert!(precision_matrix.is_square());
 
-        let (aa, ab, ba, bb) = extract_submatrices_from_precision_matrix(&precision_matrix, 0);
+    //     let (aa, ab, ba, bb) = extract_submatrices_from_precision_matrix(&precision_matrix, 0);
 
-        assert_eq!(aa, upper_left);
-        assert_eq!(ab, upper_right);
-        assert_eq!(ba, lower_left);
-        assert_eq!(bb, lower_right);
-    }
+    //     assert_eq!(aa, upper_left);
+    //     assert_eq!(ab, upper_right);
+    //     assert_eq!(ba, lower_left);
+    //     assert_eq!(bb, lower_right);
+    // }
 
-    #[test]
-    fn extract_submatrices_from_precision_matrix_with_marg_idx4_dofs4() {
-        let (precision_matrix, upper_left, upper_right, lower_left, lower_right) =
-            generate_8x8_precision_matrix!();
+    // #[test]
+    // fn extract_submatrices_from_precision_matrix_with_marg_idx4_dofs4() {
+    //     let (precision_matrix, upper_left, upper_right, lower_left, lower_right) =
+    //         generate_8x8_precision_matrix!();
 
-        assert!(precision_matrix.is_square());
+    //     assert!(precision_matrix.is_square());
 
-        let (aa, ab, ba, bb) = extract_submatrices_from_precision_matrix(&precision_matrix, 4);
+    //     let (aa, ab, ba, bb) = extract_submatrices_from_precision_matrix(&precision_matrix, 4);
 
-        assert_eq!(aa, lower_right);
-        assert_eq!(ab, lower_left);
-        assert_eq!(ba, upper_right);
-        assert_eq!(bb, upper_left);
-    }
+    //     assert_eq!(aa, lower_right);
+    //     assert_eq!(ab, lower_left);
+    //     assert_eq!(ba, upper_right);
+    //     assert_eq!(bb, upper_left);
+    // }
 
     #[test]
     fn information_vector_length_equal_to_ndofs_do_nothing() {
         #![allow(clippy::unwrap_used)]
         let information_vector: Vector<Float> = array![0., 1., 2., 3.];
-        let precision_matrix: Matrix<Float> =
-            array![[5., 0.2, 0., 0.], [0.2, 5., 0., 0.], [0., 0.0, 5., 0.3], [
-                0., 0., 0.3, 5.
-            ]];
+        let precision_matrix: Matrix<Float> = array![
+            [5., 0.2, 0., 0.],
+            [0.2, 5., 0., 0.],
+            [0., 0.0, 5., 0.3],
+            [0., 0., 0.3, 5.]
+        ];
 
         let marginalisation_idx = 0;
 

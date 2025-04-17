@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use bevy::{app::AppExit, prelude::*, tasks::IoTaskPool};
 use bevy_notify::prelude::*;
-use chrono::Duration;
+// use chrono::Duration;
 use gbp_config::{Config, DrawSetting};
 use leafwing_input_manager::prelude::*;
 use strum::IntoEnumIterator;
@@ -77,7 +77,7 @@ pub struct DrawSettingsEvent {
     /// The draw setting that was toggled
     pub setting: DrawSetting,
     /// The new value of the draw setting
-    pub draw:    bool,
+    pub draw: bool,
 }
 
 // TODO: refactor to this
@@ -143,14 +143,18 @@ pub enum GeneralAction {
 
 impl std::fmt::Display for GeneralAction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", match self {
-            Self::CycleTheme => "Cycle Theme",
-            Self::ExportGraph => "Export Graph",
-            Self::ScreenShot => "Take ScreenShot",
-            Self::SaveSettings => "Save Settings",
-            Self::QuitApplication => "Quit Application",
-            Self::PausePlaySimulation => "Pause/Play Simulation",
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::CycleTheme => "Cycle Theme",
+                Self::ExportGraph => "Export Graph",
+                Self::ScreenShot => "Take ScreenShot",
+                Self::SaveSettings => "Save Settings",
+                Self::QuitApplication => "Quit Application",
+                Self::PausePlaySimulation => "Pause/Play Simulation",
+            }
+        )
     }
 }
 
@@ -231,10 +235,10 @@ fn export_factorgraphs_as_graphviz(
         append_line_to_output(&format!(r#"  label="{:?}""#, robot_id));
         // Add all nodes
         for node in &nodes {
-            let pos = match node.kind {
-                NodeKind::Variable { x, y } => Some((x, y)),
-                _ => None,
-            };
+            // let pos = match node.kind {
+            //     NodeKind::Variable { x, y } => Some((x, y)),
+            //     _ => None,
+            // };
 
             let label = match node.kind {
                 NodeKind::Variable { .. } => format!("v{}", node.index),
@@ -256,10 +260,10 @@ fn export_factorgraphs_as_graphviz(
                     node.shape(),
                     node.width()
                 ));
-                if let Some((x, y)) = pos {
-                    // line.push_str(&format!(r#", pos="{x},{y}!""#));
-                    // line.push_str(&format!(r#", pos="{x}, {y}""#));
-                }
+                // if let Some((_, _)) = pos {
+                //     // line.push_str(&format!(r#", pos="{x},{y}!""#));
+                //     // line.push_str(&format!(r#", pos="{x}, {y}""#));
+                // }
                 line.push(']');
                 line
             };
@@ -295,7 +299,7 @@ fn export_factorgraphs_as_graphviz(
             .into_iter()
             .filter_map(|node| match node.kind {
                 NodeKind::InterRobotFactor {
-                    active,
+                    active: _,
                     external_variable_id,
                 } => Some((
                     node.index,
@@ -399,7 +403,6 @@ fn handle_export_graph(
     mut export_graph_finished_event: EventWriter<ExportFactorGraphAsGraphvizFinished>,
     // mut toast_event: EventWriter<ToastEvent>,
 ) -> std::io::Result<()> {
-
     let Some(output) = export_factorgraphs_as_graphviz(q, config) else {
         warn!("There are no factorgraphs in the world");
         // toast_event.send(ToastEvent::warning(

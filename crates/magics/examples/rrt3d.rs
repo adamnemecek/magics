@@ -22,12 +22,11 @@ use parry3d::{
 use rand::distributions::{Distribution, Uniform};
 
 const INITIAL_CAMERA_DISTANCE: f32 = 5.0;
-const CAMERA_UP: Vec3 = Vec3::NEG_Y;
+// const CAMERA_UP: Vec3 = Vec3::NEG_Y;
 const CAMERA_INITIAL_TARGET: Vec3 = Vec3::ZERO;
 const CAMERA_INITIAL_POSITION: Vec3 = Vec3::new(0.0, INITIAL_CAMERA_DISTANCE, 0.0);
 
 fn main() -> anyhow::Result<()> {
-
     let cli = cli::parse_arguments();
 
     let (config, formation, environment): (Config, FormationGroup, Environment) = if cli.default {
@@ -174,7 +173,7 @@ fn rrt_path(
     let p = CollisionProblem {
         obstacle: shape::Cuboid::new(Vector3::new(0.5f32, 0.5, 0.25)),
         // intersection sphere does not need a very big radius
-        ball:     shape::Ball::new(0.1f32),
+        ball: shape::Ball::new(0.1f32),
     };
 
     if *index == path.len() {
@@ -215,19 +214,19 @@ fn draw_gizmos(mut gizmos: Gizmos, path: Res<Path>) {
 }
 
 /// [`Startup`] system to spawn the main camera
-fn spawn_camera(mut commands: Commands) {
-    commands.spawn((
-        Camera3dBundle {
-            transform: Transform::from_translation(CAMERA_INITIAL_POSITION)
-                .looking_at(CAMERA_INITIAL_TARGET, CAMERA_UP),
-            ..default()
-        },
-        LinearMovementBundle::default(),
-        OrbitMovementBundle::default(),
-        movement::Local,
-        MainCamera,
-    ));
-}
+// fn spawn_camera(mut commands: Commands) {
+//     commands.spawn((
+//         Camera3dBundle {
+//             transform: Transform::from_translation(CAMERA_INITIAL_POSITION)
+//                 .looking_at(CAMERA_INITIAL_TARGET, CAMERA_UP),
+//             ..default()
+//         },
+//         LinearMovementBundle::default(),
+//         OrbitMovementBundle::default(),
+//         movement::Local,
+//         MainCamera,
+//     ));
+// }
 
 /// **Bevy** [`Startup`] system
 /// Spawns a directional light.
@@ -259,7 +258,7 @@ fn infinite_grid(mut commands: Commands, catppuccin_theme: Res<CatppuccinTheme>)
 
 struct CollisionProblem {
     obstacle: shape::Cuboid,
-    ball:     shape::Ball,
+    ball: shape::Ball,
 }
 
 impl CollisionProblem {

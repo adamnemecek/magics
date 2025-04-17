@@ -5,7 +5,7 @@ use itertools::Itertools;
 use ringbuf::{Rb, StaticRb};
 
 const MAX_TRACE_LENGTH: usize = 10000;
-const SAMPLE_DELAY: f32 = 0.5;
+// const SAMPLE_DELAY: f32 = 0.5;
 
 use gbp_config::Config;
 
@@ -44,7 +44,7 @@ impl Plugin for TracerVisualiserPlugin {
 
 pub struct Trace {
     // color:       Color,
-    color:       DisplayColour,
+    color: DisplayColour,
     ring_buffer: StaticRb<Vec3, MAX_TRACE_LENGTH>,
 }
 
@@ -74,7 +74,7 @@ fn create_tracer_when_a_robot_is_spawned(
     query: Query<(RobotId, &Transform, &ColorAssociation), With<RobotConnections>>,
     mut traces: ResMut<Traces>,
     mut spawn_robot_event: EventReader<RobotSpawned>,
-    theme: Res<CatppuccinTheme>,
+    // theme: Res<CatppuccinTheme>,
 ) {
     spawn_robot_event.read().for_each(|RobotSpawned(robot_id)| {
         for (other_robot_id, transform, color_association) in query.iter() {
@@ -111,7 +111,7 @@ fn track_robots(
             .0
             .entry(robot_id)
             .or_insert(Trace {
-                color:       color_association.name,
+                color: color_association.name,
                 ring_buffer: StaticRb::default(),
             })
             .ring_buffer

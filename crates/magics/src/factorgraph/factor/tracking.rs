@@ -1,9 +1,8 @@
 //! Tracking Factor (extension)
-use std::{borrow::Cow, cell::Cell, ops::Sub, sync::Mutex};
+use std::{borrow::Cow, cell::Cell, sync::Mutex};
 
-use bevy::{math::Vec2, utils::smallvec::ToSmallVec};
-use colored::Colorize;
-use gbp_linalg::{prelude::*, pretty_print_matrix};
+use bevy::math::Vec2;
+use gbp_linalg::prelude::*;
 use itertools::Itertools;
 use ndarray::{array, concatenate, s, Axis};
 
@@ -80,14 +79,14 @@ pub struct TrackingFactor {
 
 #[derive(Debug, Clone, Copy)]
 pub struct LastMeasurement {
-    pub pos:   bevy::math::Vec2,
+    pub pos: bevy::math::Vec2,
     pub value: Float,
 }
 
 impl Default for LastMeasurement {
     fn default() -> Self {
         Self {
-            pos:   Vec2::ZERO,
+            pos: Vec2::ZERO,
             value: 0.0,
         }
     }
@@ -145,7 +144,7 @@ impl TrackingFactor {
     pub fn set_linearisation_point(&mut self, mean: Vec2) {
         // self.tracking.path = None;
         self.last_measurement.lock().unwrap().set(LastMeasurement {
-            pos:   mean,
+            pos: mean,
             value: 0.0,
         });
     }
@@ -170,7 +169,7 @@ impl Factor for TrackingFactor {
     #[inline]
     fn jacobian(
         &self,
-        state: &FactorState,
+        _state: &FactorState,
         linearisation_point: &Vector<Float>,
     ) -> Cow<'_, Matrix<Float>> {
         let last_measurement = self.last_measurement.lock().unwrap().get();
@@ -297,7 +296,7 @@ impl Factor for TrackingFactor {
 
         // 5. Take the average of the two projections
         let measurement_point = match projection_to_previous {
-            Some((previous_projection, a, b)) => {
+            Some((previous_projection, _, _)) => {
                 // connections should be 2
                 self.tracking.connections.lock().unwrap().set(2);
 
@@ -334,7 +333,7 @@ impl Factor for TrackingFactor {
 
         // Update last measurement and return
         self.last_measurement.lock().unwrap().set(LastMeasurement {
-            pos:   Vec2::new(measurement_point[0] as f32, measurement_point[1] as f32),
+            pos: Vec2::new(measurement_point[0] as f32, measurement_point[1] as f32),
             value: measurement,
         });
 

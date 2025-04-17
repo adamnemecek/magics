@@ -8,7 +8,6 @@ use bevy::{
 use derive_more::IntoIterator;
 use gbp_geometry::{Point, RelativePoint};
 use gbp_linalg::Float;
-use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 use typed_floats::StrictlyPositiveFinite;
 
@@ -145,10 +144,8 @@ impl Circle {
 #[derive(Debug, Serialize, Deserialize, Clone, derive_more::Constructor)]
 #[serde(rename_all = "kebab-case")]
 pub struct Angles {
-    #[allow(non_snake_case)]
-    A: Angle,
-    #[allow(non_snake_case)]
-    B: Angle,
+    a: Angle,
+    b: Angle,
 }
 
 /// A triangle to be placed in the environment
@@ -190,8 +187,8 @@ impl Triangle {
     }
 
     pub fn points(&self) -> [Vec2; 3] {
-        let a = self.angles.A.as_radians() as f32;
-        let b = self.angles.B.as_radians() as f32;
+        let a = self.angles.a.as_radians() as f32;
+        let b = self.angles.b.as_radians() as f32;
         let c = std::f32::consts::PI - (a + b);
 
         let a_hypotenuse = self.radius.get() as f32 / a.sin();
@@ -236,7 +233,7 @@ fn sign(p1: Vec2, p2: Vec2, p3: Vec2) -> f32 {
 #[serde(rename_all = "kebab-case")]
 pub struct RegularPolygon {
     /// The number of sides of the polygon
-    pub sides:  usize,
+    pub sides: usize,
     /// The radius of the polygon
     pub radius: StrictlyPositiveFinite<Float>,
     // /// Side length of the polygon
@@ -320,7 +317,7 @@ impl RegularPolygon {
 pub struct Rectangle {
     /// The width of the rectangle
     /// This is a value in the range [0, 1]
-    pub width:  StrictlyPositiveFinite<Float>,
+    pub width: StrictlyPositiveFinite<Float>,
     /// The height of the rectangle
     /// This is a value in the range [0, 1]
     pub height: StrictlyPositiveFinite<Float>,
@@ -469,8 +466,8 @@ impl PlaceableShape {
     pub fn triangle(angles: [Angle; 2], radius: StrictlyPositiveFinite<Float>) -> Self {
         Self::Triangle(Triangle::new(
             Angles {
-                A: angles[0],
-                B: angles[1],
+                a: angles[0],
+                b: angles[1],
             },
             radius,
         ))
@@ -602,16 +599,16 @@ pub struct TileSettings {
 #[serde(rename_all = "kebab-case")]
 pub struct SdfSettings {
     pub resolution: u32,
-    pub expansion:  f32,
-    pub blur:       f32,
+    pub expansion: f32,
+    pub blur: f32,
 }
 
 impl Default for SdfSettings {
     fn default() -> Self {
         Self {
             resolution: 200,
-            expansion:  0.1,
-            blur:       0.05,
+            expansion: 0.1,
+            blur: 0.05,
         }
     }
 }
@@ -619,7 +616,7 @@ impl Default for SdfSettings {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct Tiles {
-    pub grid:     TileGrid,
+    pub grid: TileGrid,
     pub settings: TileSettings,
 }
 
@@ -628,7 +625,7 @@ impl Tiles {
     #[must_use]
     pub fn empty() -> Self {
         Self {
-            grid:     TileGrid::new(vec!["█"]),
+            grid: TileGrid::new(vec!["█"]),
             settings: TileSettings {
                 tile_size: 0.0,
                 path_width: 0.0,
@@ -669,7 +666,7 @@ pub enum EnvironmentType {
 #[derive(Debug, Clone, Serialize, Deserialize, Resource)]
 #[serde(rename_all = "kebab-case")]
 pub struct Environment {
-    pub tiles:     Tiles,
+    pub tiles: Tiles,
     pub obstacles: Obstacles,
 }
 
@@ -758,8 +755,8 @@ impl Environment {
         tile_size: f32,
     ) -> Self {
         Self {
-            tiles:     Tiles {
-                grid:     TileGrid(matrix_representation),
+            tiles: Tiles {
+                grid: TileGrid(matrix_representation),
                 settings: TileSettings {
                     tile_size,
                     path_width,
@@ -774,8 +771,8 @@ impl Environment {
     #[must_use]
     pub fn intersection() -> Self {
         Self {
-            tiles:     Tiles {
-                grid:     TileGrid::new(vec!["┼"]),
+            tiles: Tiles {
+                grid: TileGrid::new(vec!["┼"]),
                 settings: TileSettings {
                     tile_size: 100.0,
                     path_width: 0.1325,
@@ -892,7 +889,7 @@ impl Environment {
     #[allow(clippy::missing_panics_doc)]
     pub fn circle() -> Self {
         Self {
-            tiles:     Tiles::empty()
+            tiles: Tiles::empty()
                 .with_tile_size(100.0)
                 .with_obstacle_height(1.0),
             obstacles: Obstacles(vec![
