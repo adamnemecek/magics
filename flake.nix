@@ -120,7 +120,8 @@ rec {
                 (lib.getLib udev)
                 (lib.getLib libxkbcommon)
                 udev
-                egl-wayland
+                (lib.getLib vulkan-loader)
+                # (lib.getLib egl-wayland)
               ]
             );
 
