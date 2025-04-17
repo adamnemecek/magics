@@ -229,7 +229,6 @@ impl FactorGraph {
     ///
     /// **Computes in O(1) time**
     #[inline]
-    #[must_use]
     pub fn len(&self) -> usize {
         self.graph.node_count()
     }
@@ -243,10 +242,9 @@ impl FactorGraph {
     /// A count over the number of variables and factors in the factorgraph
     ///
     /// **Computes in O(1) time**
-    #[must_use]
     pub fn node_count(&self) -> NodeCount {
         NodeCount {
-            factors:   self.factor_indices.len(),
+            factors: self.factor_indices.len(),
             variables: self.variable_indices.len(),
         }
     }
@@ -1058,8 +1056,6 @@ impl<'fg> Iterator for Variables<'fg> {
 
 impl FactorGraph {
     /// Returns an iterator over the variables in the factorgraph.
-    #[inline]
-    #[must_use]
     pub fn variables(&self) -> Variables<'_> {
         Variables::new(&self.graph, &self.variable_indices)
     }
@@ -1098,8 +1094,6 @@ impl<'fg> Iterator for InterRobotFactors<'fg> {
 
 impl FactorGraph {
     /// Returns an iterator over the interrobot factors in the factorgraph.
-    #[inline]
-    #[must_use]
     pub fn inter_robot_factors(&self) -> InterRobotFactors<'_> {
         InterRobotFactors::new(&self.graph, &self.interrobot_factor_indices)
     }
@@ -1186,8 +1180,6 @@ impl<'fg> Iterator for VariableAndTheirInterRobotFactors<'fg> {
 impl FactorGraph {
     /// Returns an iterator over the variable and their connected interrobot
     /// factors in the factorgraph
-    #[inline]
-    #[must_use]
     pub fn variable_and_inter_robot_factors(&self) -> VariableAndTheirInterRobotFactors<'_> {
         VariableAndTheirInterRobotFactors::new(&self.graph, &self.variable_indices)
     }
