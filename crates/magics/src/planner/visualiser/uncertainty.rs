@@ -2,7 +2,7 @@
 use bevy::prelude::*;
 use gbp_config::Config;
 
-use super::{RobotTracker, Z_FIGHTING_OFFSET};
+use super::RobotTracker;
 use crate::{
     asset_loader::Materials,
     bevy_utils::run_conditions::event_exists,
@@ -127,7 +127,7 @@ fn init_uncertainty(
 
                 // angle of the major axis with the x-axis
                 // θ = arctan²(λ₁ - a, b)
-                let angle = f64::atan2(half_major_axis - a, b) as f32;
+                // let angle = f64::atan2(half_major_axis - a, b) as f32;
 
                 let mesh = meshes.add(Ellipse::new(
                     // pick `x` from the covariance diagonal, but cap it at 10.0
@@ -321,37 +321,37 @@ fn show_or_hide_uncertainty(
     }
 }
 
-fn remove_all_uncertainty_visualisers(
-    mut commands: Commands,
-    query: Query<Entity, With<UncertaintyVisualiser>>,
-) {
-    for entity in &query {
-        commands.entity(entity).despawn_recursive();
-    }
-}
+// fn remove_all_uncertainty_visualisers(
+//     mut commands: Commands,
+//     query: Query<Entity, With<UncertaintyVisualiser>>,
+// ) {
+//     for entity in &query {
+//         commands.entity(entity).despawn_recursive();
+//     }
+// }
 
-fn update_velocity_uncertainty(mut gizmos: Gizmos, q: Query<&FactorGraph>) {
-    for fgraph in &q {
-        for (_, v) in fgraph.variables() {
-            // let mean = v.belief.mean.view();
-            // covariance matrix
-            // [[_, _, _, _],
-            //  [_, _, _, _],
-            //  [_, _, x, _],
-            //  [_, _, _, y]]
-            let covariance = v.belief.covariance_matrix.view();
+// fn update_velocity_uncertainty(mut gizmos: Gizmos, q: Query<&FactorGraph>) {
+//     for fgraph in &q {
+//         for (_, v) in fgraph.variables() {
+//             // let mean = v.belief.mean.view();
+//             // covariance matrix
+//             // [[_, _, _, _],
+//             //  [_, _, _, _],
+//             //  [_, _, x, _],
+//             //  [_, _, _, y]]
+//             let covariance = v.belief.covariance_matrix.view();
 
-            // Draw a velocity vector
-            let pos = v.estimated_position_vec2();
-            let vx = covariance[(2, 2)] * 300.0;
-            let vy = covariance[(3, 3)] * 300.0;
+//             // Draw a velocity vector
+//             let pos = v.estimated_position_vec2();
+//             let vx = covariance[(2, 2)] * 300.0;
+//             let vy = covariance[(3, 3)] * 300.0;
 
-            // dbg!(&covariance);
+//             // dbg!(&covariance);
 
-            let start = Vec3::new(pos.x, 0.0, pos.y);
-            let end = Vec3::new(pos.x + vx as f32, 0.0, pos.y + vy as f32);
-            // dbg!((&start, &end));
-            gizmos.arrow(start, end, Color::RED);
-        }
-    }
-}
+//             let start = Vec3::new(pos.x, 0.0, pos.y);
+//             let end = Vec3::new(pos.x + vx as f32, 0.0, pos.y + vy as f32);
+//             // dbg!((&start, &end));
+//             gizmos.arrow(start, end, Color::RED);
+//         }
+//     }
+// }

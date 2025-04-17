@@ -50,25 +50,25 @@ impl AngularAcceleration {
 pub struct Orbit {
     // point to rotate around
     pub origin: Vec3,
-    pub radius: f32,
+    // pub radius: f32,
 }
 
 impl Orbit {
-    pub const fn new(origin: Vec3, radius: f32) -> Self {
-        Self { origin, radius }
+    pub const fn new(origin: Vec3) -> Self {
+        Self { origin }
     }
 }
 
 #[derive(Bundle)]
 pub struct LinearMovementBundle {
-    pub velocity:     Velocity,
+    pub velocity: Velocity,
     pub acceleration: Acceleration,
 }
 
 impl Default for LinearMovementBundle {
     fn default() -> Self {
         Self {
-            velocity:     Velocity(Vec3::ZERO),
+            velocity: Velocity(Vec3::ZERO),
             acceleration: Acceleration::new(Vec3::ZERO),
         }
     }
@@ -76,14 +76,14 @@ impl Default for LinearMovementBundle {
 
 #[derive(Bundle)]
 pub struct AngularMovementBundle {
-    pub angular_velocity:     AngularVelocity,
+    pub angular_velocity: AngularVelocity,
     pub angular_acceleration: AngularAcceleration,
 }
 
 impl Default for AngularMovementBundle {
     fn default() -> Self {
         Self {
-            angular_velocity:     AngularVelocity::new(Vec3::ZERO),
+            angular_velocity: AngularVelocity::new(Vec3::ZERO),
             angular_acceleration: AngularAcceleration::new(Vec3::ZERO),
         }
     }
@@ -91,7 +91,7 @@ impl Default for AngularMovementBundle {
 
 #[derive(Bundle, Default)]
 pub struct MovementBundle {
-    pub linear_movement:  LinearMovementBundle,
+    pub linear_movement: LinearMovementBundle,
     pub angular_movement: AngularMovementBundle,
 }
 
@@ -119,7 +119,7 @@ impl Default for OrbitMovementBundle {
     fn default() -> Self {
         Self {
             angular_movement: AngularMovementBundle::default(),
-            orbit: Orbit::new(Vec3::ZERO, 10.0),
+            orbit: Orbit::new(Vec3::ZERO),
         }
     }
 }

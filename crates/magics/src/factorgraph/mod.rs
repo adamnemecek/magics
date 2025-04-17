@@ -1,5 +1,3 @@
-#![warn(missing_docs)]
-//! ...
 use derive_more::{Add, AddAssign};
 
 pub mod factor;
@@ -104,7 +102,7 @@ impl std::fmt::Display for MessagesReceived {
 pub struct MessageCount {
     // pub sent:     usize,
     // pub received: usize,
-    pub sent:     MessagesSent,
+    pub sent: MessagesSent,
     pub received: MessagesReceived,
 }
 
@@ -116,7 +114,7 @@ impl MessageCount {
 
     pub fn new() -> Self {
         Self {
-            sent:     MessagesSent::new(),
+            sent: MessagesSent::new(),
             received: MessagesReceived::new(),
             // sent:     0,
             // received: 0,

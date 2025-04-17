@@ -71,7 +71,7 @@ impl Angle {
     /// Returns the angle in degrees.
     #[inline(always)]
     #[must_use]
-    pub fn as_degrees(&self) -> f64 {
+    pub const fn as_degrees(&self) -> f64 {
         self.0.to_degrees()
     }
 

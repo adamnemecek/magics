@@ -17,7 +17,7 @@ rec {
       rust-overlay,
       flake-utils,
       ...
-    }@inputs:
+    }:
     let
       cargoToml = with builtins; fromTOML (readFile ./Cargo.toml);
       inherit (cargoToml.workspace.package) version;
@@ -27,7 +27,7 @@ rec {
       system:
       let
         overlays = [ (import rust-overlay) ];
-        pkgs = import inputs.nixpkgs { inherit system overlays; };
+        pkgs = import nixpkgs { inherit system overlays; };
         rustToolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
         inherit (pkgs) lib;
 
@@ -47,19 +47,17 @@ rec {
         apps.default = {
           type = "app";
           program = pkgs.lib.getExe self.packages.${system}.default;
+          # description = "foo";
         };
 
+        # checks.default = self.packages.${system}.default.override { cargoBuildType = "debug"; };
+
         devShells.default = pkgs.mkShell rec {
-          inherit (self.packages.${system}.default) nativeBuildInputs;
-          buildInputs = self.packages.${system}.default.buildInputs ++ [
-            rustToolchain
-          ];
+          inherit (self.packages.${system}.default) nativeBuildInputs buildInputs;
           packages = cargo-subcommands ++ dev-deps;
 
           LD_LIBRARY_PATH = lib.makeLibraryPath (buildInputs ++ nativeBuildInputs);
         };
-
-        formatter.${system} = pkgs.nixpkgs-rfc-style;
 
         packages.default = pkgs.rustPlatform.buildRustPackage {
           pname = name;
@@ -75,6 +73,7 @@ rec {
             wayland
             egl-wayland
             libxkbcommon
+            rustToolchain
           ];
           buildInputs =
             with pkgs;
@@ -110,6 +109,8 @@ rec {
             );
 
           src = ./.;
+
+          rustPlatform = rustToolchain;
 
           cargoLock = {
             lockFile = ./Cargo.lock;

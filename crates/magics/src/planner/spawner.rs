@@ -5,7 +5,7 @@ use bevy_mod_picking::prelude::*;
 use bevy_notify::ToastEvent;
 use bevy_rand::prelude::{ForkableRng, GlobalEntropy};
 use gbp_config::{
-    formation::{PlanningStrategy, RepeatTimes, WorldDimensions},
+    formation::{RepeatTimes, WorldDimensions},
     Config,
 };
 use itertools::Itertools;
@@ -18,10 +18,9 @@ use super::{
 };
 use crate::{
     // asset_loader::SceneAssets,
-    asset_loader::Meshes,
     environment::FollowCameraMe,
     pause_play::PausePlay,
-    planner::robot::{RobotBundle, Route, StateVector},
+    planner::robot::{RobotBundle, StateVector},
     simulation_loader::{
         self, EndSimulation, LoadSimulation, ReloadSimulation, Sdf, SimulationManager,
     },
@@ -124,7 +123,7 @@ pub struct WaypointCreated {
     /// The id of the robot the waypoint is created for
     pub for_robot: RobotId,
     /// The (x,y) position of the created waypoint in world coordinates.
-    pub position:  Vec2,
+    pub position: Vec2,
 }
 
 // #[derive(Event)]
@@ -180,7 +179,7 @@ pub struct WaypointCreated {
 
 #[derive(Debug, Clone)]
 pub struct RepeatingTimer {
-    timer:  Timer,
+    timer: Timer,
     repeat: RepeatTimes,
 }
 
@@ -256,11 +255,11 @@ impl FormationSpawner {
         }
     }
 
-    #[inline]
-    const fn is_active(&self) -> bool {
-        // self.initial_delay.finished()
-        matches!(self.state, FormationSpawnerState::Active { .. })
-    }
+    // #[inline]
+    // const fn is_active(&self) -> bool {
+    //     // self.initial_delay.finished()
+    //     matches!(self.state, FormationSpawnerState::Active { .. })
+    // }
 
     /// Return `true` if there is no more to spawn
     /// TODO: use this to test if the simulation is "finished"
@@ -301,9 +300,10 @@ impl FormationSpawner {
     }
 
     fn spawn(&mut self) {
-        if matches!(self.state, FormationSpawnerState::Active {
-            on_cooldown: false,
-        }) {
+        if matches!(
+            self.state,
+            FormationSpawnerState::Active { on_cooldown: false }
+        ) {
             self.state = FormationSpawnerState::Active { on_cooldown: true };
             self.spawned += 1;
         };
@@ -311,9 +311,10 @@ impl FormationSpawner {
 
     #[inline]
     fn ready_to_spawn(&mut self) -> bool {
-        matches!(self.state, FormationSpawnerState::Active {
-            on_cooldown: false,
-        })
+        matches!(
+            self.state,
+            FormationSpawnerState::Active { on_cooldown: false }
+        )
     }
 
     // #[inline]
@@ -335,7 +336,7 @@ fn delete_formation_group_spawners(
 #[derive(Resource)]
 pub struct Scoreboard {
     pub robots_left: usize,
-    pub game_over:   bool,
+    pub game_over: bool,
 }
 
 fn create_formation_group_spawners(
@@ -365,7 +366,7 @@ fn create_formation_group_spawners(
     }
     commands.insert_resource(Scoreboard {
         robots_left: robots_to_spawn,
-        game_over:   false,
+        game_over: false,
     });
 }
 
@@ -498,17 +499,17 @@ fn spawn_formation(
             })
             .collect();
 
-        #[rustfmt::skip]
-        let Some(min_radius) = radii.iter().copied().map(ordered_float::OrderedFloat).min() else {
-            return;
-        };
-        #[rustfmt::skip]
-        let Some(max_radius) = radii.iter().copied().map(ordered_float::OrderedFloat).max() else {
-            return;
-        };
+        // #[rustfmt::skip]
+        // let Some(min_radius) = radii.iter().copied().map(ordered_float::OrderedFloat).min() else {
+        //     return;
+        // };
+        // #[rustfmt::skip]
+        // let Some(max_radius) = radii.iter().copied().map(ordered_float::OrderedFloat).max() else {
+        //     return;
+        // };
 
         for (i, initial_pose) in initial_pose_for_each_robot.iter().enumerate() {
-            let mut waypoints: Vec<Vec4> = waypoint_poses_for_each_robot
+            let waypoints: Vec<Vec4> = waypoint_poses_for_each_robot
                 .iter()
                 .map(|wps| wps[i])
                 .collect();
@@ -526,7 +527,7 @@ fn spawn_formation(
             let robot_entity = entity.id();
             evw_waypoint_created.send_batch(waypoints.iter().map(|pose| WaypointCreated {
                 for_robot: robot_entity,
-                position:  pose.xy(),
+                position: pose.xy(),
             }));
 
             // let second_last = waypoints.get(waypoints.len() - 2).copied().unwrap();
@@ -556,10 +557,10 @@ fn spawn_formation(
             // let t0: f32 = radii[i] / 2.0 / config.robot.max_speed.get();
 
             // let divisor: f32 = (min_radius / 2.0 / config.robot.max_speed.get()).into();
-            let divisor: f32 = (max_radius / 2.0 / config.robot.target_speed.get()).into();
+            // let divisor: f32 = (max_radius / 2.0 / config.robot.target_speed.get()).into();
 
-            let lookahead_horizon: u32 = (config.robot.planning_horizon.get() / divisor) as u32;
-            let lookahead_horizon: u32 = config.robot.planning_horizon.get() as u32;
+            // let lookahead_horizon: u32 = (config.robot.planning_horizon.get() / divisor) as u32;
+            // let lookahead_horizon: u32 = config.robot.planning_horizon.get() as u32;
             let lookahead_horizon: u32 =
                 (config.robot.target_speed * config.robot.planning_horizon).get() as u32;
             // let lookahead_horizon: u32 = (config.robot.planning_horizon.get()

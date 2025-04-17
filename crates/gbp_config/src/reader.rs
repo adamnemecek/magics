@@ -1,5 +1,3 @@
-#![warn(missing_docs)]
-
 use std::path::Path;
 
 use directories::BaseDirs;
@@ -43,6 +41,7 @@ fn default_paths() -> Vec<std::path::PathBuf> {
     paths
 }
 
+#[allow(clippy::missing_errors_doc)]
 pub fn read_config<P: AsRef<Path>>(path: Option<P>) -> Result<Config> {
     if let Some(path) = path
         .map(|p| p.as_ref().to_path_buf())

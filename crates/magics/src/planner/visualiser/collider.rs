@@ -176,10 +176,10 @@ mod environment_colliders {
     ) {
         // let height = config.visualisation.height.objects;
         let height = -env_config.tiles.settings.obstacle_height;
-        let color = Color::ORANGE_RED;
+        // let color = Color::ORANGE_RED;
 
         for collider @ gbp_global_planner::Collider {
-            associated_mesh,
+            associated_mesh: _,
             isometry,
             shape,
         } in env_colliders.iter()

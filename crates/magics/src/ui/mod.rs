@@ -18,10 +18,10 @@ pub use decoration::ToUiString;
 use strum_macros::EnumIter;
 
 use self::{
-    controls::ControlsPanelPlugin, metrics::MetricsPlugin,
-    scale::ScaleUiPlugin, settings::SettingsPanelPlugin,
+    controls::ControlsPanelPlugin, metrics::MetricsPlugin, scale::ScaleUiPlugin,
+    settings::SettingsPanelPlugin,
 };
-use crate::{theme::CatppuccinThemeVisualsExt, AppState};
+use crate::theme::CatppuccinThemeVisualsExt;
 
 //  _     _ _______ _______  ______
 //  |     | |______ |______ |_____/
@@ -156,10 +156,10 @@ impl ActionBlock {
 /// Resource to store the occupied screen space by each `egui` panel
 #[derive(Debug, Default, Resource)]
 struct OccupiedScreenSpace {
-    left:   f32,
-    right:  f32,
-    top:    f32,
-    bottom: f32,
+    left: f32,
+    right: f32,
+    // top:    f32,
+    // bottom: f32,
 }
 
 #[derive(Debug, EnumIter, Default, derive_more::Display)]
@@ -186,11 +186,11 @@ impl ToUiString for UiScaleType {
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Default)]
 pub struct MouseOverPanel {
-    pub left_panel:      bool,
-    pub right_panel:     bool,
-    pub top_panel:       bool,
-    pub bottom_panel:    bool,
-    pub metrics_window:  bool,
+    pub left_panel: bool,
+    pub right_panel: bool,
+    pub top_panel: bool,
+    pub bottom_panel: bool,
+    // pub metrics_window:  bool,
     pub floating_window: bool,
 }
 
@@ -275,8 +275,8 @@ impl Default for UiState {
     }
 }
 
-#[derive(Debug, Resource, Deref, DerefMut, Default)]
-struct PreviousUiState(UiState);
+// #[derive(Debug, Resource, Deref, DerefMut, Default)]
+// struct PreviousUiState(UiState);
 
 /// `Setup` **Bevy** system to initialise the `egui` visuals
 /// This is where the **default** for `egui` is set

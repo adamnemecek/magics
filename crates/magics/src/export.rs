@@ -1,9 +1,6 @@
-use std::{collections::HashMap, io::Write, time::Duration};
+use std::{collections::HashMap, io::Write};
 
-use bevy::{
-    input::common_conditions::input_just_pressed, prelude::*,
-    time::common_conditions::once_after_delay,
-};
+use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 use gbp_config::formation::PlanningStrategy;
 use itertools::Itertools;
 
@@ -122,16 +119,16 @@ pub struct RobotData {
 #[derive(serde::Serialize)]
 struct MissionData {
     // waypoints: Vec<[f32; 4]>, // [x, y, x', y']
-    waypoints:   Vec<[f32; 2]>, // [x, y]
-    started_at:  f64,
+    waypoints: Vec<[f32; 2]>, // [x, y]
+    started_at: f64,
     finished_at: f64,
-    routes:      Vec<RouteData>,
+    routes: Vec<RouteData>,
 }
 
 #[derive(serde::Serialize)]
 struct RouteData {
-    waypoints:   Vec<[f32; 2]>,
-    started_at:  f64,
+    waypoints: Vec<[f32; 2]>,
+    started_at: f64,
     finished_at: f64,
 }
 
@@ -167,7 +164,7 @@ struct RouteData {
 struct RobotRobotCollision {
     robot_a: Entity,
     robot_b: Entity,
-    aabbs:   Vec<parry2d::bounding_volume::Aabb>,
+    aabbs: Vec<parry2d::bounding_volume::Aabb>,
 }
 
 impl std::convert::From<((Entity, Entity), &[parry2d::bounding_volume::Aabb])>
@@ -177,16 +174,16 @@ impl std::convert::From<((Entity, Entity), &[parry2d::bounding_volume::Aabb])>
         Self {
             robot_a: k.0,
             robot_b: k.1,
-            aabbs:   v.into_iter().copied().collect(),
+            aabbs: v.into_iter().copied().collect(),
         }
     }
 }
 
 #[derive(serde::Serialize)]
 struct RobotEnvironmentCollision {
-    robot:    Entity,
+    robot: Entity,
     obstacle: Entity,
-    aabbs:    Vec<parry2d::bounding_volume::Aabb>,
+    aabbs: Vec<parry2d::bounding_volume::Aabb>,
 }
 
 impl std::convert::From<((Entity, Entity), &[parry2d::bounding_volume::Aabb])>
@@ -194,9 +191,9 @@ impl std::convert::From<((Entity, Entity), &[parry2d::bounding_volume::Aabb])>
 {
     fn from((k, v): ((Entity, Entity), &[parry2d::bounding_volume::Aabb])) -> Self {
         Self {
-            robot:    k.0,
+            robot: k.0,
             obstacle: k.1,
-            aabbs:    v.into_iter().copied().collect(),
+            aabbs: v.into_iter().copied().collect(),
         }
     }
 }
@@ -205,19 +202,19 @@ impl std::convert::From<((Entity, Entity), &[parry2d::bounding_volume::Aabb])>
 struct CollisionData {
     // robots:      usize,
     // environment: usize,
-    robots:      Vec<RobotRobotCollision>,
+    robots: Vec<RobotRobotCollision>,
     environment: Vec<RobotEnvironmentCollision>,
 }
 
 #[derive(serde::Serialize)]
 struct CollisionCountData {
-    robots:      usize,
+    robots: usize,
     environment: usize,
 }
 
 #[derive(serde::Serialize)]
 struct MessageData {
-    sent:     MessageCount,
+    sent: MessageCount,
     received: MessageCount,
 }
 
@@ -229,14 +226,14 @@ struct MessageCount {
 
 #[derive(serde::Serialize)]
 struct GoalAreaData {
-    aabb:    parry2d::bounding_volume::Aabb,
+    aabb: parry2d::bounding_volume::Aabb,
     history: std::collections::HashMap<Entity, f32>,
 }
 
 impl std::convert::From<&goal_area::components::GoalArea> for GoalAreaData {
     fn from(ga: &goal_area::components::GoalArea) -> Self {
         Self {
-            aabb:    ga.aabb,
+            aabb: ga.aabb,
             history: ga.history().clone(),
         }
     }
@@ -383,26 +380,26 @@ fn export(
                 positions,
                 velocities,
                 mission: MissionData {
-                    waypoints:   mission
+                    waypoints: mission
                         .taskpoints
                         .iter()
                         .map(|wp| wp.position().into())
                         .collect(),
-                    started_at:  mission.started_at(),
+                    started_at: mission.started_at(),
                     finished_at: mission
                         .finished_at()
                         .unwrap_or_else(|| time_fixed.elapsed_seconds_f64()),
                     // routes:      mission.routes.iter().map(Into::into).collect(),
-                    routes:      mission
+                    routes: mission
                         .routes
                         .iter()
                         .map(|r| RouteData {
-                            waypoints:   r
+                            waypoints: r
                                 .waypoints()
                                 .iter()
                                 .map(|wp| wp.position().into())
                                 .collect(),
-                            started_at:  r.started_at(),
+                            started_at: r.started_at(),
                             finished_at: r
                                 .finished_at()
                                 .unwrap_or_else(|| time_fixed.elapsed_seconds_f64()),
@@ -422,11 +419,11 @@ fn export(
                 //         .unwrap_or_else(|| time_virtual.elapsed_seconds_f64()),
                 // ),
                 collisions: CollisionCountData {
-                    robots:      robot_collisions,
+                    robots: robot_collisions,
                     environment: environment_collisions,
                 },
                 messages: MessageData {
-                    sent:     MessageCount {
+                    sent: MessageCount {
                         internal: graph.messages_sent().internal,
                         external: graph.messages_sent().external,
                     },
@@ -545,7 +542,7 @@ fn export(
             .collect();
 
         let collisions = CollisionData {
-            robots:      robot_collisions.collisions().map_into().collect(),
+            robots: robot_collisions.collisions().map_into().collect(),
             environment: environment_collisions.collisions().map_into().collect(),
         };
 
@@ -590,14 +587,11 @@ fn export(
 
                 let id = latest_id.map_or(0, |id| id + 1);
                 id.to_string()
-            }
-            ExportSavePostfix::UnixTimestamp => chrono::Utc::now().timestamp().to_string(),
+            } // ExportSavePostfix::UnixTimestamp => chrono::Utc::now().timestamp().to_string(),
         };
 
         let dirname = match event.save_at_location {
-            ExportSaveLocation::Cwd => {
-                std::env::current_dir().expect("current directory exists")
-            }
+            ExportSaveLocation::Cwd => std::env::current_dir().expect("current directory exists"),
             ExportSaveLocation::At(ref path) => path.clone(),
         };
 
@@ -624,7 +618,7 @@ fn export(
 pub enum ExportSavePostfix {
     #[default]
     Number,
-    UnixTimestamp,
+    // UnixTimestamp,
 }
 
 fn take_snapshot_of_robot(
@@ -688,11 +682,11 @@ fn take_snapshot_of_robot(
         //         .unwrap_or_else(|| time_fixed.elapsed_seconds_f64()),
         // ),
         collisions: CollisionCountData {
-            robots:      robot_collisions,
+            robots: robot_collisions,
             environment: environment_collisions,
         },
         messages: MessageData {
-            sent:     MessageCount {
+            sent: MessageCount {
                 internal: fgraph.messages_sent().internal,
                 external: fgraph.messages_sent().external,
             },
@@ -704,26 +698,26 @@ fn take_snapshot_of_robot(
         planning_strategy: *planning_strategy,
         color,
         mission: MissionData {
-            started_at:  mission.started_at(),
+            started_at: mission.started_at(),
             finished_at: mission
                 .finished_at()
                 .unwrap_or_else(|| time_fixed.elapsed_seconds_f64()),
-            waypoints:   mission
+            waypoints: mission
                 .taskpoints
                 .iter()
                 .map(|wp| wp.position().into())
                 .collect(),
             // routes:      mission.routes.iter().map(Into::into).collect(),
-            routes:      mission
+            routes: mission
                 .routes
                 .iter()
                 .map(|r| RouteData {
-                    waypoints:   r
+                    waypoints: r
                         .waypoints()
                         .iter()
                         .map(|wp| wp.position().into())
                         .collect(),
-                    started_at:  r.started_at(),
+                    started_at: r.started_at(),
                     finished_at: r
                         .finished_at()
                         .unwrap_or_else(|| time_fixed.elapsed_seconds_f64()),

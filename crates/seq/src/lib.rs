@@ -5,7 +5,6 @@
 
 use std::num::NonZeroUsize;
 
-#[inline]
 const fn sum_of_first_n(n: usize) -> usize {
     (n + 1) * n / 2
 }
@@ -33,7 +32,7 @@ const fn sum_of_first_n(n: usize) -> usize {
 /// ```
 #[derive(Clone, Copy)]
 pub struct UpperTriangular {
-    n:   usize,
+    n: usize,
     row: usize,
     col: usize,
 }
@@ -47,6 +46,7 @@ impl UpperTriangular {
     }
 }
 
+#[allow(clippy::copy_iterator)]
 impl std::iter::Iterator for UpperTriangular {
     type Item = (usize, usize);
 
@@ -100,7 +100,7 @@ pub const fn upper_triangular(n: NonZeroUsize) -> UpperTriangular {
 /// ```
 #[derive(Clone, Copy)]
 pub struct UpperTriangularExcludeDiagonal {
-    n:   usize,
+    n: usize,
     row: usize,
     col: usize,
 }
@@ -112,11 +112,13 @@ impl UpperTriangularExcludeDiagonal {
     // }
 
     #[inline]
+    #[allow(clippy::len_without_is_empty)]
     pub const fn len(&self) -> usize {
         sum_of_first_n(self.n)
     }
 }
 
+#[allow(clippy::copy_iterator)]
 impl std::iter::Iterator for UpperTriangularExcludeDiagonal {
     type Item = (usize, usize);
 
@@ -148,7 +150,7 @@ impl std::iter::ExactSizeIterator for UpperTriangularExcludeDiagonal {
 /// # Returns
 /// `None` if `n == 1`
 #[must_use]
-pub fn upper_triangular_exclude_diagonal(
+pub const fn upper_triangular_exclude_diagonal(
     n: NonZeroUsize,
 ) -> Option<UpperTriangularExcludeDiagonal> {
     let n = n.get();

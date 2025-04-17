@@ -4,8 +4,8 @@ pub struct Centered;
 
 mod private {
     pub struct CenteredIter {
-        n:     u8,
-        max:   u8,
+        n: u8,
+        max: u8,
         index: u8,
     }
 
@@ -31,11 +31,7 @@ mod private {
             let mid_point = self.max / 2;
             let half_n = self.n / 2;
 
-            let start = if mid_point >= half_n {
-                mid_point - half_n
-            } else {
-                0
-            };
+            let start = mid_point.saturating_sub(half_n);
             let end = if start + self.n <= self.max {
                 start + self.n - 1
             } else {

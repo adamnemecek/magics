@@ -1,7 +1,6 @@
 use std::{
     collections::{BTreeSet, HashMap},
     num::NonZeroUsize,
-    sync::{Arc, Mutex},
     time::Duration,
 };
 
@@ -33,7 +32,7 @@ use crate::{
         factor::{ExternalVariableId, FactorNode},
         factorgraph::{FactorGraph, NodeIndex, VariableIndex},
         id::{FactorId, VariableId},
-        message::{FactorToVariableMessage, VariableToFactorMessage},
+        message::VariableToFactorMessage,
         variable::VariableNode,
         DOFS,
     },
@@ -190,7 +189,7 @@ fn attach_despawn_timer_when_robot_finishes_route(
 /// Event emitted when a robot reaches a waypoint
 #[derive(Event)]
 pub struct RobotReachedWaypoint {
-    pub robot_id:       RobotId,
+    pub robot_id: RobotId,
     pub waypoint_index: usize,
 }
 
@@ -217,20 +216,20 @@ pub struct RobotReachedWaypoint {
 //     }
 // }
 
-trait CreateVariableTimesteps {
-    fn create_variable_timesteps(n: NonZeroUsize) -> Vec<u32>;
-}
+// trait CreateVariableTimesteps {
+//     fn create_variable_timesteps(n: NonZeroUsize) -> Vec<u32>;
+// }
 
-struct EvenlySpacedVariableTimesteps;
+// struct EvenlySpacedVariableTimesteps;
 
-struct GbpplannerVariableTimesteps;
+// struct GbpplannerVariableTimesteps;
 
-impl CreateVariableTimesteps for GbpplannerVariableTimesteps {
-    fn create_variable_timesteps(n: NonZeroUsize) -> Vec<u32> {
-        todo!()
-        // get_variable_timesteps()
-    }
-}
+// impl CreateVariableTimesteps for GbpplannerVariableTimesteps {
+//     fn create_variable_timesteps(n: NonZeroUsize) -> Vec<u32> {
+//         todo!()
+//         // get_variable_timesteps()
+//     }
+// }
 
 // // #[derive(Component, Deref, DerefMut, derive_more::Index)]
 // #[derive(Resource, Deref, DerefMut, derive_more::Index)]
@@ -331,7 +330,7 @@ pub struct Radius(pub f32);
 pub struct Route {
     /// A list of state vectors representing waypoints.
     #[index]
-    waypoints:    Vec<StateVector>,
+    waypoints: Vec<StateVector>,
     /// The index of the next target waypoint in the waypoints vector.
     target_index: usize,
     // /// Criteria determining when the robot is considered to have reached a
@@ -339,10 +338,10 @@ pub struct Route {
     // pub intersects_when: WaypointReachedWhenIntersects,
     /// The recorded time at the start of the route as a floating-point
     /// timestamp.
-    started_at:   f64,
+    started_at: f64,
     /// Optional recorded time when the route was completed as a floating-point
     /// timestamp.
-    finished_at:  Option<f64>,
+    finished_at: Option<f64>,
 }
 
 impl std::fmt::Display for Route {
@@ -518,7 +517,7 @@ pub struct RobotConnections {
     pub robots_within_comms_range: BTreeSet<RobotId>,
     /// List of robot ids that are currently connected via inter-robot factors
     /// to this robot called `connected_r_ids_` in **gbpplanner**.
-    pub robots_connected_with:     BTreeSet<RobotId>,
+    pub robots_connected_with: BTreeSet<RobotId>,
 }
 
 impl RobotConnections {
@@ -527,7 +526,7 @@ impl RobotConnections {
     pub fn new() -> Self {
         Self {
             robots_within_comms_range: BTreeSet::new(),
-            robots_connected_with:     BTreeSet::new(),
+            robots_connected_with: BTreeSet::new(),
         }
     }
 }
@@ -590,7 +589,7 @@ fn progress_missions(
                 // info!("disabled tracking factors while idle");
 
                 if let Ok((pathfinder, prng)) = pathfinders.get_mut(robot_entity) {
-                    let active_route = mission.active_route().unwrap();
+                    // let active_route = mission.active_route().unwrap();
                     //    let start = active_route
                     //
                     //    .waypoints
@@ -698,7 +697,7 @@ fn progress_missions(
                                     //        .get(),
                                     //) * dir.normalize();
 
-                                    let last_ts = variable_timesteps.0.last().unwrap().to_owned();
+                                    // let last_ts = variable_timesteps.0.last().unwrap().to_owned();
                                     // dbg!(&variable_timesteps);
                                     // let means = {
                                     //    let means = variable_timesteps
@@ -993,15 +992,12 @@ impl Mission {
     }
 
     pub fn advance_to_next_waypoint(&mut self, time: &Time) {
-        match self.state {
-            MissionState::Active => {
-                let current_route = self.routes.get_mut(self.active_route).unwrap();
-                current_route.advance(time.elapsed());
-                if current_route.is_completed() {
-                    self.next_route(time);
-                }
+        if matches!(self.state, MissionState::Active) {
+            let current_route = self.routes.get_mut(self.active_route).unwrap();
+            current_route.advance(time.elapsed());
+            if current_route.is_completed() {
+                self.next_route(time);
             }
-            MissionState::Completed | MissionState::Idle { .. } => return,
         }
     }
 
@@ -1133,7 +1129,7 @@ impl RobotBundle {
     #[allow(clippy::missing_panics_doc)]
     pub fn new(
         robot_id: RobotId,
-        initial_state: StateVector,
+        _initial_state: StateVector,
         // route: Route,
         variable_timesteps: &[u32],
         // variable_timesteps: Vec<u32>,
@@ -1259,7 +1255,7 @@ impl RobotBundle {
         let tile_size = env_config.tiles.settings.tile_size as f64;
         let (nrows, ncols) = env_config.tiles.grid.shape();
         let world_size = crate::factorgraph::factor::obstacle::WorldSize {
-            width:  tile_size * ncols as f64,
+            width: tile_size * ncols as f64,
             height: tile_size * nrows as f64,
         };
 
@@ -1600,171 +1596,171 @@ fn update_failed_comms(
     }
 }
 
-fn iterate_gbp_internal(
-    mut query: Query<&mut FactorGraph, With<RobotConnections>>,
-    config: Res<Config>,
-) {
-    query.par_iter_mut().for_each(|mut factorgraph| {
-        for _ in 0..config.gbp.iteration_schedule.internal {
-            factorgraph.internal_factor_iteration();
-            factorgraph.internal_variable_iteration();
-        }
-    });
-}
+// fn iterate_gbp_internal(
+//     mut query: Query<&mut FactorGraph, With<RobotConnections>>,
+//     config: Res<Config>,
+// ) {
+//     query.par_iter_mut().for_each(|mut factorgraph| {
+//         for _ in 0..config.gbp.iteration_schedule.internal {
+//             factorgraph.internal_factor_iteration();
+//             factorgraph.internal_variable_iteration();
+//         }
+//     });
+// }
 
-fn iterate_gbp_internal_sync(
-    mut query: Query<&mut FactorGraph, With<RobotConnections>>,
-    config: Res<Config>,
-) {
-    for mut factorgraph in &mut query {
-        for _ in 0..config.gbp.iteration_schedule.internal {
-            factorgraph.internal_factor_iteration();
-            factorgraph.internal_variable_iteration();
-        }
-    }
-}
+// fn iterate_gbp_internal_sync(
+//     mut query: Query<&mut FactorGraph, With<RobotConnections>>,
+//     config: Res<Config>,
+// ) {
+//     for mut factorgraph in &mut query {
+//         for _ in 0..config.gbp.iteration_schedule.internal {
+//             factorgraph.internal_factor_iteration();
+//             factorgraph.internal_variable_iteration();
+//         }
+//     }
+// }
 
-fn iterate_gbp_external(
-    mut query: Query<(Entity, &mut FactorGraph, &RobotConnections, &RadioAntenna)>,
-    config: Res<Config>,
-) {
-    // PERF: use Local<> to reuse arrays
-    let messages_to_external_variables: Arc<Mutex<Vec<FactorToVariableMessage>>> =
-        Default::default();
-    let messages_to_external_factors: Arc<Mutex<Vec<VariableToFactorMessage>>> = Default::default();
+// fn iterate_gbp_external(
+//     mut query: Query<(Entity, &mut FactorGraph, &RobotConnections, &RadioAntenna)>,
+//     config: Res<Config>,
+// ) {
+//     // PERF: use Local<> to reuse arrays
+//     let messages_to_external_variables: Arc<Mutex<Vec<FactorToVariableMessage>>> =
+//         Default::default();
+//     let messages_to_external_factors: Arc<Mutex<Vec<VariableToFactorMessage>>> = Default::default();
 
-    for _ in 0..config.gbp.iteration_schedule.external {
-        query
-            .par_iter_mut()
-            .for_each(|(_, mut factorgraph, state, antenna)| {
-                // if !state.interrobot_comms_active {
-                if !antenna.active {
-                    return;
-                }
+//     for _ in 0..config.gbp.iteration_schedule.external {
+//         query
+//             .par_iter_mut()
+//             .for_each(|(_, mut factorgraph, state, antenna)| {
+//                 // if !state.interrobot_comms_active {
+//                 if !antenna.active {
+//                     return;
+//                 }
 
-                let variable_messages = factorgraph.external_factor_iteration();
-                if !variable_messages.is_empty() {
-                    let mut guard = messages_to_external_variables.lock().expect("not poisoned");
-                    guard.extend(variable_messages.into_iter());
-                }
+//                 let variable_messages = factorgraph.external_factor_iteration();
+//                 if !variable_messages.is_empty() {
+//                     let mut guard = messages_to_external_variables.lock().expect("not poisoned");
+//                     guard.extend(variable_messages.into_iter());
+//                 }
 
-                let factor_messages = factorgraph.external_variable_iteration();
-                if !factor_messages.is_empty() {
-                    let mut guard = messages_to_external_factors.lock().expect("not poisoned");
-                    guard.extend(factor_messages.into_iter());
-                }
-            });
+//                 let factor_messages = factorgraph.external_variable_iteration();
+//                 if !factor_messages.is_empty() {
+//                     let mut guard = messages_to_external_factors.lock().expect("not poisoned");
+//                     guard.extend(factor_messages.into_iter());
+//                 }
+//             });
 
-        // Send messages to external variables
-        let mut variable_messages = messages_to_external_variables.lock().expect("not poisoned");
-        for message in variable_messages.iter() {
-            let (_, mut factorgraph, _, _) = query
-                .get_mut(message.to.factorgraph_id)
-                .expect("the factorgraph of the receiving variable should exist in the world");
+//         // Send messages to external variables
+//         let mut variable_messages = messages_to_external_variables.lock().expect("not poisoned");
+//         for message in variable_messages.iter() {
+//             let (_, mut factorgraph, _, _) = query
+//                 .get_mut(message.to.factorgraph_id)
+//                 .expect("the factorgraph of the receiving variable should exist in the world");
 
-            if let Some(variable) = factorgraph.get_variable_mut(message.to.variable_index) {
-                variable.receive_message_from(message.from, message.message.clone());
-            } else {
-                error!(
-                    "variablegraph {:?} has no variable with index {:?}",
-                    message.to.factorgraph_id, message.to.variable_index
-                );
-            }
-        }
+//             if let Some(variable) = factorgraph.get_variable_mut(message.to.variable_index) {
+//                 variable.receive_message_from(message.from, message.message.clone());
+//             } else {
+//                 error!(
+//                     "variablegraph {:?} has no variable with index {:?}",
+//                     message.to.factorgraph_id, message.to.variable_index
+//                 );
+//             }
+//         }
 
-        variable_messages.clear();
+//         variable_messages.clear();
 
-        // Send messages to external factors
-        let mut factor_messages = messages_to_external_factors.lock().expect("not poisoned");
-        for message in factor_messages.iter() {
-            let (_, mut factorgraph, _, _) = query
-                .get_mut(message.to.factorgraph_id)
-                .expect("the factorgraph of the receiving variable should exist in the world");
+//         // Send messages to external factors
+//         let mut factor_messages = messages_to_external_factors.lock().expect("not poisoned");
+//         for message in factor_messages.iter() {
+//             let (_, mut factorgraph, _, _) = query
+//                 .get_mut(message.to.factorgraph_id)
+//                 .expect("the factorgraph of the receiving variable should exist in the world");
 
-            if let Some(factor) = factorgraph.get_factor_mut(message.to.factor_index) {
-                if !factor.enabled {
-                    continue;
-                }
+//             if let Some(factor) = factorgraph.get_factor_mut(message.to.factor_index) {
+//                 if !factor.enabled {
+//                     continue;
+//                 }
 
-                factor.receive_message_from(message.from, message.message.clone());
-            }
-        }
+//                 factor.receive_message_from(message.from, message.message.clone());
+//             }
+//         }
 
-        factor_messages.clear();
-    }
-}
+//         factor_messages.clear();
+//     }
+// }
 
-fn iterate_gbp_external_sync(
-    mut query: Query<(Entity, &mut FactorGraph, &RobotConnections, &RadioAntenna)>,
-    config: Res<Config>,
-) {
-    // PERF: use Local<> to reuse arrays
-    let mut messages_to_external_variables: Vec<FactorToVariableMessage> = Default::default();
-    let mut messages_to_external_factors: Vec<VariableToFactorMessage> = Default::default();
+// fn iterate_gbp_external_sync(
+//     mut query: Query<(Entity, &mut FactorGraph, &RobotConnections, &RadioAntenna)>,
+//     config: Res<Config>,
+// ) {
+//     // PERF: use Local<> to reuse arrays
+//     let mut messages_to_external_variables: Vec<FactorToVariableMessage> = Default::default();
+//     let mut messages_to_external_factors: Vec<VariableToFactorMessage> = Default::default();
 
-    for _ in 0..config.gbp.iteration_schedule.external {
-        for (_, mut factorgraph, state, antenna) in &mut query {
-            // if !state.interrobot_comms_active {
-            if !antenna.active {
-                return;
-            }
+//     for _ in 0..config.gbp.iteration_schedule.external {
+//         for (_, mut factorgraph, state, antenna) in &mut query {
+//             // if !state.interrobot_comms_active {
+//             if !antenna.active {
+//                 return;
+//             }
 
-            let variable_messages = factorgraph.external_factor_iteration();
-            if !variable_messages.is_empty() {
-                messages_to_external_variables.extend(variable_messages.into_iter());
-                // let mut guard =
-                // messages_to_external_variables.lock().expect("not poisoned");
-                // guard.extend(variable_messages.into_iter());
-            }
+//             let variable_messages = factorgraph.external_factor_iteration();
+//             if !variable_messages.is_empty() {
+//                 messages_to_external_variables.extend(variable_messages.into_iter());
+//                 // let mut guard =
+//                 // messages_to_external_variables.lock().expect("not poisoned");
+//                 // guard.extend(variable_messages.into_iter());
+//             }
 
-            let factor_messages = factorgraph.external_variable_iteration();
-            if !factor_messages.is_empty() {
-                messages_to_external_factors.extend(factor_messages);
-                // let mut guard =
-                // messages_to_external_factors.lock().expect("not poisoned");
-                // guard.extend(factor_messages.into_iter());
-            }
-        }
+//             let factor_messages = factorgraph.external_variable_iteration();
+//             if !factor_messages.is_empty() {
+//                 messages_to_external_factors.extend(factor_messages);
+//                 // let mut guard =
+//                 // messages_to_external_factors.lock().expect("not poisoned");
+//                 // guard.extend(factor_messages.into_iter());
+//             }
+//         }
 
-        // Send messages to external variables
-        // let mut variable_messages = messages_to_external_variables.lock().expect("not
-        // poisoned");
-        for message in messages_to_external_variables.iter() {
-            let (_, mut factorgraph, _, _) = query
-                .get_mut(message.to.factorgraph_id)
-                .expect("the factorgraph of the receiving variable should exist in the world");
+//         // Send messages to external variables
+//         // let mut variable_messages = messages_to_external_variables.lock().expect("not
+//         // poisoned");
+//         for message in messages_to_external_variables.iter() {
+//             let (_, mut factorgraph, _, _) = query
+//                 .get_mut(message.to.factorgraph_id)
+//                 .expect("the factorgraph of the receiving variable should exist in the world");
 
-            if let Some(variable) = factorgraph.get_variable_mut(message.to.variable_index) {
-                variable.receive_message_from(message.from, message.message.clone());
-            } else {
-                error!(
-                    "variablegraph {:?} has no variable with index {:?}",
-                    message.to.factorgraph_id, message.to.variable_index
-                );
-            }
-        }
+//             if let Some(variable) = factorgraph.get_variable_mut(message.to.variable_index) {
+//                 variable.receive_message_from(message.from, message.message.clone());
+//             } else {
+//                 error!(
+//                     "variablegraph {:?} has no variable with index {:?}",
+//                     message.to.factorgraph_id, message.to.variable_index
+//                 );
+//             }
+//         }
 
-        // variable_messages.clear();
+//         // variable_messages.clear();
 
-        // Send messages to external factors
-        // let mut factor_messages = messages_to_external_factors.lock().expect("not
-        // poisoned");
-        for message in messages_to_external_factors.iter() {
-            let (_, mut factorgraph, _, _) = query
-                .get_mut(message.to.factorgraph_id)
-                .expect("the factorgraph of the receiving variable should exist in the world");
+//         // Send messages to external factors
+//         // let mut factor_messages = messages_to_external_factors.lock().expect("not
+//         // poisoned");
+//         for message in messages_to_external_factors.iter() {
+//             let (_, mut factorgraph, _, _) = query
+//                 .get_mut(message.to.factorgraph_id)
+//                 .expect("the factorgraph of the receiving variable should exist in the world");
 
-            if let Some(factor) = factorgraph.get_factor_mut(message.to.factor_index) {
-                factor.receive_message_from(message.from, message.message.clone());
-            }
-        }
+//             if let Some(factor) = factorgraph.get_factor_mut(message.to.factor_index) {
+//                 factor.receive_message_from(message.from, message.message.clone());
+//             }
+//         }
 
-        messages_to_external_factors.clear();
-        messages_to_external_variables.clear();
+//         messages_to_external_factors.clear();
+//         messages_to_external_variables.clear();
 
-        // factor_messages.clear();
-    }
-}
+//         // factor_messages.clear();
+//     }
+// }
 
 fn iterate_gbp_v2(
     mut query: Query<
@@ -1788,7 +1784,7 @@ fn iterate_gbp_v2(
         if internal {
             query
                 .par_iter_mut()
-                .for_each(|(mut factorgraph, _, antenna, mission)| {
+                .for_each(|(mut factorgraph, _, _, mission)| {
                     // if antenna.active {
                     // if matches!(mission.state, MissionState::Active) {
                     if !mission.state.idle() {
@@ -1860,57 +1856,57 @@ fn iterate_gbp_v2(
     }
 }
 
-fn iterate_gbp(
-    mut query: Query<(Entity, &mut FactorGraph), With<RobotConnections>>,
-    config: Res<Config>,
-) {
-    // let mut  messages_to_external_variables = vec![];
+// fn iterate_gbp(
+//     mut query: Query<(Entity, &mut FactorGraph), With<RobotConnections>>,
+//     config: Res<Config>,
+// ) {
+//     // let mut  messages_to_external_variables = vec![];
 
-    for _ in 0..config.gbp.iteration_schedule.internal {
-        // pretty_print_title!(format!("GBP iteration: {}", i + 1));
-        // ╭────────────────────────────────────────────────────────────────────────────────────────
-        // │ Factor iteration
-        let messages_to_external_variables = query
-            .iter_mut()
-            .map(|(_, mut factorgraph)| factorgraph.factor_iteration())
-            .collect::<Vec<_>>();
+//     for _ in 0..config.gbp.iteration_schedule.internal {
+//         // pretty_print_title!(format!("GBP iteration: {}", i + 1));
+//         // ╭────────────────────────────────────────────────────────────────────────────────────────
+//         // │ Factor iteration
+//         let messages_to_external_variables = query
+//             .iter_mut()
+//             .map(|(_, mut factorgraph)| factorgraph.factor_iteration())
+//             .collect::<Vec<_>>();
 
-        // Send messages to external variables
-        for message in messages_to_external_variables.into_iter().flatten() {
-            let (_, mut external_factorgraph) = query
-                .get_mut(message.to.factorgraph_id)
-                .expect("the factorgraph_id of the receiving variable should exist in the world");
+//         // Send messages to external variables
+//         for message in messages_to_external_variables.into_iter().flatten() {
+//             let (_, mut external_factorgraph) = query
+//                 .get_mut(message.to.factorgraph_id)
+//                 .expect("the factorgraph_id of the receiving variable should exist in the world");
 
-            if let Some(variable) = external_factorgraph.get_variable_mut(message.to.variable_index)
-            {
-                variable.receive_message_from(message.from, message.message);
-            } else {
-                error!(
-                    "variablegraph {:?} has no variable with index {:?}",
-                    message.to.factorgraph_id, message.to.variable_index
-                );
-            }
-        }
+//             if let Some(variable) = external_factorgraph.get_variable_mut(message.to.variable_index)
+//             {
+//                 variable.receive_message_from(message.from, message.message);
+//             } else {
+//                 error!(
+//                     "variablegraph {:?} has no variable with index {:?}",
+//                     message.to.factorgraph_id, message.to.variable_index
+//                 );
+//             }
+//         }
 
-        // ╭────────────────────────────────────────────────────────────────────────────────────────
-        // │ Variable iteration
-        let messages_to_external_factors = query
-            .iter_mut()
-            .map(|(_, mut factorgraph)| factorgraph.variable_iteration())
-            .collect::<Vec<_>>();
+//         // ╭────────────────────────────────────────────────────────────────────────────────────────
+//         // │ Variable iteration
+//         let messages_to_external_factors = query
+//             .iter_mut()
+//             .map(|(_, mut factorgraph)| factorgraph.variable_iteration())
+//             .collect::<Vec<_>>();
 
-        // Send messages to external factors
-        for message in messages_to_external_factors.into_iter().flatten() {
-            let (_, mut external_factorgraph) = query
-                .get_mut(message.to.factorgraph_id)
-                .expect("the factorgraph_id of the receiving factor should exist in the world");
+//         // Send messages to external factors
+//         for message in messages_to_external_factors.into_iter().flatten() {
+//             let (_, mut external_factorgraph) = query
+//                 .get_mut(message.to.factorgraph_id)
+//                 .expect("the factorgraph_id of the receiving factor should exist in the world");
 
-            if let Some(factor) = external_factorgraph.get_factor_mut(message.to.factor_index) {
-                factor.receive_message_from(message.from, message.message);
-            }
-        }
-    }
-}
+//             if let Some(factor) = external_factorgraph.get_factor_mut(message.to.factor_index) {
+//                 factor.receive_message_from(message.from, message.message);
+//             }
+//         }
+//     }
+// }
 
 // #[derive(Component, Debug, Default)]
 // pub struct FinishedPath(pub bool);
@@ -2082,7 +2078,7 @@ fn reached_waypoint(
         Entity,
         &mut FactorGraph,
         &Radius,
-        &Transform,
+        // &Transform,
         &mut Mission,
         //&ReachedWhenIntersects,
         //&PlanningStrategy,
@@ -2094,7 +2090,7 @@ fn reached_waypoint(
     mut evw_robot_despawned: EventWriter<RobotDespawned>,
     mut evw_robot_finalized_path: EventWriter<RobotFinishedRoute>,
 ) {
-    for (robot_entity, mut fgraph, r, transform, mut mission) in &mut q {
+    for (robot_entity, mut fgraph, r, mut mission) in &mut q {
         let Some(next_waypoint) = mission.next_waypoint() else {
             continue;
         };
@@ -2148,7 +2144,7 @@ fn reached_waypoint(
         if reached {
             mission.advance_to_next_waypoint(&time);
             evw_robot_reached_waypoint.send(RobotReachedWaypoint {
-                robot_id:       robot_entity,
+                robot_id: robot_entity,
                 waypoint_index: 0,
             });
 
@@ -2189,8 +2185,8 @@ fn update_prior_of_horizon_state(
             // &mut Route,
             &Mission,
             &mut FinishedPath,
-            &Radius,
-            &RadioAntenna,
+            // &Radius,
+            // &RadioAntenna,
             // &GbpIterationSchedule,
         ),
         With<RobotConnections>,
@@ -2208,7 +2204,7 @@ fn update_prior_of_horizon_state(
 
     let mut robots_to_despawn = Vec::new();
 
-    for (robot_id, mut factorgraph, mission, mut finished_path, radius, antenna) in &mut query {
+    for (robot_id, mut factorgraph, mission, mut finished_path) in &mut query {
         if finished_path.0 || mission.state.idle()
         // || !antenna.active
         {
@@ -2270,8 +2266,7 @@ fn update_prior_of_horizon_state(
 
     // Send messages to external factors
     for message in all_messages_to_external_factors.drain(..) {
-        let Ok((_, mut external_factorgraph, _, _, _, _)) =
-            query.get_mut(message.to.factorgraph_id)
+        let Ok((_, mut external_factorgraph, _, _)) = query.get_mut(message.to.factorgraph_id)
         else {
             continue;
         };
@@ -2290,16 +2285,16 @@ fn update_prior_of_current_state_v3(
             &mut Transform,
             &T0,
             &Mission,
-            &RadioAntenna,
+            // &RadioAntenna,
         ),
         With<RobotConnections>,
     >,
-    config: Res<Config>,
+    // config: Res<Config>,
     time_fixed: Res<Time<Fixed>>,
 ) {
     // let mut messages_to_external_factors: Vec<FactorToVariableMessage> = vec![];
 
-    for (mut factorgraph, mut transform, &t0, mission, antenna) in &mut query {
+    for (mut factorgraph, mut transform, &t0, mission) in &mut query {
         if mission.state.idle()
         // || !antenna.active
         {
@@ -2326,10 +2321,10 @@ fn update_prior_of_current_state_v3(
         );
         // messages_to_external_factors.extend(external_factor_messages);
 
-        #[allow(clippy::cast_possible_truncation)]
+        // #[allow(clippy::cast_possible_truncation)]
         // bevy uses xzy coordinates, so the y component is put at the z coordinate
-        let position_increment =
-            Vec3::new(change_in_state[0] as f32, 0.0, change_in_state[1] as f32);
+        // let position_increment =
+        //     Vec3::new(change_in_state[0] as f32, 0.0, change_in_state[1] as f32);
 
         transform.translation.x += change_in_state[0] as f32;
         transform.translation.z += change_in_state[1] as f32;
@@ -2401,49 +2396,6 @@ fn update_prior_of_current_state_v3(
 
 #[derive(Component, Deref, Clone, Copy)]
 pub struct T0(pub f32);
-
-/// Called `Robot::updateCurrent` in **gbpplanner**
-fn update_prior_of_current_state(
-    mut query: Query<(&mut FactorGraph, &mut Transform, &T0), With<RobotConnections>>,
-    config: Res<Config>,
-    time: Res<Time>,
-) {
-    // let scale = time.delta_seconds() / config.simulation.t0.get();
-
-    for (mut factorgraph, mut transform, &t0) in &mut query {
-        let scale: f32 = time.delta_seconds() / *t0;
-        let (current_variable_index, current_variable) = factorgraph
-            .nth_variable(0)
-            .expect("factorgraph should have a current variable");
-        let (_, next_variable) = factorgraph
-            .nth_variable(1)
-            .expect("factorgraph should have a next variable");
-        let mean_of_current_variable = current_variable.belief.mean.clone();
-        let change_in_state =
-            Float::from(scale) * (&next_variable.belief.mean - &mean_of_current_variable);
-
-        let messages = factorgraph.change_prior_of_variable(
-            current_variable_index,
-            &mean_of_current_variable + &change_in_state,
-        );
-
-        if !messages.is_empty() {
-            error!(
-                "{} messages from update_prior_of_current_state:",
-                messages.len()
-            );
-            // continue;
-        }
-
-        #[allow(clippy::cast_possible_truncation)]
-        let position_increment =
-            Vec3::new(change_in_state[0] as f32, 0.0, change_in_state[1] as f32);
-
-        transform.translation += position_increment;
-    }
-}
-
-// boolean_bevy_resource!(ManualMode, default = false);
 
 #[derive(States, Default, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ManualModeState {

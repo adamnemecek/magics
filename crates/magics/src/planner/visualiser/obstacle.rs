@@ -37,27 +37,6 @@ impl Plugin for ObstacleFactorVisualizerPlugin {
 //     fn handle_event() {}
 // }
 
-mod resources {
-    use bevy::prelude::*;
-
-    #[derive(Resource)]
-    struct Settings {
-        enabled: bool,
-    }
-
-    impl FromWorld for Settings {
-        fn from_world(world: &mut World) -> Self {
-            if let Some(config) = world.get_resource::<gbp_config::Config>() {
-                Self {
-                    enabled: config.visualisation.draw.obstacle_factors,
-                }
-            } else {
-                Self { enabled: false }
-            }
-        }
-    }
-}
-
 fn gradient(a: &Color, b: &Color) -> colorgrad::Gradient {
     // let [r, g, b] = a.
     // let a colorgrad::Color::from_linear_rgba(r, g, b, a)
@@ -71,13 +50,13 @@ fn gradient(a: &Color, b: &Color) -> colorgrad::Gradient {
         .unwrap()
 }
 
-pub fn measurement_color(value: f32) -> bevy::render::color::Color {
-    let value = value.clamp(0.0, 1.0);
-    let r = value;
-    let g = 1.0 - r;
-    let b = 0.0;
-    bevy::render::color::Color::rgb(r, g, b)
-}
+// pub fn measurement_color(value: f32) -> bevy::render::color::Color {
+//     let value = value.clamp(0.0, 1.0);
+//     let r = value;
+//     let g = 1.0 - r;
+//     let b = 0.0;
+//     bevy::render::color::Color::rgb(r, g, b)
+// }
 
 /// Draw a line between a variables estimated position and the sample point of
 /// its connected obstacle factor. It uses the Gizmos API to draw a line between
@@ -92,9 +71,8 @@ fn visualize_obstacle_factors(
     mut gizmos: Gizmos,
     factorgraphs: Query<&FactorGraph>,
     config: Res<Config>,
-    theme: Res<crate::theme::CatppuccinTheme>,
+    // theme: Res<crate::theme::CatppuccinTheme>,
 ) {
-    use crate::theme::ColorFromCatppuccinColourExt;
     let height = -config.visualisation.height.objects;
 
     // let red: Color = Color::from_catppuccin_colour(theme.red());

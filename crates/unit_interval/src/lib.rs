@@ -8,20 +8,22 @@ use serde::{Deserialize, Deserializer, Serialize};
 pub struct UnitInterval(f64);
 
 // impl sub and add for `UnitInterval`
-impl std::ops::Add<UnitInterval> for UnitInterval {
+impl std::ops::Add<Self> for UnitInterval {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
         assert!(self.0 + rhs.0 <= 1.0);
+        #[allow(clippy::unwrap_used)]
         Self::new(self.0 + rhs.0).unwrap()
     }
 }
 
-impl std::ops::Sub<UnitInterval> for UnitInterval {
+impl std::ops::Sub<Self> for UnitInterval {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
         assert!(self.0 - rhs.0 >= 0.0);
+        #[allow(clippy::unwrap_used)]
         Self::new(self.0 - rhs.0).unwrap()
     }
 }

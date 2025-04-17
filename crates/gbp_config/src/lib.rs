@@ -33,14 +33,14 @@ pub struct Meter(f64);
 pub struct GraphvizEdgeAttributes {
     // TODO: implement a way to validate this field to only match the valid edge styles: https://graphviz.org/docs/attr-types/style/
     pub style: String,
-    pub len:   f32,
+    pub len: f32,
     pub color: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct GraphvizInterrobotSection {
-    pub active:   GraphvizEdgeAttributes,
+    pub active: GraphvizEdgeAttributes,
     pub inactive: GraphvizEdgeAttributes,
     // pub edge: GraphvizEdgeAttributes,
 }
@@ -48,7 +48,7 @@ pub struct GraphvizInterrobotSection {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct GraphvizSection {
-    pub interrobot:      GraphvizInterrobotSection,
+    pub interrobot: GraphvizInterrobotSection,
     #[serde(default = "GraphvizSection::default_export_location")]
     pub export_location: String,
 }
@@ -62,15 +62,15 @@ impl GraphvizSection {
 impl Default for GraphvizSection {
     fn default() -> Self {
         Self {
-            interrobot:      GraphvizInterrobotSection {
-                active:   GraphvizEdgeAttributes {
+            interrobot: GraphvizInterrobotSection {
+                active: GraphvizEdgeAttributes {
                     style: "solid".to_string(),
-                    len:   8.0,
+                    len: 8.0,
                     color: "green".to_string(),
                 },
                 inactive: GraphvizEdgeAttributes {
                     style: "dashed".to_string(),
-                    len:   4.0,
+                    len: 4.0,
                     color: "green".to_string(),
                 },
             },
@@ -82,14 +82,14 @@ impl Default for GraphvizSection {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct HeightSection {
-    pub objects:    f32,
+    pub objects: f32,
     pub height_map: f32,
 }
 
 impl Default for HeightSection {
     fn default() -> Self {
         Self {
-            objects:    0.5,
+            objects: 0.5,
             height_map: 1.0,
         }
     }
@@ -99,14 +99,14 @@ impl Default for HeightSection {
 #[serde(rename_all = "kebab-case")]
 pub struct UncertaintySection {
     pub max_radius: f32,
-    pub scale:      f32,
+    pub scale: f32,
 }
 
 impl Default for UncertaintySection {
     fn default() -> Self {
         Self {
             max_radius: 5.0,
-            scale:      100.0,
+            scale: 100.0,
         }
     }
 }
@@ -325,7 +325,7 @@ pub struct SimulationSection {
 }
 
 impl SimulationSection {
-    fn default_exit_application_on_scenario_finished() -> bool {
+    const fn default_exit_application_on_scenario_finished() -> bool {
         false
     }
 }
@@ -381,19 +381,11 @@ impl GbpIterationScheduleKind {
         config: gbp_schedule::GbpScheduleParams,
     ) -> Box<dyn gbp_schedule::GbpScheduleIterator> {
         match self {
-            GbpIterationScheduleKind::Centered => {
-                Box::new(gbp_schedule::Centered::schedule(config))
-            }
-            GbpIterationScheduleKind::InterleaveEvenly => {
-                Box::new(gbp_schedule::InterleaveEvenly::schedule(config))
-            }
-            GbpIterationScheduleKind::SoonAsPossible => {
-                Box::new(gbp_schedule::SoonAsPossible::schedule(config))
-            }
-            GbpIterationScheduleKind::LateAsPossible => {
-                Box::new(gbp_schedule::LateAsPossible::schedule(config))
-            }
-            GbpIterationScheduleKind::HalfBeginningHalfEnd => {
+            Self::Centered => Box::new(gbp_schedule::Centered::schedule(config)),
+            Self::InterleaveEvenly => Box::new(gbp_schedule::InterleaveEvenly::schedule(config)),
+            Self::SoonAsPossible => Box::new(gbp_schedule::SoonAsPossible::schedule(config)),
+            Self::LateAsPossible => Box::new(gbp_schedule::LateAsPossible::schedule(config)),
+            Self::HalfBeginningHalfEnd => {
                 Box::new(gbp_schedule::HalfBeginningHalfEnd::schedule(config))
             }
         }
@@ -451,44 +443,23 @@ impl Default for GbpIterationSchedule {
     bevy::reflect::Reflect,
 )]
 #[serde(rename_all = "kebab-case")]
+#[allow(clippy::struct_excessive_bools)]
 pub struct FactorsEnabledSection {
     // pub pose:       bool,
-    #[serde(default = "FactorsEnabledSection::default_dynamic")]
-    pub dynamic:    bool,
-    #[serde(default = "FactorsEnabledSection::default_interrobot")]
+    pub dynamic: bool,
     pub interrobot: bool,
-    #[serde(default = "FactorsEnabledSection::default_obstacle")]
-    pub obstacle:   bool,
-    #[serde(default = "FactorsEnabledSection::default_tracking")]
-    pub tracking:   bool,
-}
-
-impl FactorsEnabledSection {
-    fn default_tracking() -> bool {
-        false
-    }
-
-    fn default_dynamic() -> bool {
-        true
-    }
-
-    fn default_interrobot() -> bool {
-        true
-    }
-
-    fn default_obstacle() -> bool {
-        true
-    }
+    pub obstacle: bool,
+    pub tracking: bool,
 }
 
 impl Default for FactorsEnabledSection {
     fn default() -> Self {
         Self {
             // pose:       true,
-            dynamic:    Self::default_dynamic(),
-            interrobot: Self::default_interrobot(),
-            obstacle:   Self::default_obstacle(),
-            tracking:   Self::default_tracking(),
+            dynamic: true,
+            interrobot: true,
+            obstacle: true,
+            tracking: false,
         }
     }
 }
@@ -500,37 +471,17 @@ impl Default for FactorsEnabledSection {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct TrackingSection {
-    #[serde(default = "TrackingSection::default_switch_padding")]
-    pub switch_padding:      f32,
-    #[serde(default = "TrackingSection::default_attraction_distance")]
+    pub switch_padding: f32,
     pub attraction_distance: f32,
     //#[serde(default = "TrackingSection::default_enabled")]
     // pub enabled: bool,
 }
 
-impl TrackingSection {
-    fn default_enabled() -> bool {
-        true
-    }
-
-    fn default_attraction_distance() -> f32 {
-        2.0
-    }
-
-    fn default_switch_padding() -> f32 {
-        1.0
-    }
-}
-
-/// Default value for the attraction distance
-
-/// Default value for the switch padding
-
 impl Default for TrackingSection {
     fn default() -> Self {
         Self {
-            switch_padding:      Self::default_switch_padding(),
-            attraction_distance: Self::default_attraction_distance(),
+            switch_padding: 1.0,
+            attraction_distance: 2.0,
             // enabled: Self::default_enabled(),
         }
     }
@@ -563,14 +514,8 @@ pub struct GbpSection {
     #[serde(default)]
     pub factors_enabled: FactorsEnabledSection,
     /// Number of variables to create
-    #[serde(default = "GbpSection::default_variables")]
+    #[serde(default)]
     pub variables: usize,
-}
-
-impl GbpSection {
-    fn default_variables() -> usize {
-        10
-    }
 }
 
 impl Default for GbpSection {
@@ -587,7 +532,7 @@ impl Default for GbpSection {
             iteration_schedule: GbpIterationSchedule::default(),
             // FIXME: not properly read when desirialized from toml
             factors_enabled: FactorsEnabledSection::default(),
-            variables: Self::default_variables(),
+            variables: 10,
             // ..Default::default()
         }
     }
@@ -613,13 +558,11 @@ pub struct CommunicationSection {
 impl Default for CommunicationSection {
     fn default() -> Self {
         Self {
-            radius:       20.0.try_into().expect("20.0 > 0.0"),
+            radius: 20.0.try_into().expect("20.0 > 0.0"),
             failure_rate: 0.2,
         }
     }
 }
-
-type NaturalQuantity = StrictlyPositiveFinite<f32>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -630,7 +573,7 @@ pub struct RobotRadiusSection {
 
 impl RobotRadiusSection {
     /// Returns the range that the radius can take
-    pub fn range(&self) -> RangeInclusive<f32> {
+    pub const fn range(&self) -> RangeInclusive<f32> {
         self.min.get()..=self.max.get()
     }
 }
@@ -689,14 +632,14 @@ pub struct InteractionSection {
     pub ui_focus_cancels_inputs: bool,
     /// Default camera distance from the origin.
     /// Can also be interpreted as default zoom level
-    pub default_cam_distance:    f32,
+    pub default_cam_distance: f32,
 }
 
 impl Default for InteractionSection {
     fn default() -> Self {
         Self {
             ui_focus_cancels_inputs: true,
-            default_cam_distance:    125.0,
+            default_cam_distance: 125.0,
         }
     }
 }
@@ -771,24 +714,27 @@ pub struct DebugSection {
     struct_iterable::Iterable,
 )]
 #[serde(rename_all = "kebab-case")]
+#[allow(clippy::struct_excessive_bools)]
 pub struct OnVariableClickedSection {
-    pub obstacle:   bool,
-    pub dynamic:    bool,
+    pub obstacle: bool,
+    pub dynamic: bool,
     pub interrobot: bool,
-    pub tracking:   bool,
-    pub variable:   bool,
-    pub inbox:      bool,
+    pub tracking: bool,
+    pub variable: bool,
+    pub inbox: bool,
 }
 
+// More explicit is better here
+#[allow(clippy::derivable_impls)]
 impl Default for OnVariableClickedSection {
     fn default() -> Self {
         Self {
-            obstacle:   false,
-            dynamic:    false,
+            obstacle: false,
+            dynamic: false,
             interrobot: false,
-            tracking:   false,
-            variable:   false,
-            inbox:      false,
+            tracking: false,
+            variable: false,
+            inbox: false,
         }
     }
 }
@@ -873,6 +819,7 @@ impl Default for Config {
 
 impl Config {
     /// Parse a config file from a given path
+    #[allow(clippy::missing_errors_doc)]
     pub fn from_file<P>(path: P) -> Result<Self, ParseError>
     where
         P: AsRef<std::path::Path>,
@@ -886,6 +833,7 @@ impl Config {
 
     /// Parse a config file
     /// Returns a `ParseError` if the file cannot be parsed
+    #[allow(clippy::missing_errors_doc)]
     pub fn parse(contents: &str) -> Result<Self, ParseError> {
         toml::from_str(contents).map_err(Into::into)
         // let config = toml::from_str(contents)?;

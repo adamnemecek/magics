@@ -25,7 +25,7 @@ mod marginalise_factor_distance;
 pub(crate) mod obstacle;
 pub(in crate::factorgraph) mod pose;
 pub(in crate::factorgraph) mod tracking;
-mod velocity;
+// mod velocity;
 // pub(in crate::factorgraph) mod velocity;
 
 use marginalise_factor_distance::marginalise_factor_distance;
@@ -35,7 +35,7 @@ pub use crate::factorgraph::factor::interrobot::ExternalVariableId;
 /// The value and position of a measurement
 pub struct Measurement {
     /// The value of the measurement
-    value:    Vector<Float>,
+    value: Vector<Float>,
     /// The position of the measurement
     position: Option<Vector<Float>>,
 }
@@ -136,15 +136,15 @@ pub struct FactorNode {
     /// is part of.
     pub node_index: Option<NodeIndex>,
     /// State common between all factor kinds
-    pub state:      FactorState,
+    pub state: FactorState,
     /// Variant storing the specialized behavior of each Factor kind.
-    pub kind:       FactorKind,
+    pub kind: FactorKind,
     /// ailbox for incoming message storage
-    pub inbox:      MessagesToVariables,
+    pub inbox: MessagesToVariables,
 
     message_count: MessageCount,
     /// Whether the factor is enabled
-    pub enabled:   bool,
+    pub enabled: bool,
 }
 
 impl FactorNode {
@@ -321,13 +321,13 @@ impl FactorNode {
     //     self.inbox.get(&from)
     // }
 
-    /// Calculates the residual between the current measurement and the initial
-    /// measurement
-    #[inline(always)]
-    #[must_use]
-    fn residual(&self) -> Vector<Float> {
-        &self.state.initial_measurement - &self.state.cached_measurement
-    }
+    // /// Calculates the residual between the current measurement and the initial
+    // /// measurement
+    // #[inline(always)]
+    // #[must_use]
+    // fn residual(&self) -> Vector<Float> {
+    //     &self.state.initial_measurement - &self.state.cached_measurement
+    // }
 
     /// Update the factor using the gbp message passing algorithm
     #[must_use]
@@ -373,7 +373,7 @@ impl FactorNode {
         // 1. Perform factor measurement
         let Measurement {
             value: measurement,
-            position: measurement_position,
+            position: _,
         } = self.measure(&self.state.linearisation_point);
         // In case the measurement function wants to update the linearisation point
         // if let Some(new_linearisation_point) = measurement_position {

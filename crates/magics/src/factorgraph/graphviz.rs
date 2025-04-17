@@ -1,3 +1,4 @@
+#![allow(missing_docs)]
 use super::factor::ExternalVariableId;
 
 /// Represents a factorgraph node in the graphviz output
@@ -5,7 +6,7 @@ pub struct Node {
     /// The index of the node
     pub index: usize,
     /// The kind of the node
-    pub kind:  NodeKind,
+    pub kind: NodeKind,
 }
 
 impl Node {
@@ -27,10 +28,16 @@ impl Node {
 
 pub enum NodeKind {
     Variable {
+        // It is not dead `rustc` ...
+        #[allow(dead_code)]
         x: f64,
+        // It is not dead `rustc` ...
+        #[allow(dead_code)]
         y: f64,
     },
     InterRobotFactor {
+        // It is not dead `rustc` ...
+        #[allow(dead_code)]
         active: bool,
         external_variable_id: ExternalVariableId,
     },
@@ -74,7 +81,7 @@ impl NodeKind {
 
 pub struct Edge {
     pub from: usize,
-    pub to:   usize,
+    pub to: usize,
 }
 
 pub trait ExportGraph {

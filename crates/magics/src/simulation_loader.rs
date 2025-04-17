@@ -27,7 +27,7 @@ pub enum InitialSimulation {
 #[derive(Debug)]
 pub struct SimulationLoaderPlugin {
     // pub simulations_dir: std::path::PathBuf,
-    pub show_toasts: bool,
+    // pub show_toasts: bool,
     pub initial_simulation: InitialSimulation,
     pub reload_after: Option<Duration>,
 }
@@ -35,19 +35,19 @@ pub struct SimulationLoaderPlugin {
 impl Default for SimulationLoaderPlugin {
     fn default() -> Self {
         Self {
-            show_toasts: true,
+            // show_toasts: true,
             initial_simulation: InitialSimulation::FirstFoundInFolder,
             reload_after: None,
         }
     }
 }
 
-impl SimulationLoaderPlugin {
-    pub fn reload_after(mut self, duration: Duration) -> Self {
-        self.reload_after = Some(duration);
-        self
-    }
-}
+// impl SimulationLoaderPlugin {
+//     pub fn reload_after(mut self, duration: Duration) -> Self {
+//         self.reload_after = Some(duration);
+//         self
+//     }
+// }
 
 pub type SdfImage = image::ImageBuffer<image::Rgb<u8>, Vec<u8>>;
 pub type RawImage = image::ImageBuffer<image::Rgb<u8>, Vec<u8>>;
@@ -67,9 +67,8 @@ type Simulations = BTreeMap<String, Simulation>;
 const SIMULATIONS_DIR: &'static str = "./config/scenarios";
 
 impl SimulationLoaderPlugin {
-    pub fn new(show_toasts: bool, initial_simulation: Option<String>) -> Self {
+    pub fn new(initial_simulation: Option<String>) -> Self {
         Self {
-            show_toasts,
             initial_simulation: initial_simulation
                 .map_or(InitialSimulation::FirstFoundInFolder, |name| {
                     InitialSimulation::Name(name)
@@ -99,21 +98,21 @@ impl SimulationLoaderPlugin {
     //}
 }
 
-fn reload_after(
-    duration: Duration,
-) -> impl FnMut(Res<Time<Fixed>>, EventWriter<ReloadSimulation>, ResMut<SimulationManager>) {
-    move |time: Res<Time<Fixed>>,
-          mut evw_reload_simulation: EventWriter<ReloadSimulation>,
-          mut simulation_manager: ResMut<SimulationManager>| {
-        println!("elapsed: {:?}", time.elapsed());
-        if time.elapsed() >= duration {
-            if let Some(id) = simulation_manager.active_id() {
-                simulation_manager.reload();
-                // evw_reload_simulation.send(ReloadSimulation(id));
-            };
-        }
-    }
-}
+// fn reload_after(
+//     duration: Duration,
+// ) -> impl FnMut(Res<Time<Fixed>>, EventWriter<ReloadSimulation>, ResMut<SimulationManager>) {
+//     move |time: Res<Time<Fixed>>,
+//           mut evw_reload_simulation: EventWriter<ReloadSimulation>,
+//           mut simulation_manager: ResMut<SimulationManager>| {
+//         println!("elapsed: {:?}", time.elapsed());
+//         if time.elapsed() >= duration {
+//             if let Some(_) = simulation_manager.active_id() {
+//                 simulation_manager.reload();
+//                 // evw_reload_simulation.send(ReloadSimulation(id));
+//             };
+//         }
+//     }
+// }
 
 // fn elapsed_time_exceeds(duration: Duration) -> impl FnMut(Res<Time>) -> bool
 // + Clone {    move |time: Res<Time>| time.elapsed() >= duration
@@ -349,10 +348,10 @@ pub struct SimulationManager {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Request {
-    LoadInitial,
+    // LoadInitial,
     Load(SimulationId),
     Reload,
-    End,
+    // End,
 }
 
 impl SimulationManager {
@@ -384,19 +383,19 @@ impl SimulationManager {
         self.simulations.get(active)
     }
 
-    pub fn active_id(&self) -> Option<SimulationId> {
-        self.active.map(SimulationId)
-    }
+    // pub fn active_id(&self) -> Option<SimulationId> {
+    //     self.active.map(SimulationId)
+    // }
 
     pub fn active_name(&self) -> Option<&str> {
         self.names.get(self.active?).map(|s| s.as_str())
     }
 
-    pub fn names(&self) -> impl Iterator<Item = &SmolStr> {
-        self.names.iter()
+    // pub fn names(&self) -> impl Iterator<Item = &SmolStr> {
+    //     self.names.iter()
 
-        // self.simulations.keys().map(|s| s.as_str())
-    }
+    //     // self.simulations.keys().map(|s| s.as_str())
+    // }
 
     pub fn ids_and_names(&self) -> impl Iterator<Item = (SimulationId, SmolStr)> + '_ {
         (0..self.simulations.len())
@@ -445,55 +444,54 @@ impl SimulationManager {
         self.load(SimulationId(next));
     }
 
-    pub fn ids(&self) -> impl Iterator<Item = SimulationId> + '_ {
-        (0..self.simulations.len()).map(SimulationId)
-    }
+    // pub fn ids(&self) -> impl Iterator<Item = SimulationId> + '_ {
+    //     (0..self.simulations.len()).map(SimulationId)
+    // }
 
-    #[must_use]
-    pub fn id_from_name(&self, name: &str) -> Option<SimulationId> {
-        self.names.iter().position(|n| n == name).map(SimulationId)
-    }
+    // pub fn id_from_name(&self, name: &str) -> Option<SimulationId> {
+    //     self.names.iter().position(|n| n == name).map(SimulationId)
+    // }
 
-    pub fn get_config_for(&self, id: SimulationId) -> Option<&Config> {
-        self.simulations.get(id.0).map(|s| &s.config)
-        // todo!()
-    }
+    // pub fn get_config_for(&self, id: SimulationId) -> Option<&Config> {
+    //     self.simulations.get(id.0).map(|s| &s.config)
+    //     // todo!()
+    // }
 
-    pub fn get_environment_for(&self, id: SimulationId) -> Option<&Environment> {
-        self.simulations.get(id.0).map(|s| &s.environment)
-    }
+    // pub fn get_environment_for(&self, id: SimulationId) -> Option<&Environment> {
+    //     self.simulations.get(id.0).map(|s| &s.environment)
+    // }
 
-    pub fn get_formation_group_for(&self, id: SimulationId) -> Option<&FormationGroup> {
-        self.simulations.get(id.0).map(|s| &s.formation_group)
-    }
+    // pub fn get_formation_group_for(&self, id: SimulationId) -> Option<&FormationGroup> {
+    //     self.simulations.get(id.0).map(|s| &s.formation_group)
+    // }
 
     pub fn active_formation_group(&self) -> Option<&FormationGroup> {
         let index = self.active?;
         self.simulations.get(index).map(|s| &s.formation_group)
     }
 
-    pub fn active_config(&self) -> Option<&Config> {
-        let index = self.active?;
-        self.simulations.get(index).map(|s| &s.config)
-    }
+    // pub fn active_config(&self) -> Option<&Config> {
+    //     let index = self.active?;
+    //     self.simulations.get(index).map(|s| &s.config)
+    // }
 
-    pub fn active_environment(&self) -> Option<&Environment> {
-        let index = self.active?;
-        self.simulations.get(index).map(|s| &s.environment)
-    }
+    // pub fn active_environment(&self) -> Option<&Environment> {
+    //     let index = self.active?;
+    //     self.simulations.get(index).map(|s| &s.environment)
+    // }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct SimulationId(usize);
 
 #[derive(Event)]
-pub struct LoadSimulation(pub SimulationId);
+pub struct LoadSimulation; // (pub SimulationId);
 
 #[derive(Event)]
-pub struct ReloadSimulation(pub SimulationId);
+pub struct ReloadSimulation; // (pub SimulationId);
 
 #[derive(Event)]
-pub struct EndSimulation(pub SimulationId);
+pub struct EndSimulation; // (pub SimulationId);
 
 #[derive(Event)]
 pub struct SaveSettings;
@@ -511,84 +509,84 @@ fn reload_simulation(mut simulation_manager: ResMut<SimulationManager>) {
     simulation_manager.reload();
 }
 
-fn load_initial_simulation(
-    // simulation_manager: Res<SimulationManager>,
-    // mut evw_load_simulation: EventWriter<LoadSimulation>,
-    world: &mut World,
-) {
-    let (simulation_id, config, environment, formation_group) = {
-        let simulation_manager = world
-            .get_resource_mut::<SimulationManager>()
-            .expect("SimulationManager has been inserted");
+// fn load_initial_simulation(
+//     // simulation_manager: Res<SimulationManager>,
+//     // mut evw_load_simulation: EventWriter<LoadSimulation>,
+//     world: &mut World,
+// ) {
+//     let (simulation_id, config, environment, formation_group) = {
+//         let simulation_manager = world
+//             .get_resource_mut::<SimulationManager>()
+//             .expect("SimulationManager has been inserted");
 
-        let simulation_index = simulation_manager.active.unwrap_or(0);
-        let simulation_id = SimulationId(simulation_index);
+//         let simulation_index = simulation_manager.active.unwrap_or(0);
+//         let simulation_id = SimulationId(simulation_index);
 
-        let Some(config) = simulation_manager.get_config_for(simulation_id) else {
-            panic!("no config found for simulation id: {}", simulation_id.0);
-        };
+//         let Some(config) = simulation_manager.get_config_for(simulation_id) else {
+//             panic!("no config found for simulation id: {}", simulation_id.0);
+//         };
 
-        let Some(environment) = simulation_manager.get_environment_for(simulation_id) else {
-            panic!(
-                "no environment found for simulation id: {}",
-                simulation_id.0
-            );
-        };
+//         let Some(environment) = simulation_manager.get_environment_for(simulation_id) else {
+//             panic!(
+//                 "no environment found for simulation id: {}",
+//                 simulation_id.0
+//             );
+//         };
 
-        let Some(formation_group) = simulation_manager.get_formation_group_for(simulation_id)
-        else {
-            panic!(
-                "no formation group found for simulation id: {}",
-                simulation_id.0
-            );
-        };
+//         let Some(formation_group) = simulation_manager.get_formation_group_for(simulation_id)
+//         else {
+//             panic!(
+//                 "no formation group found for simulation id: {}",
+//                 simulation_id.0
+//             );
+//         };
 
-        (
-            simulation_id,
-            config.clone(),
-            environment.clone(),
-            formation_group.clone(),
-        )
-    };
+//         (
+//             simulation_id,
+//             config.clone(),
+//             environment.clone(),
+//             formation_group.clone(),
+//         )
+//     };
 
-    world.insert_resource(environment);
-    world.insert_resource(formation_group);
-    world.insert_resource(config);
+//     world.insert_resource(environment);
+//     world.insert_resource(formation_group);
+//     world.insert_resource(config);
 
-    let mut simulation_manager = world
-        .get_resource_mut::<SimulationManager>()
-        .expect("SimulationManager has been inserted");
-    // simulation_manager.active = Some(0);
-    simulation_manager
-        .requests
-        .push_back(Request::Load(simulation_id));
+//     let mut simulation_manager = world
+//         .get_resource_mut::<SimulationManager>()
+//         .expect("SimulationManager has been inserted");
+//     // simulation_manager.active = Some(0);
+//     simulation_manager
+//         .requests
+//         .push_back(Request::Load(simulation_id));
 
-    // let Some(simulation_id) = simulation_manager.active_id() else {
-    //     panic!("no initial simulation set to active");
-    // };
+//     // let Some(simulation_id) = simulation_manager.active_id() else {
+//     //     panic!("no initial simulation set to active");
+//     // };
 
-    // if let Some(config) = simulation_manager.get_config_for(simulation_id) {
-    //     let config = config.to_owned();
-    //     world.insert_resource(config);
-    // }
+//     // if let Some(config) = simulation_manager.get_config_for(simulation_id) {
+//     //     let config = config.to_owned();
+//     //     world.insert_resource(config);
+//     // }
 
-    // if let Some(environment) =
-    // simulation_manager.get_environment_for(simulation_id) {
-    //     let environment = environment.to_owned();
-    //     world.insert_resource(environment);
-    // }
+//     // if let Some(environment) =
+//     // simulation_manager.get_environment_for(simulation_id) {
+//     //     let environment = environment.to_owned();
+//     //     world.insert_resource(environment);
+//     // }
 
-    // if let Some(formation) =
-    // simulation_manager.get_formation_for(simulation_id) {
-    //     let formation = formation.to_owned();
-    //     world.insert_resource(formation);
-    // }
+//     // if let Some(formation) =
+//     // simulation_manager.get_formation_for(simulation_id) {
+//     //     let formation = formation.to_owned();
+//     //     world.insert_resource(formation);
+//     // }
 
-    // if let Some(id) = simulation_manager.active_id() {
-    //     evw_load_simulation.send(LoadSimulation(id));
-    //     info!("sent load simulation event with id: {}", id.0);
-    // }
-}
+//     // if let Some(id) = simulation_manager.active_id() {
+//     //     evw_load_simulation.send(LoadSimulation(id));
+//     //     info!("sent load simulation event with id: {}", id.0);
+//     // }
+// }
 
 #[allow(clippy::too_many_arguments)]
 fn handle_requests(
@@ -596,7 +594,7 @@ fn handle_requests(
     mut simulation_manager: ResMut<SimulationManager>,
     mut evw_load_simulation: EventWriter<LoadSimulation>,
     mut evw_reload_simulation: EventWriter<ReloadSimulation>,
-    mut evw_end_simulation: EventWriter<EndSimulation>,
+    // mut evw_end_simulation: EventWriter<EndSimulation>,
     mut evw_toast: EventWriter<ToastEvent>,
     mut time_virtual: ResMut<Time<Virtual>>,
     mut time_fixed: ResMut<Time<Fixed>>,
@@ -617,7 +615,7 @@ fn handle_requests(
     info!("requests pending: {:?}", simulation_manager.requests.len());
 
     match request {
-        Request::LoadInitial => todo!(),
+        // Request::LoadInitial => todo!(),
         // Request::Load(id) if simulation_loader.active.is_none() => {
         //     simulation_manager.active = Some(id.0);
         // }
@@ -651,7 +649,7 @@ fn handle_requests(
             let seed: [u8; 8] = config.simulation.prng_seed.to_le_bytes();
             rng.reseed(seed);
 
-            evw_load_simulation.send(LoadSimulation(id));
+            evw_load_simulation.send(LoadSimulation);
             info!("sent load simulation event with id: {}", id.0);
             simulation_manager.simulations_loaded += 1;
             let simulation_name = &simulation_manager.names[id.0];
@@ -676,7 +674,7 @@ fn handle_requests(
                     // commands.entity(entity).despawn_recursive();
                     commands.entity(entity).despawn();
                 }
-                evw_reload_simulation.send(ReloadSimulation(SimulationId(index)));
+                evw_reload_simulation.send(ReloadSimulation);
                 info!("sent reload simulation event with id: {}", index);
                 simulation_manager.simulations_loaded += 1;
                 evw_toast.send(ToastEvent {
@@ -697,16 +695,16 @@ fn handle_requests(
                 error!("no active simulation, cannot reload");
             }
         },
-        Request::End => match simulation_manager.active {
-            Some(index) => {
-                simulation_manager.active = None;
-                evw_end_simulation.send(EndSimulation(SimulationId(index)));
-                info!("sent end simulation event with id: {}", index);
-            }
-            None => {
-                error!("no active simulation to end");
-            }
-        },
+        // Request::End => match simulation_manager.active {
+        //     Some(index) => {
+        //         simulation_manager.active = None;
+        //         evw_end_simulation.send(EndSimulation);
+        //         info!("sent end simulation event with id: {}", index);
+        //     }
+        //     None => {
+        //         error!("no active simulation to end");
+        //     }
+        // },
     }
 
     match request {
@@ -722,8 +720,6 @@ fn handle_requests(
 
             virtual_time.set_relative_speed(config.simulation.time_scale.get());
         }
-
-        _ => {}
     }
 }
 

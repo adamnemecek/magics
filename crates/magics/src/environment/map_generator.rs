@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use bevy::{prelude::*, reflect::Tuple};
+use bevy::prelude::*;
 use bevy_mod_picking::prelude::*;
 use gbp_config::{Config, DrawSetting};
 use gbp_environment::{
@@ -206,7 +206,12 @@ fn build_obstacles(
 
                 Some((mesh, transform, isometry, shape))
             }
-            PlaceableShape::Triangle(ref triangle_shape @ Triangle { angles, radius }) => {
+            PlaceableShape::Triangle(
+                ref triangle_shape @ Triangle {
+                    angles: _,
+                    radius: _,
+                },
+            ) => {
                 let center = Vec3::new(
                     (translation.x.get() as f32).mul_add(tile_size, offset_x) - pos_offset,
                     // obstacle_height / 2.0,
@@ -1312,12 +1317,4 @@ fn show_or_hide_generated_map(
             }
         }
     }
-}
-
-/// **Bevy** [`Update`] system that clear all spawned obstacle colliders. Used
-/// to clear existing colliders before a new simulation is loaded.
-fn clear_colliders(mut colliders: ResMut<Colliders>) {
-    let n_colliders = colliders.len();
-    colliders.clear();
-    info!("{} colliders cleared", n_colliders);
 }

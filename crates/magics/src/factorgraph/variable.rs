@@ -14,7 +14,7 @@ use super::{
 #[derive(Debug, Clone)]
 pub struct VariablePrior {
     information_vector: Vector<Float>,
-    precision_matrix:   Matrix<Float>,
+    precision_matrix: Matrix<Float>,
 }
 
 impl VariablePrior {
@@ -86,9 +86,9 @@ impl From<VariableBelief> for Message {
 pub struct VariableNode {
     factorgraph_id: FactorGraphId,
     /// Prior distribution
-    pub prior:      VariablePrior,
+    pub prior: VariablePrior,
     /// Variables belief about its position and velocity
-    pub belief:     VariableBelief,
+    pub belief: VariableBelief,
 
     // / Flag to indicate if the variable's covariance is finite, i.e. it does
     // / not contain NaNs or Infs In gbpplanner it is used to control if a
@@ -347,6 +347,7 @@ impl VariableNode {
         self.belief.valid
     }
 
+    /// Reset variable to have mean
     pub fn reset(&mut self, mean: &[f64; 4], sigma: f64) {
         self.belief.mean = Vector::from_iter(mean.to_owned());
         self.belief.precision_matrix = Matrix::from_diag_elem(DOFS, sigma);

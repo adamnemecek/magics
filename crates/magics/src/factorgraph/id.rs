@@ -7,7 +7,7 @@ pub struct FactorId {
     /// The id of the factorgraph that the factor belongs to.
     pub factorgraph_id: FactorGraphId,
     /// The index of the factor in the factorgraph.
-    pub factor_index:   FactorIndex,
+    pub factor_index: FactorIndex,
 }
 
 impl FactorId {

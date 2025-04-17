@@ -19,10 +19,12 @@ pub(in crate::factorgraph) trait FactorGraphNode {
     fn messages_sent(&self) -> MessagesSent;
     fn messages_received(&self) -> MessagesReceived;
 
+    #[allow(dead_code)]
     fn reset_message_count(&mut self);
 }
 
 /// Different variants a factorgraph node can be
+#[allow(missing_docs)]
 #[derive(Debug, derive_more::IsVariant, strum_macros::EnumTryAs)]
 pub enum NodeKind {
     /// The node is a factor
@@ -35,7 +37,8 @@ pub enum NodeKind {
 /// The node stored in the factorgraph
 #[derive(Debug)]
 pub struct Node {
-    // factorgraph_id: FactorGraphId,
+    #[allow(dead_code)]
+    factorgraph_id: FactorGraphId,
     /// The kind of this node, either Variable or some Factor
     pub kind: NodeKind,
 }
@@ -43,15 +46,18 @@ pub struct Node {
 impl Node {
     /// Construct a new node
     pub const fn new(factorgraph_id: FactorGraphId, kind: NodeKind) -> Self {
-        Self { kind }
+        Self {
+            factorgraph_id,
+            kind,
+        }
         // Self { factorgraph_id, kind }
     }
 
     /// Returns `true` if the node is [`Factor`].
     ///
     /// [`Factor`]: Node::Factor
-    #[must_use]
     #[inline]
+    #[allow(dead_code)]
     pub fn is_factor(&self) -> bool {
         self.kind.is_factor()
     }
@@ -62,6 +68,7 @@ impl Node {
     ///
     /// Panics if the node is not a factor
     #[inline]
+    #[allow(dead_code)]
     pub fn factor(&self) -> &FactorNode {
         self.as_factor().expect("The node should be a Factor")
     }
@@ -131,6 +138,7 @@ impl Node {
     ///
     /// Panics if the node is not a variable
     #[inline]
+    #[allow(dead_code)]
     pub fn variable(&self) -> &VariableNode {
         self.as_variable().expect("The node should be a Variable")
     }

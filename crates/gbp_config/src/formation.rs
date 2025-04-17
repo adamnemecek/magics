@@ -1,11 +1,6 @@
 //! A module for working with robot formations declaratively.
 
-use std::{
-    f32::consts::{PI, TAU},
-    num::NonZeroUsize,
-    path::Path,
-    time::Duration,
-};
+use std::{f32::consts::PI, num::NonZeroUsize, path::Path, time::Duration};
 
 use bevy::{
     ecs::{component::Component, system::Resource},
@@ -13,8 +8,7 @@ use bevy::{
 };
 use itertools::Itertools;
 use min_len_vec::{one_or_more, OneOrMore};
-use num_traits::{Saturating, SaturatingMul};
-use rand::{thread_rng, Rng};
+use rand::Rng;
 use serde::{Deserialize, Serialize};
 use typed_floats::StrictlyPositiveFinite;
 
@@ -136,7 +130,7 @@ impl RepeatTimes {
     /// Decrement the number of repeats left in self.
     /// If `Self::Infinite`, do nothing
     /// If `Self::Finite(remaining)` decrement remaining if > 0
-    pub fn decrement(&mut self) {
+    pub const fn decrement(&mut self) {
         match self {
             Self::Finite(ref mut remaining) if *remaining > 0 => *remaining -= 1,
             _ => {}
@@ -174,7 +168,7 @@ pub struct ReachedWhen {
 }
 
 impl ReachedWhen {
-    pub fn same_as_paper() -> Self {
+    pub const fn same_as_paper() -> Self {
         Self {
             distance: IntersectionDistance::RobotRadius,
             intersects_with: CheckIntersectionWith::Horizon,
@@ -254,7 +248,7 @@ impl Default for Formation {
 }
 
 impl Formation {
-    fn default_finished_when_intersects() -> ReachedWhen {
+    const fn default_finished_when_intersects() -> ReachedWhen {
         ReachedWhen {
             distance: IntersectionDistance::RobotRadius,
             intersects_with: CheckIntersectionWith::Horizon,
@@ -318,7 +312,7 @@ impl Formation {
                         randomly_place_nonoverlapping_circles_along_line_segment(
                             ls_start,
                             ls_end,
-                            &robot_radii,
+                            robot_radii,
                             // self.robots,
                             // robot_radius,
                             *attempts,
@@ -329,7 +323,7 @@ impl Formation {
                         evenly_place_nonoverlapping_circles_along_line_segment(
                             ls_start,
                             ls_end,
-                            &robot_radii,
+                            robot_radii,
                         )
 
                         // let d = ls_start.distance(ls_end);
@@ -398,7 +392,7 @@ impl Formation {
                         let angles = (0..self.robots).map(|i| i as f32 * angle).collect();
                         Some(angles)
                     }
-                    InitialPlacementStrategy::Random { attempts } => {
+                    InitialPlacementStrategy::Random { attempts: _ } => {
                         // TODO: check if it even makes sense to iterate
                         // if B * n > 2 * math.pi * A:
                         // let mut rng = thread_rng();
@@ -461,6 +455,7 @@ fn polar(angle: f32, magnitude: f32) -> Vec2 {
     Vec2::new(angle.cos() * magnitude, angle.sin() * magnitude)
 }
 
+#[allow(dead_code)]
 trait Vec2Ext {
     fn from_polar(angle: f32, magnitude: f32) -> Self;
 }
@@ -469,6 +464,7 @@ impl Vec2Ext for bevy::math::Vec2 {
     /// Create a vector from polar coordinates
     #[must_use]
     #[inline]
+    #[allow(dead_code)]
     fn from_polar(angle: f32, magnitude: f32) -> Self {
         Self::new(angle.cos() * magnitude, angle.sin() * magnitude)
     }
@@ -476,7 +472,7 @@ impl Vec2Ext for bevy::math::Vec2 {
 
 #[derive(Debug, Clone, Copy)]
 pub struct WorldDimensions {
-    width:  StrictlyPositiveFinite<f64>,
+    width: StrictlyPositiveFinite<f64>,
     height: StrictlyPositiveFinite<f64>,
 }
 
@@ -489,7 +485,7 @@ impl WorldDimensions {
     #[must_use]
     pub fn new(width: f64, height: f64) -> Self {
         Self {
-            width:  width.try_into().expect("width is not zero"),
+            width: width.try_into().expect("width is not zero"),
             height: height.try_into().expect("height is not zero"),
         }
     }
@@ -513,38 +509,38 @@ impl WorldDimensions {
     }
 }
 
-fn randomly_place_nonoverlapping_circles_along_circle_perimeter(
-    num_circles: NonZeroUsize,
-    radius: StrictlyPositiveFinite<f32>,
-    perimeter_radius: StrictlyPositiveFinite<f32>,
-    max_attempts: NonZeroUsize,
-    rng: &mut impl Rng,
-) -> Option<Vec<f32>> {
-    let num_circles = num_circles.get();
-    let perimeter_radius = perimeter_radius.get();
-    let mut placed_angles = Vec::with_capacity(num_circles);
-    let mut placed_positions: Vec<Vec2> = Vec::with_capacity(num_circles);
-    // TODO: use rng argument passed
-    // let mut rng = thread_rng();
+// fn randomly_place_nonoverlapping_circles_along_circle_perimeter(
+//     num_circles: NonZeroUsize,
+//     radius: StrictlyPositiveFinite<f32>,
+//     perimeter_radius: StrictlyPositiveFinite<f32>,
+//     max_attempts: NonZeroUsize,
+//     rng: &mut impl Rng,
+// ) -> Option<Vec<f32>> {
+//     let num_circles = num_circles.get();
+//     let perimeter_radius = perimeter_radius.get();
+//     let mut placed_angles = Vec::with_capacity(num_circles);
+//     let mut placed_positions: Vec<Vec2> = Vec::with_capacity(num_circles);
+//     // TODO: use rng argument passed
+//     // let mut rng = thread_rng();
 
-    for _ in 0..max_attempts.get() {
-        let theta = rng.gen_range(0.0..TAU);
-        let pos = Vec2::from_polar(theta, perimeter_radius);
-        let not_overlapping_with_others = placed_positions
-            .iter()
-            .any(|other| other.distance(pos) <= radius);
+//     for _ in 0..max_attempts.get() {
+//         let theta = rng.gen_range(0.0..TAU);
+//         let pos = Vec2::from_polar(theta, perimeter_radius);
+//         let not_overlapping_with_others = placed_positions
+//             .iter()
+//             .any(|other| other.distance(pos) <= radius);
 
-        if not_overlapping_with_others {
-            placed_angles.push(theta);
-            placed_positions.push(pos);
-            if placed_angles.len() == num_circles {
-                return Some(placed_angles);
-            }
-        }
-    }
+//         if not_overlapping_with_others {
+//             placed_angles.push(theta);
+//             placed_positions.push(pos);
+//             if placed_angles.len() == num_circles {
+//                 return Some(placed_angles);
+//             }
+//         }
+//     }
 
-    None
-}
+//     None
+// }
 
 fn randomly_place_nonoverlapping_circles_along_line_segment(
     from: Vec2,
@@ -653,7 +649,6 @@ pub enum ParseError {
     // InvalidFormation(#[from] FormationError),
     // #[error("Invalid formation group: {0}")]
     // InvalidFormationGroup(#[from] FormationGroupError),
-
     #[error("YAML error: {0}")]
     Yaml(#[from] serde_yaml::Error),
 }
@@ -671,7 +666,6 @@ impl FormationGroup {
         std::fs::read_to_string(path)
             .map(|file_contents| Self::parse_from_yaml(file_contents.as_str()))?
     }
-
 
     /// Attempt to parse a `FormationGroup` from a YAML encoded string.
     ///
@@ -692,7 +686,7 @@ impl FormationGroup {
             .iter()
             .map(Formation::robots_to_spawn)
             // .inspect(|it| println!("  {}", it))
-            .fold(0usize, |acc, it| acc.saturating_add(it))
+            .fold(0usize, usize::saturating_add)
     }
 
     pub fn circle_from_paper() -> Self {

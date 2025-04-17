@@ -110,7 +110,7 @@ ringbuf  = "0.3.3"
 termsize = "0.1.6"
 paste    = "1.0.14"
 colored  = "2.1.0"
-chrono   = "0.4.37"
+# chrono   = "0.4.37"
 # parry3d = "0.13.7"
 
 # font-kit = { version = "0.13.0", features = ["freetype"] }
@@ -123,12 +123,12 @@ rand_chacha = { version = "0.3.1", features = [
   "simd",
 ] }
 
-atty = "0.2.14"
+# atty = "0.2.14"
 # colored-diff  = "0.2.3"
 serde_json = "1.0.116"
 colorgrad  = "0.6.2"
 # open          = "5.1.0"
-ordered-float = "4.2.0"
+# ordered-float = "4.2.0"
 # dialoguer = { version = "0.11.0", features = ["fuzzy-select"] }
 
 open = "5.1"

@@ -1,4 +1,8 @@
-#![allow(clippy::module_name_repetitions, clippy::uninlined_format_args)]
+#![allow(
+    clippy::module_name_repetitions,
+    clippy::uninlined_format_args,
+    clippy::used_underscore_items
+)]
 //! Pretty printing of matrices and vectors. Useful for debugging and
 //! visualizing the contents of a matrix or vector.
 
@@ -57,6 +61,7 @@ pub fn num_of_integral_digits(mut f: f64) -> Option<usize> {
         count += 1;
     }
 
+    #[allow(clippy::while_float)]
     while f >= 1.0 {
         f /= 10.0;
         count += 1;
@@ -302,7 +307,7 @@ fn float_color(f: f64) -> &'static str {
 ///
 /// # Panics
 /// - If any of the elements of the matrix cannot be converted to a `f64`
-#[allow(clippy::unwrap_used)]
+#[allow(clippy::unwrap_used, clippy::too_many_lines)]
 pub fn _pretty_format_vector<T, V>(
     vector: &V,
     name: Option<&str>,
@@ -494,7 +499,11 @@ impl<T: GbpFloat> PrettyPrintMatrix<T> for Matrix<T> {
     }
 }
 
-#[allow(clippy::unwrap_used)]
+#[allow(
+    clippy::unwrap_used,
+    clippy::missing_panics_doc,
+    clippy::too_many_lines
+)]
 pub fn _pretty_format_matrix<T, M>(
     matrix: &M,
     name: Option<&str>,

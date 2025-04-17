@@ -23,14 +23,14 @@ pub struct CursorCoordinates {
     // Global (world-space) coordinates
     global: Vec3,
     // Local (relative to the ground plane) coordinates
-    local:  Vec2,
+    local: Vec2,
 }
 
 impl CursorCoordinates {
-    /// Get the global (world-space) coordinates of the cursor
-    pub const fn global(&self) -> Vec3 {
-        self.global
-    }
+    // /// Get the global (world-space) coordinates of the cursor
+    // pub const fn global(&self) -> Vec3 {
+    //     self.global
+    // }
 
     /// Get the local (relative to the ground plane) coordinates of the cursor
     pub const fn local(&self) -> Vec2 {
@@ -47,13 +47,16 @@ fn spawn_invisible_ground_plane(
     materials: Res<Materials>,
     meshes: Res<Meshes>,
 ) {
-    commands.spawn((InvisibleGroundPlane, PbrBundle {
-        transform: Transform::default(),
-        mesh: meshes.plane.clone(),
-        material: materials.waypoint.clone(),
-        visibility: Visibility::Hidden,
-        ..default()
-    }));
+    commands.spawn((
+        InvisibleGroundPlane,
+        PbrBundle {
+            transform: Transform::default(),
+            mesh: meshes.plane.clone(),
+            material: materials.waypoint.clone(),
+            visibility: Visibility::Hidden,
+            ..default()
+        },
+    ));
 }
 
 fn cursor_to_ground_plane(

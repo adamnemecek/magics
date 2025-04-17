@@ -8,11 +8,7 @@ use crate::{
     asset_loader::{Materials, Meshes},
     bevy_utils::run_conditions::event_exists,
     input::DrawSettingsEvent,
-    planner::{
-        robot::{Mission, RobotReachedWaypoint},
-        spawner::WaypointCreated,
-        RobotId,
-    },
+    planner::{robot::Mission, spawner::WaypointCreated, RobotId},
     simulation_loader,
     theme::ColorAssociation,
 };
@@ -63,23 +59,23 @@ fn visualize_waypoints(
     }
 }
 
-fn remove_when_robot_reached_waypoint(
-    mut commands: Commands,
-    mut evr_robot_reached_waypoint: EventReader<RobotReachedWaypoint>,
-    // mut evw_waypoint_reached: EventWriter<RobotReachedWaypoint>,
-    waypoint_visualizers: Query<(Entity, &AssociatedWithRobot), With<WaypointVisualiser>>,
-) {
-    for event in evr_robot_reached_waypoint.read() {
-        // Find the entity id of the waypoint visualizer that has just been reached
-        if let Some(waypoint_id) = waypoint_visualizers
-            .iter()
-            .find(|(_, AssociatedWithRobot(robot_id))| *robot_id == event.robot_id)
-            .map(|(entity, _)| entity)
-        {
-            commands.entity(waypoint_id).despawn();
-        };
-    }
-}
+// fn remove_when_robot_reached_waypoint(
+//     mut commands: Commands,
+//     mut evr_robot_reached_waypoint: EventReader<RobotReachedWaypoint>,
+//     // mut evw_waypoint_reached: EventWriter<RobotReachedWaypoint>,
+//     waypoint_visualizers: Query<(Entity, &AssociatedWithRobot), With<WaypointVisualiser>>,
+// ) {
+//     for event in evr_robot_reached_waypoint.read() {
+//         // Find the entity id of the waypoint visualizer that has just been reached
+//         if let Some(waypoint_id) = waypoint_visualizers
+//             .iter()
+//             .find(|(_, AssociatedWithRobot(robot_id))| *robot_id == event.robot_id)
+//             .map(|(entity, _)| entity)
+//         {
+//             commands.entity(waypoint_id).despawn();
+//         };
+//     }
+// }
 
 // /// **Bevy** system to delete the mesh of the allocated waypoint visualizer
 // /// whenever the waypoint has been reached.

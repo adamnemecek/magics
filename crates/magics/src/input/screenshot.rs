@@ -12,16 +12,14 @@ pub struct ScreenshotPlugin {
 #[derive(Debug, Clone, Copy, Resource)]
 pub struct ScreenshotPluginConfig {
     pub show_notification: bool,
-    pub override_if_screenshot_exists: bool,
-    pub with_egui_ui: bool,
+    // pub override_if_screenshot_exists: bool,
+    // pub with_egui_ui: bool,
 }
 
 impl Default for ScreenshotPluginConfig {
     fn default() -> Self {
         Self {
             show_notification: false,
-            override_if_screenshot_exists: true,
-            with_egui_ui: true,
             // screenshot_save_location: ScreenShotSaveLocation::default(),
         }
     }
@@ -64,7 +62,7 @@ impl Default for TakeScreenshot {
 
 #[derive(Debug, Clone, Default)]
 pub enum ScreenshotSaveLocation {
-    At(std::path::PathBuf),
+    // At(std::path::PathBuf),
     #[default]
     Cwd,
     // Clipboard,
@@ -74,7 +72,7 @@ pub enum ScreenshotSaveLocation {
 pub enum ScreenshotSavePostfix {
     #[default]
     Number,
-    UnixTimestamp,
+    // UnixTimestamp,
 }
 
 #[derive(Debug, Clone, Event)]
@@ -119,8 +117,7 @@ fn handle_screenshot_event(
 
                 let screenshot_id = latest_screenshot_id.map_or(0, |id| id + 1);
                 screenshot_id.to_string()
-            }
-            ScreenshotSavePostfix::UnixTimestamp => chrono::Utc::now().timestamp().to_string(),
+            } // ScreenshotSavePostfix::UnixTimestamp => chrono::Utc::now().timestamp().to_string(),
         };
 
         let extension = event
@@ -132,8 +129,7 @@ fn handle_screenshot_event(
         let dirname = match event.save_at_location {
             ScreenshotSaveLocation::Cwd => {
                 std::env::current_dir().expect("current directory exists")
-            }
-            ScreenshotSaveLocation::At(ref path) => path.clone(),
+            } // ScreenshotSaveLocation::At(ref path) => path.clone(),
         };
 
         let path = dirname

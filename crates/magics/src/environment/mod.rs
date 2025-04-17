@@ -5,7 +5,6 @@ pub mod map;
 pub mod map_generator;
 
 use camera::CameraPlugin;
-pub use camera::MainCamera;
 use cursor::CursorToGroundPlugin;
 pub use follow_cameras::FollowCameraMe;
 use follow_cameras::FollowCamerasPlugin;

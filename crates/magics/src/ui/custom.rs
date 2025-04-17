@@ -11,10 +11,10 @@ pub fn float_right<R>(ui: &mut Ui, add_contents: impl FnOnce(&mut Ui) -> R) -> I
     ui.with_layout(Layout::right_to_left(Align::Center), add_contents)
 }
 
-/// A simple function to float a widget to the left
-pub fn float_left<R>(ui: &mut Ui, add_contents: impl FnOnce(&mut Ui) -> R) -> InnerResponse<R> {
-    ui.with_layout(Layout::left_to_right(Align::Center), add_contents)
-}
+// /// A simple function to float a widget to the left
+// pub fn float_left<R>(ui: &mut Ui, add_contents: impl FnOnce(&mut Ui) -> R) -> InnerResponse<R> {
+//     ui.with_layout(Layout::left_to_right(Align::Center), add_contents)
+// }
 
 /// A simple function to make a widget fill the available space in x
 pub fn fill_x<R>(ui: &mut Ui, add_contents: impl FnOnce(&mut Ui) -> R) -> InnerResponse<R> {
@@ -188,7 +188,7 @@ pub const BINDING_ROW_HEIGHT: f32 = 35.0;
 pub const FIRST_COL_WIDTH: f32 = 200.0;
 pub const BINDING_COL_WIDTH: f32 = 100.0;
 pub const SPACING: f32 = 5.0;
-pub const SLIDER_EXTRA: f32 = 45.0;
+// pub const SLIDER_EXTRA: f32 = 45.0;
 pub const SLIDER_EXTRA_WIDE: f32 = 75.0;
 
 pub fn binding_table(ui: &mut Ui) -> TableBuilder<'_> {

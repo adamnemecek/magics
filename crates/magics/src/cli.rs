@@ -54,7 +54,7 @@ pub struct Cli {
 
     /// Run the app without a window for rendering the environment
     #[arg(long, group = "display")]
-    pub headless:   bool,
+    pub headless: bool,
     /// Start the app in fullscreen mode
     #[arg(short, long, group = "display")]
     pub fullscreen: bool,
@@ -121,7 +121,6 @@ impl Cli {
 pub fn parse_arguments() -> Cli {
     Cli::parse()
 }
-
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, clap::ValueEnum)]
 pub enum BevySchedule {

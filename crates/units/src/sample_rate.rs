@@ -71,7 +71,7 @@ impl SampleRate {
     /// Returns the number of samples per second.
     #[inline(always)]
     #[must_use]
-    pub fn as_secs(&self) -> f64 {
+    pub const fn as_secs(&self) -> f64 {
         self.0.as_secs_f64()
     }
 

@@ -3,13 +3,8 @@
 
 use bevy::prelude::*;
 use gbp_config::Config;
-use itertools::Itertools;
 
-use crate::{
-    factorgraph::prelude::FactorGraph,
-    planner::robot::{Mission, Route, StateVector},
-    theme::{CatppuccinTheme, ColorAssociation, ColorFromCatppuccinColourExt},
-};
+use crate::{factorgraph::prelude::FactorGraph, planner::robot::Mission};
 
 pub struct TrackingVisualizerPlugin;
 

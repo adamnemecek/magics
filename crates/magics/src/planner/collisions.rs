@@ -1,6 +1,6 @@
 use std::{collections::HashMap, ops::Deref, time::Duration};
 
-use bevy::{prelude::*, time::common_conditions::on_timer};
+use bevy::prelude::*;
 use bevy_mod_picking::prelude::*;
 use gbp_global_planner::Colliders;
 use parry2d::{
@@ -145,14 +145,14 @@ pub mod resources {
 
     #[derive(Resource)]
     pub struct RobotRobotCollisions {
-        inner:      HashMap<(Entity, Entity), CollisionHistory>,
+        inner: HashMap<(Entity, Entity), CollisionHistory>,
         collisions: usize,
     }
 
     impl RobotRobotCollisions {
         fn new() -> Self {
             Self {
-                inner:      HashMap::new(),
+                inner: HashMap::new(),
                 collisions: 0,
             }
         }
@@ -228,14 +228,14 @@ pub mod resources {
 
     #[derive(Resource)]
     pub struct RobotEnvironmentCollisions {
-        inner:      HashMap<(Entity, Entity), CollisionHistory>,
+        inner: HashMap<(Entity, Entity), CollisionHistory>,
         collisions: usize,
     }
 
     impl RobotEnvironmentCollisions {
         fn new() -> Self {
             Self {
-                inner:      HashMap::new(),
+                inner: HashMap::new(),
                 collisions: 0,
             }
         }
@@ -290,9 +290,9 @@ pub mod resources {
                 .filter(|(_, v)| v.len() > 0)
         }
 
-        fn clear(&mut self) {
-            self.inner.clear();
-        }
+        // fn clear(&mut self) {
+        //     self.inner.clear();
+        // }
 
         pub fn robots_collided_with(&self, obstacle_entity: Entity) -> Option<Vec<Entity>> {
             let mut exists = false;
@@ -349,10 +349,10 @@ pub mod events {
 
     #[derive(Event, Component, Clone, Copy, Debug)]
     pub struct RobotRobotCollision {
-        pub robot_a:      Entity,
-        pub robot_b:      Entity,
+        pub robot_a: Entity,
+        pub robot_b: Entity,
         pub intersection: parry2d::bounding_volume::Aabb,
-        pub happened_at:  f32,
+        pub happened_at: f32,
     }
 
     #[derive(Event)]
@@ -369,13 +369,13 @@ fn update_robot_environment_collisions(
     env_colliders: Res<Colliders>,
     robots: Query<(Entity, &Transform, &Ball), With<RobotConnections>>,
     mut robot_environment_collisions: ResMut<resources::RobotEnvironmentCollisions>,
-    mut aabbs: Local<
-        Vec<(
-            Entity,
-            Isometry<f32, Unit<Complex<f32>>, 2>,
-            parry2d::bounding_volume::BoundingSphere,
-        )>,
-    >,
+    // aabbs: Local<
+    //     Vec<(
+    //         Entity,
+    //         Isometry<f32, Unit<Complex<f32>>, 2>,
+    //         parry2d::bounding_volume::BoundingSphere,
+    //     )>,
+    // >,
     mut evw_robot_environment_collision: EventWriter<events::RobotEnvironmentCollision>,
 ) {
     // aabbs.clear();

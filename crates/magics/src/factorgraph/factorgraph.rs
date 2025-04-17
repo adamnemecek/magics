@@ -1,7 +1,6 @@
 use bevy::{
     ecs::{component::Component, entity::Entity},
     log::{debug, info},
-    math::Vec2,
 };
 // use gbp_linalg::Float;
 use gbp_linalg::prelude::*;
@@ -66,7 +65,7 @@ impl From<VariableIndex> for usize {
 #[derive(Debug, Clone, Copy, Default)]
 struct IterationCount {
     variable: usize,
-    factor:   usize,
+    factor: usize,
 }
 
 /// A factor graph is a bipartite graph consisting of two types of nodes:
@@ -79,13 +78,13 @@ pub struct FactorGraph {
     /// - The id of the factorgraph is unique among all factorgraphs in the
     ///   system.
     /// - The id does not change during the lifetime of the factorgraph.
-    id:    FactorGraphId,
+    id: FactorGraphId,
     /// The underlying graph data structure
     graph: Graph,
 
     iteration_count: IterationCount,
 
-    message_count:    MessageCount,
+    message_count: MessageCount,
     /// In **gbpplanner** the sequence in which variables are inserted/created
     /// in the graph is meaningful. `self.graph` does not capture this
     /// ordering, so we use an extra vector to manage the order in which
@@ -96,7 +95,7 @@ pub struct FactorGraph {
     variable_indices: Vec<NodeIndex>,
     /// List of indices of the factors in the graph. Order is not important.
     /// Used to speed up iteration over factors.
-    factor_indices:   Vec<NodeIndex>,
+    factor_indices: Vec<NodeIndex>,
 
     /// List of indices of the interrobot factors in the graph. Order is not
     /// important. Used to speed up iteration over interrobot factors.
@@ -260,10 +259,10 @@ impl FactorGraph {
     /// **Computes in O(1) time**
     pub fn factor_count(&self) -> FactorCount {
         FactorCount {
-            obstacle:   self.obstacle_factor_indices.len(),
+            obstacle: self.obstacle_factor_indices.len(),
             interrobot: self.interrobot_factor_indices.len(),
-            dynamic:    self.dynamic_factor_indices.len(),
-            tracking:   self.tracking_factor_indices.len(),
+            dynamic: self.dynamic_factor_indices.len(),
+            tracking: self.tracking_factor_indices.len(),
         }
     }
 
@@ -433,19 +432,19 @@ impl FactorGraph {
         }
     }
 
-    pub(crate) fn delete_messages_from_interrobot_factor_at(&mut self, other: FactorGraphId) {
-        // PERF: avoid allocation
-        #[allow(clippy::needless_collect)]
-        for node_index in self.graph.node_indices().collect::<Vec<_>>() {
-            let node = &mut self.graph[node_index];
-            let Some(variable) = node.as_variable_mut() else {
-                continue;
-            };
-            variable
-                .inbox
-                .retain(|factor_id, _| factor_id.factorgraph_id != other);
-        }
-    }
+    // pub(crate) fn delete_messages_from_interrobot_factor_at(&mut self, other: FactorGraphId) {
+    //     // PERF: avoid allocation
+    //     #[allow(clippy::needless_collect)]
+    //     for node_index in self.graph.node_indices().collect::<Vec<_>>() {
+    //         let node = &mut self.graph[node_index];
+    //         let Some(variable) = node.as_variable_mut() else {
+    //             continue;
+    //         };
+    //         variable
+    //             .inbox
+    //             .retain(|factor_id, _| factor_id.factorgraph_id != other);
+    //     }
+    // }
 
     pub fn variable_indices_ordered_by_creation(&self) -> impl Iterator<Item = NodeIndex> + '_ {
         self.variable_indices.iter().copied()
@@ -563,6 +562,7 @@ impl FactorGraph {
     ///
     /// Panic if the `index` does not point to an existing variable
     #[inline]
+    #[allow(dead_code)]
     fn variable(&self, index: VariableIndex) -> &VariableNode {
         self.get_variable(index)
             .expect("variable index points to a variable in the graph")
@@ -916,7 +916,7 @@ impl FactorGraph {
 #[derive(Debug, Clone, Copy, Default)]
 pub struct NodeCount {
     /// Number of `Factor` nodes
-    pub factors:   usize,
+    pub factors: usize,
     /// Number of `Variable` nodes
     pub variables: usize,
 }
@@ -932,13 +932,13 @@ impl NodeCount {
 #[derive(Debug, Clone, Copy, Default)]
 pub struct FactorCount {
     /// Number of `ObstacleFactor`s
-    pub obstacle:   usize,
+    pub obstacle: usize,
     /// Number of `InterRobotFactor`s
     pub interrobot: usize,
     /// Number of `DynamicFactor`s
-    pub dynamic:    usize,
+    pub dynamic: usize,
     /// Number of `TrackingFactor`s
-    pub tracking:   usize,
+    pub tracking: usize,
 }
 
 /// Iterator over the factors in the factorgraph.
@@ -1104,7 +1104,7 @@ pub struct VariableAndTheirInterRobotFactors<'fg> {
     graph: &'fg Graph,
     // iter: std::iter::Zip<std::slice::Iter<'fg, NodeIndex>, std::slice::Iter<'fg, NodeIndex>>,
     // iter: impl Iterator<Item = EdgeReference<'fg, (), IndexSize>>,
-    iter:  Box<dyn Iterator<Item = EdgeReference<'fg, (), IndexSize>> + 'fg>,
+    iter: Box<dyn Iterator<Item = EdgeReference<'fg, (), IndexSize>> + 'fg>,
     // iter:  &'fg mut dyn Iterator<Item = EdgeReference<'fg, (), IndexSize>>,
     // variable_indices: std::slice::Iter<'fg, NodeIndex>,
     // edges: petgraph::stable_graph::Edges<'edges, (), Undirected, IndexSize>,
@@ -1315,7 +1315,7 @@ impl FactorGraph {
 
 /// Iterator over the neighbours of a variable in the factorgraph
 pub struct VariableNeighboursDyn<'fg> {
-    graph:      &'fg Graph,
+    graph: &'fg Graph,
     neighbours: petgraph::stable_graph::Neighbors<'fg, (), IndexSize>,
 }
 
@@ -1352,7 +1352,7 @@ impl FactorGraph {
 }
 
 pub struct VariableNeighbours<'fg> {
-    graph:      &'fg Graph,
+    graph: &'fg Graph,
     neighbours: petgraph::stable_graph::Neighbors<'fg, (), IndexSize>,
 }
 
@@ -1395,7 +1395,7 @@ impl FactorGraph {
 
 /// Iterator over the neighbours of a factor in the factorgraph
 pub struct FactorNeighbours<'fg> {
-    graph:      &'fg Graph,
+    graph: &'fg Graph,
     neighbours: petgraph::stable_graph::Neighbors<'fg, (), IndexSize>,
 }
 
@@ -1428,7 +1428,7 @@ impl FactorGraph {
 /// Iterator over the factors in the factorgraph
 pub struct FactorsDyn<'fg> {
     graph: &'fg Graph,
-    iter:  std::slice::Iter<'fg, NodeIndex>,
+    iter: std::slice::Iter<'fg, NodeIndex>,
 }
 
 impl<'fg> Iterator for FactorsDyn<'fg> {
@@ -1449,7 +1449,7 @@ impl FactorGraph {
     pub fn factors_dyn(&self) -> FactorsDyn<'_> {
         FactorsDyn {
             graph: &self.graph,
-            iter:  self.factor_indices.iter(),
+            iter: self.factor_indices.iter(),
         }
     }
 }
@@ -1479,7 +1479,7 @@ impl graphviz::ExportGraph for FactorGraph {
                 let node = &self.graph[node_index];
                 graphviz::Node {
                     index: node_index.index(),
-                    kind:  match &node.kind {
+                    kind: match &node.kind {
                         NodeKind::Factor(factor) => match factor.kind {
                             FactorKind::Dynamic(_) => graphviz::NodeKind::DynamicFactor,
                             FactorKind::Obstacle(_) => graphviz::NodeKind::ObstacleFactor,
@@ -1508,7 +1508,7 @@ impl graphviz::ExportGraph for FactorGraph {
                     .edge_endpoints(edge_index)
                     .map(|(from, to)| graphviz::Edge {
                         from: from.index(),
-                        to:   to.index(),
+                        to: to.index(),
                     })
             })
             .collect::<Vec<_>>();
@@ -1557,10 +1557,10 @@ impl FactorGraph {
 
     pub fn reset_tracking_factors(&mut self) {
         for ix in &self.variable_indices[1..self.variable_indices.len() - 1] {
-            let mean = {
-                let var = self.graph[*ix].as_variable().unwrap();
-                var.belief.mean.clone()
-            };
+            // let mean = {
+            //     let var = self.graph[*ix].as_variable().unwrap();
+            //     var.belief.mean.clone()
+            // };
             let neighbours = self.graph.neighbors(*ix).collect_vec();
             for n in &neighbours {
                 let Some(factor) = self.graph[*n].as_factor_mut() else {
@@ -1571,7 +1571,7 @@ impl FactorGraph {
                     continue;
                 };
 
-                let mean = Vec2::new(mean[0] as f32, mean[1] as f32);
+                // let mean = Vec2::new(mean[0] as f32, mean[1] as f32);
                 // tracking.set_linearisation_point(mean);
                 tracking.set_timeout(10);
             }
