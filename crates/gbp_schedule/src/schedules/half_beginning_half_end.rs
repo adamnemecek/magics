@@ -4,8 +4,8 @@ pub struct HalfBeginningHalfEnd;
 
 mod private {
     pub struct HalfBeginningHalfEndIter {
-        n:     u8,
-        max:   u8,
+        n: u8,
+        max: u8,
         index: u8,
     }
 
@@ -33,11 +33,7 @@ mod private {
             let end_middle = self.max - half_n - remainder;
 
             // Determine the result based on the current index
-            let result = if self.index < start_middle || self.index >= end_middle {
-                true
-            } else {
-                false
-            };
+            let result = self.index < start_middle || self.index >= end_middle;
 
             self.index += 1;
             Some(result)

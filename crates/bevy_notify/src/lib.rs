@@ -53,7 +53,7 @@ pub struct NotifyPlugin {
     /// Maximum number of toasts to show at once
     /// Defaults to 5
     /// When the max is reached, the oldest toast is removed
-    pub max:    NonZeroU8,
+    pub max: NonZeroU8,
 }
 
 impl Default for NotifyPlugin {
@@ -61,7 +61,7 @@ impl Default for NotifyPlugin {
         Self {
             anchor: egui_notify::Anchor::TopCenter,
             // anchor: egui_notify::Anchor::BottomCenter,
-            max:    NonZeroU8::new(5).expect("5 > 0"),
+            max: NonZeroU8::new(5).expect("5 > 0"),
         }
     }
 }
@@ -83,7 +83,7 @@ impl Plugin for NotifyPlugin {
 #[derive(Resource)]
 struct Toasts {
     toasts: egui_notify::Toasts,
-    max:    NonZeroU8,
+    max: NonZeroU8,
 }
 
 impl Toasts {

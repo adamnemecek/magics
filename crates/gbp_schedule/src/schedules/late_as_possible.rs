@@ -15,8 +15,8 @@ pub struct LateAsPossibleIter {
 mod private {
 
     pub(super) struct LateAsPossibleIter {
-        n:     u8,
-        max:   u8,
+        n: u8,
+        max: u8,
         index: u8,
     }
 

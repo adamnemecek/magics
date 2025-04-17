@@ -325,7 +325,7 @@ pub struct SimulationSection {
 }
 
 impl SimulationSection {
-    fn default_exit_application_on_scenario_finished() -> bool {
+    const fn default_exit_application_on_scenario_finished() -> bool {
         false
     }
 }
@@ -381,19 +381,11 @@ impl GbpIterationScheduleKind {
         config: gbp_schedule::GbpScheduleParams,
     ) -> Box<dyn gbp_schedule::GbpScheduleIterator> {
         match self {
-            GbpIterationScheduleKind::Centered => {
-                Box::new(gbp_schedule::Centered::schedule(config))
-            }
-            GbpIterationScheduleKind::InterleaveEvenly => {
-                Box::new(gbp_schedule::InterleaveEvenly::schedule(config))
-            }
-            GbpIterationScheduleKind::SoonAsPossible => {
-                Box::new(gbp_schedule::SoonAsPossible::schedule(config))
-            }
-            GbpIterationScheduleKind::LateAsPossible => {
-                Box::new(gbp_schedule::LateAsPossible::schedule(config))
-            }
-            GbpIterationScheduleKind::HalfBeginningHalfEnd => {
+            Self::Centered => Box::new(gbp_schedule::Centered::schedule(config)),
+            Self::InterleaveEvenly => Box::new(gbp_schedule::InterleaveEvenly::schedule(config)),
+            Self::SoonAsPossible => Box::new(gbp_schedule::SoonAsPossible::schedule(config)),
+            Self::LateAsPossible => Box::new(gbp_schedule::LateAsPossible::schedule(config)),
+            Self::HalfBeginningHalfEnd => {
                 Box::new(gbp_schedule::HalfBeginningHalfEnd::schedule(config))
             }
         }
@@ -451,44 +443,23 @@ impl Default for GbpIterationSchedule {
     bevy::reflect::Reflect,
 )]
 #[serde(rename_all = "kebab-case")]
+#[allow(clippy::struct_excessive_bools)]
 pub struct FactorsEnabledSection {
     // pub pose:       bool,
-    #[serde(default = "FactorsEnabledSection::default_dynamic")]
     pub dynamic: bool,
-    #[serde(default = "FactorsEnabledSection::default_interrobot")]
     pub interrobot: bool,
-    #[serde(default = "FactorsEnabledSection::default_obstacle")]
     pub obstacle: bool,
-    #[serde(default = "FactorsEnabledSection::default_tracking")]
     pub tracking: bool,
-}
-
-impl FactorsEnabledSection {
-    fn default_tracking() -> bool {
-        false
-    }
-
-    fn default_dynamic() -> bool {
-        true
-    }
-
-    fn default_interrobot() -> bool {
-        true
-    }
-
-    fn default_obstacle() -> bool {
-        true
-    }
 }
 
 impl Default for FactorsEnabledSection {
     fn default() -> Self {
         Self {
             // pose:       true,
-            dynamic: Self::default_dynamic(),
-            interrobot: Self::default_interrobot(),
-            obstacle: Self::default_obstacle(),
-            tracking: Self::default_tracking(),
+            dynamic: true,
+            interrobot: true,
+            obstacle: true,
+            tracking: false,
         }
     }
 }
@@ -543,14 +514,8 @@ pub struct GbpSection {
     #[serde(default)]
     pub factors_enabled: FactorsEnabledSection,
     /// Number of variables to create
-    #[serde(default = "GbpSection::default_variables")]
+    #[serde(default)]
     pub variables: usize,
-}
-
-impl GbpSection {
-    fn default_variables() -> usize {
-        10
-    }
 }
 
 impl Default for GbpSection {
@@ -567,7 +532,7 @@ impl Default for GbpSection {
             iteration_schedule: GbpIterationSchedule::default(),
             // FIXME: not properly read when desirialized from toml
             factors_enabled: FactorsEnabledSection::default(),
-            variables: Self::default_variables(),
+            variables: 10,
             // ..Default::default()
         }
     }
@@ -608,7 +573,7 @@ pub struct RobotRadiusSection {
 
 impl RobotRadiusSection {
     /// Returns the range that the radius can take
-    pub fn range(&self) -> RangeInclusive<f32> {
+    pub const fn range(&self) -> RangeInclusive<f32> {
         self.min.get()..=self.max.get()
     }
 }
@@ -749,6 +714,7 @@ pub struct DebugSection {
     struct_iterable::Iterable,
 )]
 #[serde(rename_all = "kebab-case")]
+#[allow(clippy::struct_excessive_bools)]
 pub struct OnVariableClickedSection {
     pub obstacle: bool,
     pub dynamic: bool,
@@ -758,6 +724,8 @@ pub struct OnVariableClickedSection {
     pub inbox: bool,
 }
 
+// More explicit is better here
+#[allow(clippy::derivable_impls)]
 impl Default for OnVariableClickedSection {
     fn default() -> Self {
         Self {
@@ -851,6 +819,7 @@ impl Default for Config {
 
 impl Config {
     /// Parse a config file from a given path
+    #[allow(clippy::missing_errors_doc)]
     pub fn from_file<P>(path: P) -> Result<Self, ParseError>
     where
         P: AsRef<std::path::Path>,
@@ -864,6 +833,7 @@ impl Config {
 
     /// Parse a config file
     /// Returns a `ParseError` if the file cannot be parsed
+    #[allow(clippy::missing_errors_doc)]
     pub fn parse(contents: &str) -> Result<Self, ParseError> {
         toml::from_str(contents).map_err(Into::into)
         // let config = toml::from_str(contents)?;

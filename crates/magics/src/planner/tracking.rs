@@ -36,7 +36,7 @@ pub struct TrackingBundle {
 
 #[derive(Clone, Copy)]
 pub struct PositionMeasurement {
-    pub position:  Vec3,
+    pub position: Vec3,
     pub timestamp: Instant,
 }
 
@@ -122,7 +122,7 @@ fn track_positions(
         tracker.timer.tick(time.delta());
         if tracker.timer.just_finished() {
             let measurement = PositionMeasurement {
-                position:  transform.translation,
+                position: transform.translation,
                 timestamp: Instant::now(),
             };
             // tracker.ringbuf.push_overwrite(transform.translation);
@@ -137,15 +137,15 @@ fn track_positions(
 
 #[derive(Clone, Copy, serde::Serialize)]
 pub struct VelocityMeasurement {
-    pub velocity:      Vec3,
+    pub velocity: Vec3,
     // pub timestamp:     Instant,
-    pub timestamp:     f64,
+    pub timestamp: f64,
     pub measured_over: Duration,
 }
 
 #[derive(Clone, Copy, serde::Serialize)]
 struct PreviousPosition {
-    position:      Vec3,
+    position: Vec3,
     pub timestamp: f64,
     // timestamp: Instant,
 }
@@ -220,15 +220,15 @@ fn track_velocities(
             if let Some(previous_position) = tracker.previous_position {
                 let dt = now - previous_position.timestamp;
                 let measurement = VelocityMeasurement {
-                    velocity:      (transform.translation - previous_position.position) / dt as f32,
-                    timestamp:     now,
+                    velocity: (transform.translation - previous_position.position) / dt as f32,
+                    timestamp: now,
                     measured_over: Duration::from_secs_f64(dt),
                 };
                 // tracker.ringbuf.push_overwrite(transform.translation);
                 tracker.ringbuf.push_overwrite(measurement);
             }
             tracker.previous_position = Some(PreviousPosition {
-                position:  transform.translation,
+                position: transform.translation,
                 timestamp: now,
             });
 

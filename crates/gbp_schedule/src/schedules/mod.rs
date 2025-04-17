@@ -69,7 +69,7 @@ pub struct GbpScheduleParams {
 }
 
 impl GbpScheduleParams {
-    pub(crate) fn max(&self) -> u8 {
+    pub(crate) fn max(self) -> u8 {
         self.internal.max(self.external)
     }
 }

@@ -11,19 +11,19 @@ use crate::simulation_loader::SdfImage;
 
 pub struct ObstacleFactor {
     /// The signed distance field of the environment
-    obstacle_sdf:     SdfImage,
+    obstacle_sdf: SdfImage,
     /// Copy of the `WORLD_SZ` setting from **gbpplanner**, that we store a copy
     /// of here since `ObstacleFactor` needs this information to calculate
     /// `.jacobian_delta()` and `.measurement()`
-    world_size:       WorldSize,
+    world_size: WorldSize,
     // world_size:       Float,
     last_measurement: Mutex<Cell<LastMeasurement>>,
-    jacobian_delta:   Float,
+    jacobian_delta: Float,
 }
 
 #[derive(Debug, Clone, Copy)]
 pub struct WorldSize {
-    pub width:  Float,
+    pub width: Float,
     pub height: Float,
 }
 
@@ -35,7 +35,7 @@ impl std::fmt::Display for WorldSize {
 
 #[derive(Debug, Clone, Copy)]
 pub struct LastMeasurement {
-    pub pos:   bevy::math::Vec2,
+    pub pos: bevy::math::Vec2,
     pub value: Float,
 }
 
@@ -70,7 +70,7 @@ impl std::fmt::Display for LastMeasurement {
 impl Default for LastMeasurement {
     fn default() -> Self {
         Self {
-            pos:   Vec2::ZERO,
+            pos: Vec2::ZERO,
             value: 0.0,
         }
     }
@@ -180,7 +180,7 @@ impl Factor for ObstacleFactor {
         let hsv_value = 1.0 - Float::from(red_channel) / 255.0;
 
         self.last_measurement.lock().unwrap().set(LastMeasurement {
-            pos:   Vec2::new(x_pos as f32, y_pos as f32),
+            pos: Vec2::new(x_pos as f32, y_pos as f32),
             value: hsv_value,
         });
 

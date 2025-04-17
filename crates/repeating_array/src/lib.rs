@@ -19,7 +19,7 @@ impl<T: Copy, const N: usize> RepeatingArray<T, N> {
     }
 
     /// Get the next item or the first one if we are at the end
-    pub fn next_or_first(&mut self) -> T {
+    pub const fn next_or_first(&mut self) -> T {
         let item = self.array[self.index];
         self.index = (self.index + 1) % N;
         item
@@ -27,7 +27,7 @@ impl<T: Copy, const N: usize> RepeatingArray<T, N> {
 
     /// Reset the index to 0
     #[inline(always)]
-    pub fn reset(&mut self) {
+    pub const fn reset(&mut self) {
         self.index = 0;
     }
 

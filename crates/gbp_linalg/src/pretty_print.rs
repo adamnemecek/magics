@@ -1,4 +1,8 @@
-#![allow(clippy::module_name_repetitions, clippy::uninlined_format_args)]
+#![allow(
+    clippy::module_name_repetitions,
+    clippy::uninlined_format_args,
+    clippy::used_underscore_items
+)]
 //! Pretty printing of matrices and vectors. Useful for debugging and
 //! visualizing the contents of a matrix or vector.
 
@@ -495,7 +499,11 @@ impl<T: GbpFloat> PrettyPrintMatrix<T> for Matrix<T> {
     }
 }
 
-#[allow(clippy::unwrap_used)]
+#[allow(
+    clippy::unwrap_used,
+    clippy::missing_panics_doc,
+    clippy::too_many_lines
+)]
 pub fn _pretty_format_matrix<T, M>(
     matrix: &M,
     name: Option<&str>,

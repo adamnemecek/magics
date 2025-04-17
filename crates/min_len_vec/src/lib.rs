@@ -4,6 +4,7 @@
 use serde::{Deserialize, Deserializer, Serialize};
 
 /// A vector with a minimum length.
+///
 /// It is a wrapper around `Vec<T>` that ensures that the vector has at least
 /// `N` elements. It is useful when you want to ensure that a vector has at
 /// least a certain number of elements. but don't want to check it every time
@@ -29,7 +30,7 @@ pub enum MinLenVecError {
     // NotEnoughElements(usize),
     NotEnoughElements {
         /// Minimum number of elements
-        min:    usize,
+        min: usize,
         /// Actual number of elements
         actual: usize,
     },
@@ -62,7 +63,7 @@ impl<T, const N: usize> MinLenVec<T, N> {
     pub fn new(data: Vec<T>) -> Result<Self> {
         if data.len() < N {
             return Err(MinLenVecError::NotEnoughElements {
-                min:    N,
+                min: N,
                 actual: data.len(),
             });
         }
@@ -120,7 +121,7 @@ impl<T, const N: usize> MinLenVec<T, N> {
     pub fn pop(&mut self) -> Result<T> {
         if self.0.len() <= N {
             return Err(MinLenVecError::NotEnoughElements {
-                min:    N,
+                min: N,
                 actual: self.0.len(),
             });
         }
@@ -246,10 +247,7 @@ mod tests {
     fn test_min_len_vec() {
         assert!(matches!(
             MinLenVec::<_, 3>::new(vec![1, 2]),
-            Err(MinLenVecError::NotEnoughElements {
-                min:    3,
-                actual: 2,
-            })
+            Err(MinLenVecError::NotEnoughElements { min: 3, actual: 2 })
         ));
 
         assert!(matches!(
@@ -263,10 +261,7 @@ mod tests {
         ));
         assert!(matches!(
             MinLenVec::<i32, 1>::new(vec![]),
-            Err(MinLenVecError::NotEnoughElements {
-                min:    1,
-                actual: 0,
-            })
+            Err(MinLenVecError::NotEnoughElements { min: 1, actual: 0 })
         ));
     }
 
@@ -290,18 +285,12 @@ mod tests {
         assert_eq!(v.len(), 3);
         assert_eq!(
             v.pop(),
-            Err(MinLenVecError::NotEnoughElements {
-                min:    3,
-                actual: 3,
-            })
+            Err(MinLenVecError::NotEnoughElements { min: 3, actual: 3 })
         );
         assert_eq!(v.len(), 3);
         assert_eq!(
             v.pop(),
-            Err(MinLenVecError::NotEnoughElements {
-                min:    3,
-                actual: 3,
-            })
+            Err(MinLenVecError::NotEnoughElements { min: 3, actual: 3 })
         );
         assert_eq!(v.len(), 3);
     }
@@ -372,10 +361,7 @@ mod tests {
         let v = vec![1];
         assert!(matches!(
             MinLenVec::<_, 2>::try_from(v),
-            Err(MinLenVecError::NotEnoughElements {
-                min:    2,
-                actual: 1,
-            })
+            Err(MinLenVecError::NotEnoughElements { min: 2, actual: 1 })
         ));
     }
 }

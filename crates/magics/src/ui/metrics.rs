@@ -17,8 +17,7 @@ pub struct MetricsPlugin;
 
 impl Default for MetricsPlugin {
     fn default() -> Self {
-        Self {
-        }
+        Self {}
     }
 }
 

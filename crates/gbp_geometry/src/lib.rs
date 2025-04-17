@@ -37,10 +37,11 @@ pub struct RelativePoint {
 }
 
 // impl sub and add for `RelativePoint`
-impl std::ops::Add<RelativePoint> for RelativePoint {
+impl std::ops::Add<Self> for RelativePoint {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
+        #[allow(clippy::unwrap_used)]
         Self {
             x: UnitInterval::new(self.x.get() + rhs.x.get()).unwrap(),
             y: UnitInterval::new(self.y.get() + rhs.y.get()).unwrap(),
@@ -48,10 +49,11 @@ impl std::ops::Add<RelativePoint> for RelativePoint {
     }
 }
 
-impl std::ops::Sub<RelativePoint> for RelativePoint {
+impl std::ops::Sub<Self> for RelativePoint {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
+        #[allow(clippy::unwrap_used)]
         Self {
             x: UnitInterval::new(self.x.get() - rhs.x.get()).unwrap(),
             y: UnitInterval::new(self.y.get() - rhs.y.get()).unwrap(),
@@ -102,7 +104,7 @@ impl RelativePoint {
 
     /// Calculate magnitude of the vector from the origin to the point
     pub fn squared_magnitude(&self) -> f64 {
-        self.x.get().powi(2) + self.y.get().powi(2)
+        self.x.get().mul_add(self.x.get(), self.y.get().powi(2))
     }
 
     // /// Returns the x and y values as a tuple

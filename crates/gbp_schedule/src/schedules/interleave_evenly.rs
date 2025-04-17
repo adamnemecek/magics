@@ -41,6 +41,7 @@ mod private {
 
     impl InterleaveEvenlyIter {
         fn recurse(slice: &mut [bool], n: u8) {
+            #[allow(clippy::cast_possible_truncation)]
             let max = slice.len() as u8;
             // let diff = max - n;
             let half = (max / 2) as usize;
@@ -49,55 +50,59 @@ mod private {
                 slice.fill(true);
             } else if n == 0 {
                 slice.fill(false);
-            } else {
-                if odd(n) && odd(max) {
-                    if divides(max, n) {
-                        let times_divided = max / n;
-                        // Example max = 9, n = 3
-                        // times_divided = 3
-                        // seq = [true, false, false, true, false, false,
-                        // true, false, false]
-                        let mut iter = std::iter::once(true)
-                            .chain(std::iter::repeat(false).take(times_divided as usize - 1))
-                            .cycle();
-                        slice.fill_with(|| iter.next().unwrap());
-                    } else {
-                        let n = n / 2;
+            } else if odd(n) && odd(max) {
+                if divides(max, n) {
+                    let times_divided = max / n;
+                    // Example max = 9, n = 3
+                    // times_divided = 3
+                    // seq = [true, false, false, true, false, false,
+                    // true, false, false]
+                    let mut iter = std::iter::once(true)
+                        .chain(std::iter::repeat_n(false, times_divided as usize - 1))
+                        .cycle();
+                    slice.fill_with(|| {
+                        iter.next()
+                            .expect("One element exist due to `std::iter::once(true)`")
+                    });
+                } else {
+                    let n = n / 2;
 
-                        Self::recurse(&mut slice[0..half], n);
-                        slice[half] = true;
-                        Self::recurse(&mut slice[half + 1..], n);
-                        slice[half + 1..].reverse();
-                    }
-                } else if even(n) && odd(max) {
+                    Self::recurse(&mut slice[0..half], n);
+                    slice[half] = true;
+                    Self::recurse(&mut slice[half + 1..], n);
+                    slice[half + 1..].reverse();
+                }
+            } else if even(n) && odd(max) {
+                let n = n / 2;
+                Self::recurse(&mut slice[0..half], n);
+                slice[0..half].reverse();
+                slice[half] = false;
+                Self::recurse(&mut slice[half + 1..], n);
+            } else if even(n) && even(max) {
+                if divides(max, n) {
+                    let times_divided = max / n;
+                    // Example max = 8, n = 4
+                    // times_divided = 2
+                    // seq = [true, false, true, false, true, false, true, false]
+                    let mut iter = std::iter::once(true)
+                        .chain(std::iter::repeat_n(false, times_divided as usize - 1))
+                        .cycle();
+                    slice.fill_with(|| {
+                        iter.next()
+                            .expect("One element exist due to `std::iter::once(true)`")
+                    });
+                } else {
                     let n = n / 2;
                     Self::recurse(&mut slice[0..half], n);
-                    slice[0..half].reverse();
-                    slice[half] = false;
-                    Self::recurse(&mut slice[half + 1..], n);
-                } else if even(n) && even(max) {
-                    if divides(max, n) {
-                        let times_divided = max / n;
-                        // Example max = 8, n = 4
-                        // times_divided = 2
-                        // seq = [true, false, true, false, true, false, true, false]
-                        let mut iter = std::iter::once(true)
-                            .chain(std::iter::repeat(false).take(times_divided as usize - 1))
-                            .cycle();
-                        slice.fill_with(|| iter.next().unwrap());
-                    } else {
-                        let n = n / 2;
-                        Self::recurse(&mut slice[0..half], n);
-                        Self::recurse(&mut slice[half..], n);
-                    }
-                } else {
-                    // odd(n) && even(max)
-                    // Example max = 8, n = 3
-                    let n = n / 2;
-                    Self::recurse(&mut slice[0..half], n + 1);
-                    slice[0..half].reverse();
                     Self::recurse(&mut slice[half..], n);
                 }
+            } else {
+                // odd(n) && even(max)
+                // Example max = 8, n = 3
+                let n = n / 2;
+                Self::recurse(&mut slice[0..half], n + 1);
+                slice[0..half].reverse();
+                Self::recurse(&mut slice[half..], n);
             }
         }
 

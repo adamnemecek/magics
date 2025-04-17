@@ -36,7 +36,6 @@ const END: Vec2 = Vec2::new(100.0, -62.5 + 12.5);
 // const END: Vec2 = Vec2::new(0.0, -75.0 + 5.0);
 
 fn main() -> anyhow::Result<()> {
-
     let cli = cli::parse_arguments();
 
     let (config, formation, environment): (Config, FormationGroup, Environment) = if cli.default {
@@ -489,9 +488,9 @@ pub struct WaypointAmountText;
 
 fn init_path_info_text(mut commands: Commands, theme: Res<CatppuccinTheme>, fonts: Res<Fonts>) {
     let text_style = TextStyle {
-        font:      fonts.main.clone(),
+        font: fonts.main.clone(),
         font_size: 20.0,
-        color:     Color::from_catppuccin_colour(theme.mauve()),
+        color: Color::from_catppuccin_colour(theme.mauve()),
     };
 
     let keybind_text =

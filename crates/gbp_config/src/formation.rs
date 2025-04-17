@@ -130,7 +130,7 @@ impl RepeatTimes {
     /// Decrement the number of repeats left in self.
     /// If `Self::Infinite`, do nothing
     /// If `Self::Finite(remaining)` decrement remaining if > 0
-    pub fn decrement(&mut self) {
+    pub const fn decrement(&mut self) {
         match self {
             Self::Finite(ref mut remaining) if *remaining > 0 => *remaining -= 1,
             _ => {}
@@ -168,7 +168,7 @@ pub struct ReachedWhen {
 }
 
 impl ReachedWhen {
-    pub fn same_as_paper() -> Self {
+    pub const fn same_as_paper() -> Self {
         Self {
             distance: IntersectionDistance::RobotRadius,
             intersects_with: CheckIntersectionWith::Horizon,
@@ -248,7 +248,7 @@ impl Default for Formation {
 }
 
 impl Formation {
-    fn default_finished_when_intersects() -> ReachedWhen {
+    const fn default_finished_when_intersects() -> ReachedWhen {
         ReachedWhen {
             distance: IntersectionDistance::RobotRadius,
             intersects_with: CheckIntersectionWith::Horizon,
@@ -312,7 +312,7 @@ impl Formation {
                         randomly_place_nonoverlapping_circles_along_line_segment(
                             ls_start,
                             ls_end,
-                            &robot_radii,
+                            robot_radii,
                             // self.robots,
                             // robot_radius,
                             *attempts,
@@ -323,7 +323,7 @@ impl Formation {
                         evenly_place_nonoverlapping_circles_along_line_segment(
                             ls_start,
                             ls_end,
-                            &robot_radii,
+                            robot_radii,
                         )
 
                         // let d = ls_start.distance(ls_end);
@@ -686,7 +686,7 @@ impl FormationGroup {
             .iter()
             .map(Formation::robots_to_spawn)
             // .inspect(|it| println!("  {}", it))
-            .fold(0usize, |acc, it| acc.saturating_add(it))
+            .fold(0usize, usize::saturating_add)
     }
 
     pub fn circle_from_paper() -> Self {

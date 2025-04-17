@@ -98,7 +98,7 @@ impl Rotation {
 
     /// Get the rotation in degrees
     #[inline]
-    pub fn as_degrees(&self) -> Float {
+    pub const fn as_degrees(&self) -> Float {
         self.0.as_degrees()
     }
 }
@@ -124,6 +124,8 @@ pub struct Circle {
 
 impl Circle {
     /// Expand the circle's radius with a give factor `expansion`
+    #[must_use]
+    #[allow(clippy::missing_panics_doc)]
     pub fn expanded(&self, expansion: Float) -> Self {
         // self.radius = StrictlyPositiveFinite::<Float>::new(self.radius.get() *
         // expansion).unwrap();
@@ -134,6 +136,7 @@ impl Circle {
 
     /// Check if a given point is inside the circle
     /// Expects translation and rotation to be performed beforehand
+    #[allow(clippy::cast_possible_truncation)]
     pub fn inside(&self, point: Vec2) -> bool {
         let squared_distance = point.length_squared();
         squared_distance <= self.radius.get().powi(2) as f32
@@ -165,6 +168,8 @@ impl Triangle {
     /// includes:
     /// - `base_length`
     /// - `height`
+    #[must_use]
+    #[allow(clippy::missing_panics_doc)]
     pub fn expanded(&self, expansion: Float) -> Self {
         // let factor = expansion * 3.0;
 
@@ -186,6 +191,7 @@ impl Triangle {
         }
     }
 
+    #[allow(clippy::cast_possible_truncation)]
     pub fn points(&self) -> [Vec2; 3] {
         let a = self.angles.a.as_radians() as f32;
         let b = self.angles.b.as_radians() as f32;
@@ -212,9 +218,9 @@ impl Triangle {
         // find the three vertices of the triangle
         let [a, b, c] = self.points();
 
-        let d1 = sign(Vec2::from(point), a, b);
-        let d2 = sign(Vec2::from(point), b, c);
-        let d3 = sign(Vec2::from(point), c, a);
+        let d1 = sign(point, a, b);
+        let d2 = sign(point, b, c);
+        let d3 = sign(point, c, a);
 
         let has_neg = d1 < 0.0 || d2 < 0.0 || d3 < 0.0;
         let has_pos = d1 > 0.0 || d2 > 0.0 || d3 > 0.0;
@@ -224,7 +230,7 @@ impl Triangle {
 }
 
 fn sign(p1: Vec2, p2: Vec2, p3: Vec2) -> f32 {
-    (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
+    (p1.x - p3.x).mul_add(p2.y - p3.y, -((p2.x - p3.x) * (p1.y - p3.y)))
 }
 
 /// A regular polygon to be placed in the environment
@@ -244,6 +250,7 @@ pub struct RegularPolygon {
 
 impl RegularPolygon {
     /// Expand the polygon's `side_length` with a given factor `expansion`
+    #[must_use]
     pub fn expanded(&self, expansion: Float) -> Self {
         // let factor = expansion * 2.0;
 
@@ -257,9 +264,10 @@ impl RegularPolygon {
         //     2.0 * expanded_radius * (std::f64::consts::PI / self.sides as
         // Float).tan();
 
-        RegularPolygon::new(
+        Self::new(
             self.sides,
-            StrictlyPositiveFinite::<Float>::new(self.radius.get() + expansion * 2.0).unwrap(),
+            StrictlyPositiveFinite::<Float>::new(expansion.mul_add(2.0, self.radius.get()))
+                .unwrap(),
         )
     }
 
@@ -274,8 +282,9 @@ impl RegularPolygon {
 
         // (x, y)
 
-        let angle = 2.0 * std::f64::consts::PI / self.sides as Float * i as Float
-            + std::f64::consts::FRAC_PI_4;
+        #[allow(clippy::cast_precision_loss)]
+        let angle = (2.0 * std::f64::consts::PI / self.sides as Float)
+            .mul_add(i as Float, std::f64::consts::FRAC_PI_4);
 
         let x = angle.cos() * self.radius.get();
         let y = angle.sin() * self.radius.get();
@@ -283,6 +292,7 @@ impl RegularPolygon {
         (x, y)
     }
 
+    #[allow(clippy::tuple_array_conversions)]
     pub fn points(&self) -> Vec<[Float; 2]> {
         (0..self.sides)
             .map(|i| self.point_at(i))
@@ -294,15 +304,15 @@ impl RegularPolygon {
     /// Expects translation and rotation to be performed beforehand
     pub fn inside(&self, point: Vec2) -> bool {
         let mut inside = false;
-        let (x, y) = (point.x as f64 * 2.0, point.y as f64 * 2.0);
+        let (x, y) = (f64::from(point.x) * 2.0, f64::from(point.y) * 2.0);
         let mut j = self.sides - 1;
         for i in 0..self.sides {
             let (xi, yi) = self.point_at(i);
             let (xj, yj) = self.point_at(j);
-            if yi < y && yj >= y || yj < y && yi >= y {
-                if xi + (y - yi) / (yj - yi) * (xj - xi) < x {
-                    inside = !inside;
-                }
+            if (yi < y && yj >= y || yj < y && yi >= y)
+                && ((y - yi) / (yj - yi)).mul_add(xj - xi, xi) < x
+            {
+                inside = !inside;
             }
             j = i;
         }
@@ -330,21 +340,23 @@ impl Rectangle {
     /// includes:
     /// - `width`
     /// - `height`
+    #[must_use]
     pub fn expanded(&self, expansion: Float) -> Self {
         // self.width = StrictlyPositiveFinite::<Float>::new(self.width.get() *
         // expansion).unwrap(); self.height =
         // StrictlyPositiveFinite::<Float>::new(self.height.get() * expansion).unwrap();
 
-        Rectangle::new(
-            StrictlyPositiveFinite::<Float>::new(self.width.get() + expansion * 2.0).unwrap(),
-            StrictlyPositiveFinite::<Float>::new(self.height.get() + expansion * 2.0).unwrap(),
+        Self::new(
+            StrictlyPositiveFinite::<Float>::new(expansion.mul_add(2.0, self.width.get())).unwrap(),
+            StrictlyPositiveFinite::<Float>::new(expansion.mul_add(2.0, self.height.get()))
+                .unwrap(),
         )
     }
 
     /// Check if a given point is inside the rectangle
     /// Expects translation and rotation to be performed beforehand
     pub fn inside(&self, point: Vec2) -> bool {
-        let (x, y) = (point.x as f64, point.y as f64);
+        let (x, y) = (f64::from(point.x), f64::from(point.y));
 
         let half_width = self.width.get() / 4.0;
         let half_height = self.height.get() / 4.0;
@@ -370,7 +382,9 @@ pub struct Polygon {
 impl Polygon {
     /// Expand the polygon's size by scaling around the average pointmass by
     /// `expansion` as an addition
+    #[must_use]
     pub fn expanded(&self, expansion: Float) -> Self {
+        #[allow(clippy::cast_precision_loss)]
         let point_center = {
             let acc = self
                 .points
@@ -390,14 +404,14 @@ impl Polygon {
                 .map(|p| {
                     let direction = [p.x - point_center[0], p.y - point_center[1]];
                     Point::new(
-                        p.x + direction[0] * 4.0 * expansion,
-                        p.y + direction[1] * 4.0 * expansion,
+                        (direction[0] * 4.0).mul_add(expansion, p.x),
+                        (direction[1] * 4.0).mul_add(expansion, p.y),
                     )
                 })
                 .collect()
         };
 
-        Polygon::new(new_points)
+        Self::new(new_points)
     }
 
     /// Check if a given point is inside the polygon by checking if a ray cast
@@ -406,7 +420,7 @@ impl Polygon {
     /// rotation to be performed beforehand
     pub fn inside(&self, point: Vec2) -> bool {
         is_point_in_polygon(
-            (point.x as f64, point.y as f64),
+            (f64::from(point.x), f64::from(point.y)),
             self.points
                 .iter()
                 .map(|relative_point| (relative_point.x, relative_point.y))
@@ -501,6 +515,7 @@ impl PlaceableShape {
     }
 
     /// Expand the shape by a given factor `expansion`
+    #[must_use]
     pub fn expanded(&self, expansion: Float) -> Self {
         let factor = expansion * 1.0;
         match self {

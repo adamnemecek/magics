@@ -2,7 +2,7 @@
 use bevy::prelude::*;
 use gbp_config::Config;
 
-use super::{RobotTracker};
+use super::RobotTracker;
 use crate::{
     asset_loader::Materials,
     bevy_utils::run_conditions::event_exists,
