@@ -670,21 +670,16 @@ fn exit_application_on_scenario_finished(
     mut timer: Local<Option<DelayTimer>>,
     time: Res<Time>,
 ) {
-    match *timer {
-        Some(ref mut timer) => {
-            timer.0.tick(time.delta());
-            if timer.0.just_finished() {
-                evw_app_exit.send(bevy::app::AppExit);
-            }
+    if let Some(ref mut timer) = *timer {
+        timer.0.tick(time.delta());
+        if timer.0.just_finished() {
+            evw_app_exit.send(bevy::app::AppExit);
         }
-        None => {}
-    }
+    };
 
     for _ in evr_all_formations_finished.read() {
-        if config.simulation.exit_application_on_scenario_finished {
-            if timer.is_none() {
-                *timer = Some(DelayTimer::default());
-            }
+        if config.simulation.exit_application_on_scenario_finished && timer.is_none() {
+            *timer = Some(DelayTimer::default());
         }
     }
 }
