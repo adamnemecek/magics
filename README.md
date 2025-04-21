@@ -59,12 +59,12 @@ The accompanying thesis is available online [here](https://drive.google.com/file
 
 | Key | Function              |
 | --- | --------------------- |
-| <kbd>H </kbd>  | Toggle Left Panel     |
-| <kbd>L </kbd>  | Toggle Right Panel    |
-| <kbd>K </kbd>  | Toggle Top Panel      |
-| <kbd>J </kbd>  | Toggle Bottom Panel   |
-| <kbd>D </kbd>  | Toggle Metrics Window |
-| <kbd>U </kbd>  | Change Scale Kind     |
+| <kbd>H</kbd>  | Toggle Left Panel     |
+| <kbd>L</kbd>  | Toggle Right Panel    |
+| <kbd>K</kbd>  | Toggle Top Panel      |
+| <kbd>J</kbd>  | Toggle Bottom Panel   |
+| <kbd>D</kbd>  | Toggle Metrics Window |
+| <kbd>U</kbd>  | Change Scale Kind     |
 
 ### Camera Controls
 
@@ -144,10 +144,10 @@ cargo build --release
 
 The simulator comes with several pre-configured scenarios to demonstrate different aspects of multi-agent path planning:
 
-- [Circle Experiment](./config/scenarios/Circle Experiment/config.toml): Robots arranged in a circle swap positions
-- [Junction Experiment](/config/scenarios/Junction Experiment/config.toml): Robots navigate through a four-way junction
-- [Structured Junction](/config/scenarios/Structured Junction/config.toml): A more complex junction with structured paths
-- [Collaborative Complex](/config/scenarios/Collaborative Complex/config.toml): Multiple robots collaborating in a complex environment
+- `Circle Experiment`: Robots arranged in a circle swap positions
+- `Junction Experiment`: Robots navigate through a four-way junction
+- `Structured Junction`: A more complex junction with structured paths
+- `Collaborative Complex`: Multiple robots collaborating in a complex environment
 - And many more...
 
 Use the `--list-scenarios` command to see all available scenarios.
