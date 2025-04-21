@@ -41,6 +41,11 @@ The accompanying thesis is available online [here](https://drive.google.com/file
 
 ## Getting Started
 
+### Supported Platforms
+
+All development has been done on Linux, but both Windows and MacOS is supported as well. The compilation instructions
+are the same for all platforms.
+
 ### Prerequisites
 
 - Rust toolchain `stable` channel
