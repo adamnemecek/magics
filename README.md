@@ -144,10 +144,10 @@ cargo build --release
 
 The simulator comes with several pre-configured scenarios to demonstrate different aspects of multi-agent path planning:
 
-- [Circle Experiment](./config/scenarios/Circle Experiment): Robots arranged in a circle swap positions
-- [Junction Experiment](/config/scenarios/Junction Experiment): Robots navigate through a four-way junction
-- [Structured Junction](/config/scenarios/Structured Junction): A more complex junction with structured paths
-- [Collaborative Complex](/config/scenarios/Collaborative Complex): Multiple robots collaborating in a complex environment
+- [Circle Experiment](./config/scenarios/Circle Experiment/config.toml): Robots arranged in a circle swap positions
+- [Junction Experiment](/config/scenarios/Junction Experiment/config.toml): Robots navigate through a four-way junction
+- [Structured Junction](/config/scenarios/Structured Junction/config.toml): A more complex junction with structured paths
+- [Collaborative Complex](/config/scenarios/Collaborative Complex/config.toml): Multiple robots collaborating in a complex environment
 - And many more...
 
 Use the `--list-scenarios` command to see all available scenarios.
@@ -194,13 +194,11 @@ bevy = { version = "0.13", default-features = true, features = [
 ```
 
 #### ld linking problem in WSL
-- **Problem**: "`cannot find 'ld'`",
+- **Problem**: `cannot find 'ld'`,
 - **Solution**: You will have to go into [.cargo/config.toml](.cargo/config.toml) and disable the use of [`mold`](https://github.com/rui314/mold):
 
 ```diff
-# Recommended by bevy: https://bevyengine.org/learn/book/getting-started/setup/
 [target.x86_64-unknown-linux-gnu]
-# linker = "clang"
 rustflags = [
 -  "-Clink-arg=-fuse-ld=mold", # Use mold Linker
   "-Ctarget-cpu=native",
