@@ -1,4 +1,4 @@
-# magics 
+# magics
 
 > Master Thesis Project in Computer Engineering at Aarhus University 2024 on "Simulating Multi-agent Path Planning in Complex environments using Gaussian Belief Propagation and Global Path Finding". Available here (https://drive.google.com/file/d/12g-7bqcy_yfkZdpKzxQAErayFJQhu4sE/view?usp=sharing)
 
@@ -17,22 +17,41 @@
 
 |:---------------------------------------------------------:|:---------------------------------------------------------:|
 | **Waypoint Tracking** | **Path Tracking** |
-| https://github.com/user-attachments/assets/832fe84b-4b8b-4473-bfe1-9d87153988af | https://github.com/user-attachments/assets/6b8df209-d1db-4f35-9271-1c61ef660ab6 |
+| [](https://github.com/user-attachments/assets/832fe84b-4b8b-4473-bfe1-9d87153988af) | [](https://github.com/user-attachments/assets/6b8df209-d1db-4f35-9271-1c61ef660ab6) |
 
 <!-- | <img src="https://github.com/user-attachments/assets/832fe84b-4b8b-4473-bfe1-9d87153988af
 " alt="GIF 3" width="380"/> | <img src="https://github.com/user-attachments/assets/6b8df209-d1db-4f35-9271-1c61ef660ab6" alt="GIF 4" width="380"/> |
 -->
 
 
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/832fe84b-4b8b-4473-bfe1-9d87153988af" alt="Waypoint Tracking" width="100%"/>
+      <br/>
+      <b>Waypoint Tracking</b>
+    </td>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/6b8df209-d1db-4f35-9271-1c61ef660ab6" alt="Path Tracking" width="100%"/>
+      <br/>
+      <b>Path Tracking</b>
+    </td>
+  </tr>
+</table>
+
+
 ## Demo
 
 > The video below demonstrates some of the features of the simulation tool, and shows how the GBP algorithm can handle complex scenarios such as a multi-lane twoway junction.
 
-[magics-functionality-demo-trimmed-for-github.webm](https://github.com/user-attachments/assets/8f5d0db6-dd2c-41a3-9a12-4ccddf80d4f3)
+[magics-functionality-demo](https://github.com/user-attachments/assets/8f5d0db6-dd2c-41a3-9a12-4ccddf80d4f3)
 
 ## Thesis
 
 The accompanying thesis is available online [here](https://drive.google.com/file/d/12g-7bqcy_yfkZdpKzxQAErayFJQhu4sE/view?usp=sharing).
+
+
+<!-- ## ICRA Article -->
 
 ## External Dependencies
 
@@ -40,25 +59,25 @@ Most dependencies used are available through the `crates.io` registry. And shoul
 
 | Dependencies | Platform Specific |
 |--------------|----------|
-| `udev` | Linux |
 | `alsa-lib` | Linux |
-| `vulkan-loader` |  |
+| `egl-wayland` | Linux + Wayland |
+| `fontconfig` | Linux
+| `freetype` | Linux |
+| `libxkbcommon` | Linux + X11 |
+| `udev` | Linux |
+| `vulkan-loader` | Linux |
+| `wayland` | Linux + Wayland |
 | `xorg.libX11` | Linux + X11 |
 | `xorg.libXcursor` | Linux + X11 |
 | `xorg.libXi` | Linux + X11 |
-| `xorg.libXrandr` | Linux + X11 |
-| `libxkbcommon` | Linux + X11 |
-| `wayland` | Linux + Wayland |
-| `egl-wayland` | Linux + Wayland |
-| `freetype` | |
-| `fontconfig` |  |
+| `xorg.libXrandr` | Linux + X11 ||
 
 The exact name of the dependency might vary between platforms, and even between Linux distributions. Consult the respective package management tool used on your system for their exact names.
 
 
 ### Nix/NixOS
 
-The `./flake.nix` file provides a development shell with all the necessary dependencies to run the project. If you have `direnv` installed you can simply use the provided `.envrc` and type `direnv allow` to automatically enter it. Otherwise you can run:
+The `./flake.nix` file provides a development shell with all the necessary dependencies to run the project. If you have[ `direnv`](https://direnv.net/) installed you can simply use the provided `.envrc` and type `direnv allow` to automatically enter it. Otherwise you can run:
 
 ```sh
 # To enter the development environment
@@ -75,17 +94,17 @@ cargo build --release
 
 ## Run
 
-
 ```sh
-cargo run --release --bin magics # Open the simulator
-cargo run --release --bin magics -- --list # List all available scenarios
+# Open the simulator with the first
+cargo run --release
+cargo run --release -- --list-scenarios # List all available scenarios
 
 # Run a specific scenario
-cargo run --release --bin magics -- -i <SCENARIO_NAME>
-cargo run --release --bin magics -- --initial-scenario <SCENARIO_NAME>
+cargo run --release -- -i <SCENARIO_NAME>
+# See ./config/scenarios/ for all distributed scenarios
+cargo run --release -- -i "Junction Twoway"
 ```
 
 ## Credits
 
 The primary algorithm for GBP path planning is based on [gbpplanner](https://github.com/aalpatya/gbpplanner) by [Aalok Patwardhan](https://aalok.uk/) from  Imperial College London and Dyson Robotics Lab. As part of this thesis we have reimplemented and extended upon in Rust!
-
