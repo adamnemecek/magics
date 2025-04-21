@@ -36,11 +36,72 @@
 The accompanying thesis is available online [here](https://drive.google.com/file/d/12g-7bqcy_yfkZdpKzxQAErayFJQhu4sE/view?usp=sharing).
 
 
+## Getting Started
+
+### Prerequisites
+
+- Rust toolchain `stable` channel
+- Cargo build system
+- External dependencies for graphics (see [External Dependencies](#external-dependencies))
+
+### Installation
+
+1. Clone the repository
+2. Install the required dependencies for your platform
+
 <!-- ## ICRA Article -->
+
+
+
+## Keyboard Controls
+
+### UI Controls
+
+| Key | Function              |
+| --- | --------------------- |
+| <kbd>H </kbd>  | Toggle Left Panel     |
+| <kbd>L </kbd>  | Toggle Right Panel    |
+| <kbd>K </kbd>  | Toggle Top Panel      |
+| <kbd>J </kbd>  | Toggle Bottom Panel   |
+| <kbd>D </kbd>  | Toggle Metrics Window |
+| <kbd>U </kbd>  | Change Scale Kind     |
+
+### Camera Controls
+
+| Key/Mouse                          | Function                                     |
+| ---------------------------------- | -------------------------------------------- |
+| Arrow Keys                         | Move Camera                                  |
+| <kbd>C</kbd>                                 | Toggle Camera Movement Mode (Pan/Orbit)      |
+| <kbd>Tab</kbd>                                | Switch Camera                                |
+| <kbd>R</kbd>                                 | Reset Camera                                 |
+| Mouse Wheel                        | Zoom In/Out                                  |
+| Left Mouse Button + Mouse Movement | Move Camera (Pan or Orbit depending on mode) |
+| Middle Mouse Button                | Pan Camera                                   |
+| Right-click Drag                   | Rotate Camera                                |
+
+### Simulation Controls
+
+| Key   | Function                  |
+| ----- | ------------------------- |
+| <kbd>F5</kbd>    | Reload Current Simulation |
+| <kbd>F6</kbd>    | Load Next Simulation      |
+| <kbd>F4</kbd>    | Load Previous Simulation  |
+| <kbd>Space</kbd> | Pause/Play Simulation     |
+
+### General Controls
+
+| Key    | Function         |
+| ------ | ---------------- |
+| <kbd>T</kbd>     | Cycle Theme      |
+| <kbd>G</kbd>     | Export Graph     |
+| <kbd>Ctrl+S</kbd> | Save Settings    |
+| <kbd>Ctrl+P</kbd> | Take Screenshot  |
+| <kbd>Ctrl+Q</kbd> | Quit Application |
+
 
 ## External Dependencies
 
-Most dependencies used are available through the `crates.io` registry. And should work on all major platforms supported by the `cargo` build tool. Still some external dependencies are needed for the graphical session.
+Most dependencies used are available through the [crates.io](https://crates.io) registry. And should work on all major platforms supported by the `cargo` build tool. Still some external dependencies are needed for the graphical session.
 
 | Dependencies | Platform Specific |
 |--------------|----------|
@@ -79,6 +140,33 @@ cargo build --release
 
 ## Run
 
+### Available Scenarios
+
+The simulator comes with several pre-configured scenarios to demonstrate different aspects of multi-agent path planning:
+
+- [Circle Experiment](./config/scenarios/Circle Experiment): Robots arranged in a circle swap positions
+- [Junction Experiment](/config/scenarios/Junction Experiment): Robots navigate through a four-way junction
+- [Structured Junction](/config/scenarios/Structured Junction): A more complex junction with structured paths
+- [Collaborative Complex](/config/scenarios/Collaborative Complex): Multiple robots collaborating in a complex environment
+- And many more...
+
+Use the `--list-scenarios` command to see all available scenarios.
+
+> **Important**: When specifying a scenario, use the exact name as shown in the `--list-scenarios` output. Do not use file paths.
+
+### WSL Configuration (Windows 10.)
+
+When running in Windows Subsystem for Linux (WSL), you need to configure an X server:
+
+1. Install an X server on Windows (VcXsrv, Xming, or X410)
+2. Launch the X server with "Disable access control" checked
+3. Set the following environment variables in WSL:
+
+```sh
+export DISPLAY=:0
+export WINIT_UNIX_BACKEND=x11
+```
+
 ```sh
 # Open the simulator with the first
 cargo run --release
@@ -88,6 +176,35 @@ cargo run --release -- --list-scenarios # List all available scenarios
 cargo run --release -- -i <SCENARIO_NAME>
 # See ./config/scenarios/ for all distributed scenarios
 cargo run --release -- -i "Junction Twoway"
+```
+
+
+## Troubleshooting
+
+### Common Issues
+
+#### Display Issues in WSL
+- **Problem**: "Failed to build event loop: Os(OsError { ... error: WaylandError(Connection(NoCompositor)) })"
+- **Solution**: Set `export DISPLAY=:0` and `export WINIT_UNIX_BACKEND=x11` and in `Cargo.toml` under `bevy` remove `wayland`:
+
+```diff
+bevy = { version = "0.13", default-features = true, features = [
+-  "wayland",
+] }
+```
+
+#### ld linking problem in WSL
+- **Problem**: "`cannot find 'ld'`",
+- **Solution**: You will have to go into [.cargo/config.toml](.cargo/config.toml) and disable the use of [`mold`](https://github.com/rui314/mold):
+
+```diff
+# Recommended by bevy: https://bevyengine.org/learn/book/getting-started/setup/
+[target.x86_64-unknown-linux-gnu]
+# linker = "clang"
+rustflags = [
+-  "-Clink-arg=-fuse-ld=mold", # Use mold Linker
+  "-Ctarget-cpu=native",
+]
 ```
 
 ## Credits
