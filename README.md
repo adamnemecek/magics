@@ -14,31 +14,17 @@
 
 <!-- https://github.com/user-attachments/assets/6b8df209-d1db-4f35-9271-1c61ef660ab6 -->
 
+### Waypoint Tracking
 
-|:---------------------------------------------------------:|:---------------------------------------------------------:|
-| **Waypoint Tracking** | **Path Tracking** |
-| [](https://github.com/user-attachments/assets/832fe84b-4b8b-4473-bfe1-9d87153988af) | [](https://github.com/user-attachments/assets/6b8df209-d1db-4f35-9271-1c61ef660ab6) |
+[waypoint-tracking.webm](https://github.com/user-attachments/assets/d299208a-0eeb-4d93-9462-d68d963a39f2) 
+
+### Path Tracking
+
+[path-tracking.webm](https://github.com/user-attachments/assets/d6d8b5f3-3efd-404c-8645-3df1b4a8b64c)
 
 <!-- | <img src="https://github.com/user-attachments/assets/832fe84b-4b8b-4473-bfe1-9d87153988af
 " alt="GIF 3" width="380"/> | <img src="https://github.com/user-attachments/assets/6b8df209-d1db-4f35-9271-1c61ef660ab6" alt="GIF 4" width="380"/> |
 -->
-
-
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="https://github.com/user-attachments/assets/832fe84b-4b8b-4473-bfe1-9d87153988af" alt="Waypoint Tracking" width="100%"/>
-      <br/>
-      <b>Waypoint Tracking</b>
-    </td>
-    <td align="center" width="50%">
-      <img src="https://github.com/user-attachments/assets/6b8df209-d1db-4f35-9271-1c61ef660ab6" alt="Path Tracking" width="100%"/>
-      <br/>
-      <b>Path Tracking</b>
-    </td>
-  </tr>
-</table>
-
 
 ## Demo
 
