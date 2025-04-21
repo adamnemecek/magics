@@ -1,5 +1,8 @@
 # magics
 
+![image](https://github.com/user-attachments/assets/7a4a2c85-4a86-4ac2-961d-f9df3735ab38)
+
+
 > Master Thesis Project in Computer Engineering at Aarhus University 2024 on "Simulating Multi-agent Path Planning in Complex environments using Gaussian Belief Propagation and Global Path Finding". Available here (https://drive.google.com/file/d/12g-7bqcy_yfkZdpKzxQAErayFJQhu4sE/view?usp=sharing)
 
 ## Motivating Example
