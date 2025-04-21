@@ -261,8 +261,8 @@ impl UiState {
 impl Default for UiState {
     fn default() -> Self {
         Self {
-            left_panel_visible: false,
-            right_panel_visible: false,
+            left_panel_visible: true,
+            right_panel_visible: true,
             top_panel_visible: false,
             bottom_panel_visible: false,
             metrics_window_visible: false,
