@@ -1,6 +1,6 @@
 [package]
 name                   = "gbp_geometry"
-edition                = "2021"
+edition.workspace      = true
 description            = "Geometry utilities for the simulator"
 version.workspace      = true
 repository.workspace   = true

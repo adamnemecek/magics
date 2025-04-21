@@ -1,6 +1,6 @@
 [package]
 name                   = "gbp_multivariate_normal"
-edition                = "2021"
+edition.workspace      = true
 description            = "Multivariate Normal Distribution"
 version.workspace      = true
 repository.workspace   = true

@@ -1,6 +1,6 @@
 [package]
 name                   = "percentage"
-edition                = "2021"
+edition.workspace      = true
 description            = "Percentage type to robustly represent percentages"
 version.workspace      = true
 repository.workspace   = true

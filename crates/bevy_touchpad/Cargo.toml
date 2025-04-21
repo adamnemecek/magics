@@ -1,6 +1,6 @@
 [package]
 name                   = "bevy_touchpad"
-edition                = "2021"
+edition.workspace      = true
 description            = "A touchpad plugin for Bevy"
 version.workspace      = true
 repository.workspace   = true

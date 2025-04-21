@@ -1,6 +1,6 @@
 [package]
 name                   = "repeating_array"
-edition                = "2021"
+edition.workspace      = true
 description            = "A repeating array type"
 version.workspace      = true
 repository.workspace   = true

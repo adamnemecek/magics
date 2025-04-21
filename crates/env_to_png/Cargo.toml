@@ -1,6 +1,6 @@
 [package]
 name                   = "env_to_png"
-edition                = "2021"
+edition.workspace      = true
 description            = "Environment description to PNG converter"
 version.workspace      = true
 repository.workspace   = true

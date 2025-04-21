@@ -1,6 +1,6 @@
 [package]
 name                   = "gbp_environment"
-edition                = "2021"
+edition.workspace      = true
 description            = "Environment description for the simulator"
 version.workspace      = true
 repository.workspace   = true

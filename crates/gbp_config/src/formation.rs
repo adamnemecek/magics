@@ -7,7 +7,7 @@ use bevy::{
     math::Vec2,
 };
 use itertools::Itertools;
-use min_len_vec::{one_or_more, OneOrMore};
+use min_len_vec::{OneOrMore, one_or_more};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 use typed_floats::StrictlyPositiveFinite;
@@ -132,7 +132,7 @@ impl RepeatTimes {
     /// If `Self::Finite(remaining)` decrement remaining if > 0
     pub const fn decrement(&mut self) {
         match self {
-            Self::Finite(ref mut remaining) if *remaining > 0 => *remaining -= 1,
+            Self::Finite(remaining) if *remaining > 0 => *remaining -= 1,
             _ => {}
         }
     }
@@ -375,10 +375,12 @@ impl Formation {
                     })
                     .collect();
 
-                assert!(waypoints_of_each_robot
-                    .iter()
-                    .map(std::vec::Vec::len)
-                    .all(|l| l == initial_positions.len()));
+                assert!(
+                    waypoints_of_each_robot
+                        .iter()
+                        .map(std::vec::Vec::len)
+                        .all(|l| l == initial_positions.len())
+                );
 
                 Some((initial_positions, waypoints_of_each_robot))
             }
@@ -797,11 +799,13 @@ mod tests {
                 // assert!(!inner.is_empty());
                 assert_eq!(inner.len(), 1);
 
-                assert!(inner
-                    .iter()
-                    .map(|p| (p.x, p.y))
-                    .zip(vec![(0.1, 0.1)].into_iter())
-                    .all(|(p, (x, y))| float_eq(p.0, x) && float_eq(p.1, y)));
+                assert!(
+                    inner
+                        .iter()
+                        .map(|p| (p.x, p.y))
+                        .zip(vec![(0.1, 0.1)].into_iter())
+                        .all(|(p, (x, y))| float_eq(p.0, x) && float_eq(p.1, y))
+                );
             }
 
             #[test]
@@ -812,11 +816,13 @@ mod tests {
                 // assert!(!inner.is_empty());
                 assert_eq!(inner.len(), 3);
 
-                assert!(inner
-                    .iter()
-                    .map(|p| (p.x, p.y))
-                    .zip(vec![(0.35, 0.35), (0.35, 0.5), (0.7, 0.8)].into_iter())
-                    .all(|(p, (x, y))| float_eq(p.0, x) && float_eq(p.1, y)));
+                assert!(
+                    inner
+                        .iter()
+                        .map(|p| (p.x, p.y))
+                        .zip(vec![(0.35, 0.35), (0.35, 0.5), (0.7, 0.8)].into_iter())
+                        .all(|(p, (x, y))| float_eq(p.0, x) && float_eq(p.1, y))
+                );
             }
 
             /// Really just a test to see if the macro compiles and matches
@@ -828,11 +834,13 @@ mod tests {
                 // assert!(!inner.is_empty());
                 assert_eq!(inner.len(), 1);
 
-                assert!(inner
-                    .iter()
-                    .map(|p| (p.x, p.y))
-                    .zip(vec![(0., 0.1)].into_iter())
-                    .all(|(p, (x, y))| float_eq(p.0, x) && float_eq(p.1, y)));
+                assert!(
+                    inner
+                        .iter()
+                        .map(|p| (p.x, p.y))
+                        .zip(vec![(0., 0.1)].into_iter())
+                        .all(|(p, (x, y))| float_eq(p.0, x) && float_eq(p.1, y))
+                );
             }
         }
     }

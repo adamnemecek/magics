@@ -1,6 +1,6 @@
 [package]
 name                   = "gbp_schedule"
-edition                = "2021"
+edition.workspace      = true
 description            = "Iteration schedules for the gbp algorithm"
 version.workspace      = true
 repository.workspace   = true

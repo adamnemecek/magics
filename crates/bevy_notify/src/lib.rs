@@ -32,7 +32,7 @@
 use std::{num::NonZeroU8, time::Duration};
 
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiContexts, EguiPlugin};
+use bevy_egui::{EguiContexts, EguiPlugin, egui};
 // Reexport symbols from egui_notify
 pub use egui_notify::Anchor;
 pub use egui_notify::ToastLevel;
@@ -220,11 +220,7 @@ fn update_toasts(
     mut toasts: ResMut<Toasts>,
     mut toast_event: EventReader<ToastEvent>,
 ) {
-    for ToastEvent {
-        caption,
-        ref options,
-    } in toast_event.read()
-    {
+    for ToastEvent { caption, options } in toast_event.read() {
         debug!("received toast event");
         trace!("toast, caption: {}, options: {:?}", caption, options);
         let mut toast = egui_notify::Toast::custom(caption, options.level.clone());

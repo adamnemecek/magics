@@ -1,6 +1,6 @@
 [package]
 name                   = "unit_interval"
-edition                = "2021"
+edition.workspace      = true
 description            = "Unit interval type to robustly represent [0,1] intervals"
 version.workspace      = true
 repository.workspace   = true

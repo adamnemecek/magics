@@ -1,6 +1,6 @@
 [package]
 name                   = "gbp_global_planner"
-edition                = "2021"
+edition.workspace      = true
 description            = "A global planner for the simulator"
 version.workspace      = true
 repository.workspace   = true

@@ -1,5 +1,5 @@
 [package]
-edition                = "2021"
+edition.workspace      = true
 name                   = "magics"
 description            = "Rust implementation and improvement of the GBP planner algorithm"
 version.workspace      = true

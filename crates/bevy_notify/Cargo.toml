@@ -1,6 +1,6 @@
 [package]
 name                   = "bevy_notify"
-edition                = "2021"
+edition.workspace      = true
 description            = "Integrate bevy with egui-notify"
 version.workspace      = true
 repository.workspace   = true

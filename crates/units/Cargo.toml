@@ -1,6 +1,6 @@
 [package]
 name                   = "units"
-edition                = "2021"
+edition.workspace      = true
 description            = "A few unit types"
 version.workspace      = true
 repository.workspace   = true

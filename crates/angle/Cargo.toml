@@ -1,6 +1,6 @@
 [package]
 name                   = "angle"
-edition                = "2021"
+edition.workspace      = true
 description            = "Angle type to robustly represent angles in either degrees or radians"
 version.workspace      = true
 repository.workspace   = true

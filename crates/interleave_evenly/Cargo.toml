@@ -1,6 +1,6 @@
 [package]
 name                   = "interleave_evenly"
-edition                = "2021"
+edition.workspace      = true
 description            = "Interleave evenly"
 version.workspace      = true
 repository.workspace   = true

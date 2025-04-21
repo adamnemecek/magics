@@ -1,6 +1,6 @@
 [package]
 name                   = "seq"
-edition                = "2021"
+edition.workspace      = true
 description            = "Iterators for common sequences"
 version.workspace      = true
 repository.workspace   = true

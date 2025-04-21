@@ -1,6 +1,6 @@
 [package]
 name                   = "gbp_config"
-edition                = "2021"
+edition.workspace      = true
 description            = "All configurations for the simulator"
 version.workspace      = true
 repository.workspace   = true

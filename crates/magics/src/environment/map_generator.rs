@@ -207,7 +207,7 @@ fn build_obstacles(
                 Some((mesh, transform, isometry, shape))
             }
             PlaceableShape::Triangle(
-                ref triangle_shape @ Triangle {
+                triangle_shape @ Triangle {
                     angles: _,
                     radius: _,
                 },
@@ -279,7 +279,7 @@ fn build_obstacles(
 
                 Some((mesh, transform, isometry, shape))
             }
-            PlaceableShape::RegularPolygon(ref polygon @ RegularPolygon { sides, radius }) => {
+            PlaceableShape::RegularPolygon(polygon @ RegularPolygon { sides, radius }) => {
                 let center = Vec3::new(
                     (translation.x.get() as f32).mul_add(tile_size, offset_x) - pos_offset,
                     obstacle_height / 2.0,

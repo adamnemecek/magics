@@ -1,6 +1,6 @@
 [package]
 name                   = "min_len_vec"
-edition                = "2021"
+edition.workspace      = true
 description            = "A vector with a quarenteed minimum length"
 version.workspace      = true
 repository.workspace   = true
