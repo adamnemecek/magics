@@ -6,13 +6,6 @@ rustflags = [
   "-Ctarget-cpu=native",
 ]
 
-# compile simulation as a wasm binary for static webpage
-[target.wasm32-unknown-unknown]
-# runner = "wasm-server-runner"
-rustflags = [
-  "--cfg=web_sys_unstable_apis",
-  # "-Ctarget-feature=+simd128",
-]
 [build]
 rustflags = [
   "-C",
