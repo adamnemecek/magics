@@ -1425,7 +1425,7 @@ fn delete_interrobot_factors(mut query: Query<(Entity, &mut FactorGraph, &mut Ro
         if let Ok((_, mut factorgraph2, _)) = query.get_mut(robot2) {
             factorgraph2.delete_interrobot_factors_connected_to(robot1);
         } else {
-            error!(
+            warn!(
                 "attempt to delete interrobot factors between robots: {:?} and {:?} failed, \
                  reason: {:?} does not exist!",
                 robot1, robot2, robot2
