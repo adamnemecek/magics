@@ -2188,6 +2188,8 @@ fn update_prior_of_horizon_state(
             // &Radius,
             // &RadioAntenna,
             // &GbpIterationSchedule,
+            &VariableTimesteps,
+            &T0,
         ),
         With<RobotConnections>,
     >,
@@ -2204,7 +2206,9 @@ fn update_prior_of_horizon_state(
 
     let mut robots_to_despawn = Vec::new();
 
-    for (robot_id, mut factorgraph, mission, mut finished_path) in &mut query {
+    for (robot_id, mut factorgraph, mission, mut finished_path, variable_timesteps, t0) in
+        &mut query
+    {
         if finished_path.0 || mission.state.idle()
         // || !antenna.active
         {
@@ -2232,6 +2236,14 @@ fn update_prior_of_horizon_state(
         //    v.
         //}
 
+        // Get the current robot position (var0) - clone the data to avoid borrow issues
+        let current_position = {
+            let (_, current_variable) = factorgraph
+                .nth_variable(0)
+                .expect("factorgraph should have a current variable");
+            current_variable.belief.mean.slice(s![..2]).to_owned()
+        };
+
         let (horizon_variable_index, horizon_variable) = factorgraph.last_variable_mut().unwrap();
         // dbg!(&horizon_variable_index);
         // dbg!(&horizon_variable.belief.mean);
@@ -2248,7 +2260,27 @@ fn update_prior_of_horizon_state(
         let horizon2goal_dist = horizon2waypoint.euclidean_norm();
 
         let new_velocity = Float::min(max_speed, horizon2goal_dist) * horizon2waypoint.normalized();
-        let new_position = estimated_position.into_owned() + (&new_velocity * delta_t);
+
+        // Calculate unbounded new position
+        let unbounded_new_position = estimated_position.into_owned() + (&new_velocity * delta_t);
+
+        // Calculate maximum allowed distance from current position
+        let t0_value = Float::from(**t0);
+        let last_timestep = Float::from(variable_timesteps.0.last().copied().unwrap_or(0));
+        let time_diff_to_end = t0_value * last_timestep;
+        let max_allowed_distance = max_speed * time_diff_to_end;
+        // Check if unbounded position exceeds maximum allowed distance
+        let current_to_new = &unbounded_new_position - &current_position;
+        let distance_to_new = current_to_new.euclidean_norm();
+        // Bound the new position if necessary
+        let new_position = if distance_to_new > max_allowed_distance {
+            // Clamp to maximum allowed distance
+            let bounded =
+                current_position.to_owned() + max_allowed_distance * current_to_new.normalized();
+            bounded
+        } else {
+            unbounded_new_position
+        };
 
         // Update horizon state with new position and velocity
         let new_mean = concatenate![Axis(0), new_position, new_velocity];
@@ -2266,7 +2298,8 @@ fn update_prior_of_horizon_state(
 
     // Send messages to external factors
     for message in all_messages_to_external_factors.drain(..) {
-        let Ok((_, mut external_factorgraph, _, _)) = query.get_mut(message.to.factorgraph_id)
+        let Ok((_, mut external_factorgraph, _, _, _, _)) =
+            query.get_mut(message.to.factorgraph_id)
         else {
             continue;
         };
