@@ -2177,7 +2177,7 @@ pub struct FinishedPath(pub bool);
 /// Called `Robot::updateHorizon` in **gbpplanner**
 fn update_prior_of_horizon_state(
     config: Res<Config>,
-    time: Res<Time>,
+    time_fixed: Res<Time<Fixed>>,
     mut query: Query<
         (
             Entity,
@@ -2198,7 +2198,7 @@ fn update_prior_of_horizon_state(
     // the vector is cleared between calls, by calling .drain(..) at the end of every call
     mut all_messages_to_external_factors: Local<Vec<VariableToFactorMessage>>,
 ) {
-    let delta_t = Float::from(time.delta_seconds());
+    let delta_t = Float::from(time_fixed.delta_seconds());
 
     let max_speed = Float::from(config.robot.target_speed.get());
 
