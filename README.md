@@ -216,3 +216,18 @@ rustflags = [
 ## Credits
 
 The primary algorithm for GBP path planning is based on [gbpplanner](https://github.com/aalpatya/gbpplanner) by [Aalok Patwardhan](https://aalok.uk/) from  Imperial College London and Dyson Robotics Lab. As part of this thesis we have reimplemented and extended upon in Rust!
+
+
+## Cite
+
+```bibtex
+@misc{jensen2025multiagentpathplanningcomplex,
+      title={Multi-Agent Path Planning in Complex Environments using Gaussian Belief Propagation with Global Path Finding},
+      author={Jens Høigaard Jensen and Kristoffer Plagborg Bak Sørensen and Jonas le Fevre Sejersen and Andriy Sarabakha},
+      year={2025},
+      eprint={2502.20369},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2502.20369},
+}
+```
