@@ -10,14 +10,14 @@ use self::{
     tracking::TrackingFactor,
 };
 use super::{
+    DOFS, MessageCount, MessagesReceived, MessagesSent,
     factorgraph::{FactorGraphId, NodeIndex},
     id::VariableId,
     message::MessagesToVariables,
     node::FactorGraphNode,
     prelude::Message,
-    MessageCount, MessagesReceived, MessagesSent, DOFS,
 };
-use crate::{factorgraph::node::RemoveConnectionToError, simulation_loader::SdfImage};
+use crate::{factorgraph::node::RemoveConnectionToError, simulation_loader::SharedSdfImage};
 
 pub(in crate::factorgraph) mod dynamic;
 pub(in crate::factorgraph) mod interrobot;
@@ -240,7 +240,7 @@ impl FactorNode {
         factorgraph_id: FactorGraphId,
         strength: Float,
         measurement: Vector<Float>,
-        obstacle_sdf: SdfImage,
+        obstacle_sdf: SharedSdfImage,
         world_size: obstacle::WorldSize,
         enabled: bool,
         // world_size_width: Float,

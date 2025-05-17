@@ -1,20 +1,20 @@
-use std::{num::NonZeroUsize, ops::DerefMut, time::Duration};
+use std::{num::NonZeroUsize, ops::DerefMut, sync::Arc, time::Duration};
 
 use bevy::prelude::*;
 use bevy_mod_picking::prelude::*;
 use bevy_notify::ToastEvent;
 use bevy_rand::prelude::{ForkableRng, GlobalEntropy};
 use gbp_config::{
-    formation::{RepeatTimes, WorldDimensions},
     Config,
+    formation::{RepeatTimes, WorldDimensions},
 };
 use itertools::Itertools;
-use rand::{seq::IteratorRandom, Rng};
+use rand::{Rng, seq::IteratorRandom};
 use strum::IntoEnumIterator;
 
 use super::{
-    robot::{RobotFinishedRoute, RobotSpawned},
     RobotId,
+    robot::{RobotFinishedRoute, RobotSpawned},
 };
 use crate::{
     // asset_loader::SceneAssets,
@@ -515,8 +515,7 @@ fn spawn_formation(
                 .collect();
             trace!(
                 "initial pose: {:?}, waypoints: {:?}",
-                initial_pose,
-                waypoints
+                initial_pose, waypoints
             );
 
             let initial_direction = initial_pose.yz().extend(0.0);
@@ -577,7 +576,7 @@ fn spawn_formation(
                 &config,
                 &env_config,
                 radii[i],
-                &sdf.0,
+                Arc::clone(&sdf.0),
                 time_fixed.elapsed().as_secs_f64(),
                 waypoints.try_into().unwrap(),
                 // config

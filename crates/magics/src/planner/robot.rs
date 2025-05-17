@@ -5,20 +5,20 @@ use std::{
 };
 
 use bevy::{
-    input::{keyboard::KeyboardInput, ButtonState},
+    input::{ButtonState, keyboard::KeyboardInput},
     prelude::*,
     tasks::futures_lite::future,
 };
 use bevy_prng::WyRand;
 use bevy_rand::{component::EntropyComponent, prelude::GlobalEntropy};
 use gbp_config::{
-    formation::{CheckIntersectionWith, IntersectionDistance, PlanningStrategy, ReachedWhen},
     Config,
+    formation::{CheckIntersectionWith, IntersectionDistance, PlanningStrategy, ReachedWhen},
 };
 use gbp_global_planner::PathfindingTask;
 use gbp_linalg::prelude::*;
 use itertools::Itertools;
-use ndarray::{array, concatenate, s, Axis};
+use ndarray::{Axis, array, concatenate, s};
 use rand::Rng;
 
 use super::{
@@ -29,15 +29,15 @@ use crate::{
     bevy_utils::run_conditions::time::virtual_time_is_paused,
     export::events::TakeSnapshotOfRobot,
     factorgraph::{
+        DOFS,
         factor::{ExternalVariableId, FactorNode},
         factorgraph::{FactorGraph, NodeIndex, VariableIndex},
         id::{FactorId, VariableId},
         message::VariableToFactorMessage,
         variable::VariableNode,
-        DOFS,
     },
     pause_play::PausePlay,
-    simulation_loader::{LoadSimulation, ReloadSimulation, SdfImage},
+    simulation_loader::{LoadSimulation, ReloadSimulation, SharedSdfImage},
 };
 
 pub type RobotId = Entity;
@@ -1137,7 +1137,7 @@ impl RobotBundle {
         config: &Config,
         env_config: &gbp_environment::Environment,
         radius: f32,
-        sdf: &SdfImage,
+        sdf: SharedSdfImage,
         started_at: f64,
         waypoints: min_len_vec::TwoOrMore<StateVector>,
         // use_tracking: bool,

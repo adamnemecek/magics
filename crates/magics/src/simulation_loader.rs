@@ -1,5 +1,6 @@
 use std::{
     collections::{BTreeMap, VecDeque},
+    sync::Arc,
     time::Duration,
 };
 
@@ -50,10 +51,11 @@ impl Default for SimulationLoaderPlugin {
 // }
 
 pub type SdfImage = image::ImageBuffer<image::Rgb<u8>, Vec<u8>>;
+pub type SharedSdfImage = Arc<SdfImage>;
 pub type RawImage = image::ImageBuffer<image::Rgb<u8>, Vec<u8>>;
 
 #[derive(Debug, Clone, Resource, Deref, DerefMut)]
-pub struct Sdf(pub SdfImage);
+pub struct Sdf(pub SharedSdfImage);
 
 #[derive(Debug, Clone, Resource, Deref, DerefMut)]
 pub struct Raw(pub RawImage);
@@ -182,7 +184,7 @@ impl Plugin for SimulationLoaderPlugin {
                     config,
                     environment,
                     formation_group: formation,
-                    sdf: Sdf(sdf_image_buffer.into()),
+                    sdf: Sdf(Arc::new(sdf_image_buffer.into())),
                     // raw: Raw(raw_image_buffer.into()),
                 };
 
