@@ -63,8 +63,8 @@ target-speed                           = 7.0
 inter-robot-safety-distance-multiplier = 4.0
 
 [robot.radius]
-min = 2.0
-max = 2.0
+min = 1.5
+max = 1.5
 
 [robot.communication]
 radius       = 20.0

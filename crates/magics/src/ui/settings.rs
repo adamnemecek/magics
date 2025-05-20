@@ -2,11 +2,11 @@ use std::{path::Path, time::Duration};
 
 use bevy::{prelude::*, window::PrimaryWindow};
 use bevy_egui::{
-    egui::{self, Color32, Context, RichText},
     EguiContext, EguiContexts,
+    egui::{self, Color32, Context, RichText},
 };
 use bevy_infinite_grid::InfiniteGrid;
-use bevy_inspector_egui::{bevy_inspector, DefaultInspectorConfigPlugin};
+use bevy_inspector_egui::{DefaultInspectorConfigPlugin, bevy_inspector};
 use bevy_notify::ToastEvent;
 use catppuccin::Colour;
 use gbp_config::{Config, DrawSection, DrawSetting};
@@ -17,12 +17,12 @@ use smol_str::SmolStr;
 use struct_iterable::Iterable;
 use strum::IntoEnumIterator;
 
-use super::{custom, scale::ScaleUi, OccupiedScreenSpace, ToUiString, UiScaleType, UiState};
+use super::{OccupiedScreenSpace, ToUiString, UiScaleType, UiState, custom, scale::ScaleUi};
 use crate::{
     environment::cursor::CursorCoordinates,
     factorgraph::prelude::FactorGraph,
     input::{
-        screenshot::TakeScreenshot, ChangingBinding, DrawSettingsEvent, ExportFactorGraphAsGraphviz,
+        ChangingBinding, DrawSettingsEvent, ExportFactorGraphAsGraphviz, screenshot::TakeScreenshot,
     },
     pause_play::PausePlay,
     planner::robot::RadioAntenna,
@@ -838,7 +838,6 @@ fn ui_settings_panel(
                                                 );
                                             custom::float_right(ui, |ui| {
                                                 if custom::toggle_ui(ui, setting).clicked() {
-                                                    println!("name: {}", name);
                                                     if let Ok(setting_kind) = name.parse::<DrawSetting>() {
                                                         let event = DrawSettingsEvent {
                                                             setting: setting_kind,

@@ -2,7 +2,7 @@ formations:
   # red, turn left
 - repeat:
     every:
-      secs: 8
+      secs: 10
       nanos: 0
     times: !finite 10
   delay:
@@ -42,7 +42,7 @@ formations:
   # red, turn left, right, left, right
 - repeat:
     every:
-      secs: 8
+      secs: 10
       nanos: 0
     times: !finite 10
   delay:
@@ -100,7 +100,7 @@ formations:
   # red, turn right
 - repeat:
     every:
-      secs: 8
+      secs: 10
       nanos: 0
     times: !finite 10
   delay:
@@ -141,7 +141,7 @@ formations:
   # red, turn right, left
 - repeat:
     every:
-      secs: 8
+      secs: 10
       nanos: 0
     times: !finite 10
   delay:
@@ -188,7 +188,7 @@ formations:
   # yellow, straigt
 - repeat:
     every:
-      secs: 9
+      secs: 11
       nanos: 0
     times: !finite 10
   delay:
@@ -222,7 +222,7 @@ formations:
   # yellow, left
 - repeat:
     every:
-      secs: 9
+      secs: 11
       nanos: 0
     times: !finite 10
   delay:
@@ -262,7 +262,7 @@ formations:
   # yellow, right, left, right
 - repeat:
     every:
-      secs: 9
+      secs: 11
       nanos: 0
     times: !finite 10
   delay:
@@ -315,7 +315,7 @@ formations:
   # blue, up, right, left, left
 - repeat:
     every:
-      secs: 12
+      secs: 14
       nanos: 0
     times: !finite 10
   delay:
@@ -366,7 +366,7 @@ formations:
   # blue, up, right, left, right
 - repeat:
     every:
-      secs: 12
+      secs: 14
       nanos: 0
     times: !finite 10
   delay:
@@ -417,7 +417,7 @@ formations:
   # blue, up, right, left, left, right, right, left
 - repeat:
     every:
-      secs: 12
+      secs: 14
       nanos: 0
     times: !finite 10
   delay:
@@ -486,7 +486,7 @@ formations:
 # dark green, lllr
 - repeat:
     every:
-      secs: 10
+      secs: 12
       nanos: 0
     times: !finite 10
   delay:
@@ -549,7 +549,7 @@ formations:
 # dark green, rslr
 - repeat:
     every:
-      secs: 10
+      secs: 12
       nanos: 0
     times: !finite 10
   delay:
@@ -600,7 +600,7 @@ formations:
 # dark green, rlrs
 - repeat:
     every:
-      secs: 10
+      secs: 12
       nanos: 0
     times: !finite 10
   delay:
@@ -651,7 +651,7 @@ formations:
 # dark green, sssrlrl
 - repeat:
     every:
-      secs: 10
+      secs: 12
       nanos: 0
     times: !finite 10
   delay:
@@ -708,7 +708,7 @@ formations:
 # light green, ssslrsl
 - repeat:
     every:
-      secs: 9
+      secs: 11
       nanos: 500000000
     times: !finite 10
   delay:
@@ -759,7 +759,7 @@ formations:
 # light green, ssrlsrsrl
 - repeat:
     every:
-      secs: 9
+      secs: 11
       nanos: 500000000
     times: !finite 10
   delay:
@@ -822,7 +822,7 @@ formations:
 # purple, srs
 - repeat:
     every:
-      secs: 9
+      secs: 11
       nanos: 0
     times: !finite 10
   delay:
@@ -861,7 +861,7 @@ formations:
 # purple, lrssss
 - repeat:
     every:
-      secs: 9
+      secs: 11
       nanos: 0
     times: !finite 10
   delay:
@@ -906,7 +906,7 @@ formations:
 # purple, lsrsl
 - repeat:
     every:
-      secs: 9
+      secs: 11
       nanos: 0
     times: !finite 10
   delay:
