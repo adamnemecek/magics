@@ -4,7 +4,7 @@ formations:
     every:
       secs: 10
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 0
     nanos: 0
@@ -44,7 +44,7 @@ formations:
     every:
       secs: 10
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 2
     nanos: 0
@@ -102,7 +102,7 @@ formations:
     every:
       secs: 10
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 4
     nanos: 0
@@ -143,7 +143,7 @@ formations:
     every:
       secs: 10
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 6
     nanos: 0
@@ -190,7 +190,7 @@ formations:
     every:
       secs: 11
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 0
     nanos: 0
@@ -224,7 +224,7 @@ formations:
     every:
       secs: 11
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 3
     nanos: 0
@@ -264,7 +264,7 @@ formations:
     every:
       secs: 11
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 6
     nanos: 0
@@ -317,7 +317,7 @@ formations:
     every:
       secs: 14
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 0
     nanos: 0
@@ -368,7 +368,7 @@ formations:
     every:
       secs: 14
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 1
     nanos: 0
@@ -419,7 +419,7 @@ formations:
     every:
       secs: 14
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 2
     nanos: 0
@@ -488,7 +488,7 @@ formations:
     every:
       secs: 12
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 0
     nanos: 0
@@ -551,7 +551,7 @@ formations:
     every:
       secs: 12
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 2
     nanos: 500000000
@@ -602,7 +602,7 @@ formations:
     every:
       secs: 12
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 5
     nanos: 0
@@ -653,7 +653,7 @@ formations:
     every:
       secs: 12
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 7
     nanos: 500000000
@@ -710,7 +710,7 @@ formations:
     every:
       secs: 11
       nanos: 500000000
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 4
     nanos: 0
@@ -761,7 +761,7 @@ formations:
     every:
       secs: 11
       nanos: 500000000
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 5
     nanos: 0
@@ -824,7 +824,7 @@ formations:
     every:
       secs: 11
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 0
     nanos: 0
@@ -863,7 +863,7 @@ formations:
     every:
       secs: 11
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 3
     nanos: 0
@@ -908,7 +908,7 @@ formations:
     every:
       secs: 11
       nanos: 0
-    times: !finite 10
+    times: !infinite
   delay:
     secs: 6
     nanos: 0

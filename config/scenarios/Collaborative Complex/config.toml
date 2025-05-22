@@ -15,14 +15,14 @@ uncertainty                        = false
 paths                              = false
 communication-radius               = false
 obstacle-factors                   = false
-tracking                           = false
-interrobot-factors                 = false
+tracking                           = true
+interrobot-factors                 = true
 interrobot-factors-safety-distance = false
 generated-map                      = true
 sdf                                = false
 robot-colliders                    = false
 environment-colliders              = false
-robot-robot-collisions             = true
+robot-robot-collisions             = false
 robot-environment-collisions       = false
 
 [visualisation.uncertainty]
@@ -43,7 +43,7 @@ lookahead-multiple      = 3
 variables               = 10
 
 [gbp.tracking]
-switch-padding      = 1.0
+switch-padding      = 2.0
 attraction-distance = 2.0
 
 [gbp.iteration-schedule]

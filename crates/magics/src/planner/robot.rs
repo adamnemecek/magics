@@ -2506,7 +2506,7 @@ fn on_robot_clicked(
             continue;
         };
 
-        println!("----- robot cliked on -----");
+        println!("----- robot clicked on -----");
         println!("{}: {:?}", "robot".blue(), robot_id);
         println!("  {}: {}", "radius".magenta(), radius.0);
         println!("  {}:", "antenna".magenta());
@@ -2566,7 +2566,7 @@ fn on_robot_clicked(
             "interrobot".yellow(),
             factor_counts.interrobot
         );
-        println!("        {}: {}", "pose".yellow(), node_counts.variables); // bundled together
+        println!("        {}: {}", "pose".yellow(), 2); // bundled together
         println!(
             "        {}: {}",
             "tracking".yellow(),

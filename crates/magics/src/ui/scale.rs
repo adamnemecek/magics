@@ -1,6 +1,6 @@
 /// **Bevy** module that manages the scale/zoom of all egui UI elements.
 use bevy::{
-    input::{keyboard::KeyboardInput, mouse::MouseWheel, ButtonState},
+    input::{ButtonState, keyboard::KeyboardInput, mouse::MouseWheel},
     prelude::*,
     window::PrimaryWindow,
 };
@@ -19,7 +19,7 @@ impl Plugin for ScaleUiPlugin {
             app.add_plugins(EguiPlugin);
         }
         app.add_event::<ScaleUi>()
-            .add_systems(Startup, scale_ui)
+            .add_systems(Startup, scale_ui_startup)
             .add_systems(Update, scale_ui);
 
         app.add_systems(
@@ -81,6 +81,24 @@ pub enum ScaleUi {
     Set(f32),
     Increment(f32),
     Decrement(f32),
+}
+
+fn scale_ui_startup(
+    mut egui_settings: ResMut<EguiSettings>,
+    primary_window: Query<&Window, With<PrimaryWindow>>,
+    mut ui_state: ResMut<UiState>,
+) {
+    let scale_factor = match ui_state.scale_type {
+        UiScaleType::None => 1.0,
+        UiScaleType::Window => {
+            let primary_window = primary_window.single();
+            1.0 / primary_window.scale_factor()
+        }
+        UiScaleType::Custom => ui_state.scale_percent as f32 / 100.0,
+    };
+    #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
+    ui_state.set_scale((scale_factor * 100.0) as usize);
+    egui_settings.scale_factor = scale_factor;
 }
 
 fn scale_ui(

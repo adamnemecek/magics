@@ -6,6 +6,13 @@ rustflags = [
   "-Ctarget-cpu=native",
 ]
 
+# [target.aarch64-apple-darwin]
+# linker = "clang"
+# rustflags = [
+#   "-Clink-arg=-fuse-ld=mold", # Use mold Linker
+#   "-Ctarget-cpu=native",
+# ]
+
 [build]
 rustflags = [
   "-C",

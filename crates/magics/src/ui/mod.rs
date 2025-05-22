@@ -10,8 +10,8 @@ use std::ops::RangeInclusive;
 
 use bevy::{input::common_conditions::input_just_pressed, prelude::*, window::WindowTheme};
 use bevy_egui::{
-    egui::{self, Visuals},
     EguiContexts,
+    egui::{self, Visuals},
 };
 // use bevy_touchpad::TwoFingerSwipe;
 pub use decoration::ToUiString;
@@ -167,9 +167,9 @@ pub enum UiScaleType {
     #[display(fmt = "None")]
     None,
     #[display(fmt = "Custom")]
+    #[default]
     Custom,
     #[display(fmt = "Window")]
-    #[default]
     Window,
 }
 

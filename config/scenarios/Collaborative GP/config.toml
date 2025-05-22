@@ -10,7 +10,7 @@ height-map = 2.0
 robots                             = true
 communication-graph                = true
 predicted-trajectories             = true
-waypoints                          = false
+waypoints                          = true
 uncertainty                        = false
 paths                              = false
 communication-radius               = false
@@ -55,12 +55,12 @@ schedule = "interleave-evenly"
 dynamic    = true
 interrobot = true
 obstacle   = true
-tracking   = false
+tracking   = true
 
 [robot]
 planning-horizon                       = 5.0
 target-speed                           = 7.0
-inter-robot-safety-distance-multiplier = 4.0
+inter-robot-safety-distance-multiplier = 7.0
 
 [robot.radius]
 min = 1.5
