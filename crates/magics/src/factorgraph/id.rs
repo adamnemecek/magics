@@ -36,27 +36,17 @@ impl std::cmp::PartialOrd for FactorId {
     /// work correctly.
     #[allow(clippy::if_same_then_else)]
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        if self.factorgraph_id < other.factorgraph_id {
-            Some(std::cmp::Ordering::Less)
-        } else if self.factorgraph_id == other.factorgraph_id
-            && self.factor_index.0 < other.factor_index.0
-        {
-            Some(std::cmp::Ordering::Less)
-        } else if self.factorgraph_id == other.factorgraph_id
-            && self.factor_index == other.factor_index
-        {
-            Some(std::cmp::Ordering::Equal)
-        } else {
-            Some(std::cmp::Ordering::Greater)
-        }
+        self.cmp(&other).into()
     }
 }
+
 
 impl std::cmp::Ord for FactorId {
     #[inline]
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.partial_cmp(other)
-            .expect("every branch in Self::partial_cmp() returns Some()")
+        self.factorgraph_id
+            .cmp(&other.factorgraph_id)
+            .then_with(|| self.factor_index.cmp(&other.factor_index))
     }
 }
 
